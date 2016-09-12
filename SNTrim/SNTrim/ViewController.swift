@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     @IBOutlet var viewMain:UIView!
     @IBOutlet var btnUndo:UIBarButtonItem!
     @IBOutlet var btnRedo:UIBarButtonItem!
+    @IBOutlet var imageView:UIImageView!
     
     let image = UIImage(named: "dog.jpg")!
     var layers = [CALayer]()
@@ -29,12 +30,6 @@ class ViewController: UIViewController {
         layer.opacity = 0.5
         self.viewMain.layer.addSublayer(layer)
         return layer
-    }()
-    lazy var imageView:UIImageView = {
-        let view = UIImageView(frame: self.viewMain.bounds)
-        view.image = self.image
-        view.contentMode = .ScaleAspectFit
-        return view
     }()
     lazy var imageTransform:CGAffineTransform = {
         let size = self.viewMain.bounds.size
@@ -71,7 +66,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewMain.addSubview(imageView)
+        imageView.image = image
         updateUI()
     }
 
