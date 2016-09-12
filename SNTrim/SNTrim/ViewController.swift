@@ -14,16 +14,25 @@ class ViewController: UIViewController {
 
     var builder = SNPathBuilder(minSegment: 8.0)
     lazy var shapeLayer:CAShapeLayer = {
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.contentsScale = UIScreen.mainScreen().scale
-        shapeLayer.lineWidth = 10.0
-        shapeLayer.strokeColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.3).CGColor
-        shapeLayer.lineCap = kCALineCapRound
-        shapeLayer.lineJoin = kCALineJoinRound
-        shapeLayer.fillColor = UIColor.clearColor().CGColor
-        self.view.layer.addSublayer(shapeLayer)
-        return shapeLayer
+        let layer = ViewController.createShapeLayer()
+        self.view.layer.addSublayer(layer)
+        return layer
     }()
+    
+    static private func createShapeLayer() -> CAShapeLayer {
+        let layer = CAShapeLayer()
+        layer.contentsScale = UIScreen.mainScreen().scale
+        layer.lineWidth = 10
+        layer.fillColor = UIColor.clearColor().CGColor
+        layer.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).CGColor
+        layer.shadowRadius = 2.0
+        layer.shadowColor = layer.strokeColor
+        layer.shadowOpacity = 1.0
+        layer.shadowOffset = CGSize.zero
+        layer.lineCap = "round"
+        layer.lineJoin = "round"
+        return layer
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,19 +66,10 @@ extension ViewController {
             }
         case .Ended:
             shapeLayer.path = nil
-            let layerCurve = CAShapeLayer()
-            layerCurve.path = builder.end()
-            layerCurve.lineWidth = 12
-            layerCurve.fillColor = UIColor.clearColor().CGColor
-            layerCurve.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).CGColor
-            layerCurve.shadowRadius = 2.0
-            layerCurve.shadowColor = layerCurve.strokeColor
-            layerCurve.shadowOpacity = 1.0
-            layerCurve.shadowOffset = CGSize.zero
-            layerCurve.lineCap = "round"
-            layerCurve.lineJoin = "round"
-            self.view.layer.addSublayer(layerCurve)
-            layers.append(layerCurve)
+            let layer = ViewController.createShapeLayer()
+            layer.path = builder.end()
+            self.view.layer.insertSublayer(layer, below: shapeLayer)
+            layers.append(layer)
         default:
             shapeLayer.path = nil
         }
