@@ -100,6 +100,17 @@ class ViewController: UIViewController {
     @IBAction func redo() {
         print("redo")
     }
+    
+    private func renderLayers(layers:[CALayer]) {
+        UIGraphicsBeginImageContext(image.size)
+        let context = UIGraphicsGetCurrentContext()!
+        maskView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
+        CGContextConcatCTM(context, imageTransform)
+        CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
+        layers.forEach { $0.renderInContext(context) }
+        maskView.image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+    }
 }
 
 //
@@ -121,15 +132,8 @@ extension ViewController {
             layer.path = builder.end()
             layers.removeRange(index..<layers.count)
             layers.append(layer)
+            renderLayers([layer])
             index = layers.count
-            UIGraphicsBeginImageContext(image.size)
-            let context = UIGraphicsGetCurrentContext()!
-            maskView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
-            CGContextConcatCTM(context, imageTransform)
-            CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
-            layer.renderInContext(context)
-            maskView.image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
             updateUI()
         default:
             shapeLayer.path = nil
