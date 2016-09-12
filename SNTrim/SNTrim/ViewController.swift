@@ -20,6 +20,11 @@ class ViewController: UIViewController {
         self.viewMain.layer.addSublayer(layer)
         return layer
     }()
+    lazy var maskView:UIImageView = {
+        let maskView = UIImageView(frame: self.viewMain.bounds)
+        maskView.contentMode = .ScaleAspectFit
+        return maskView
+    }()
     
     private func createShapeLayer() -> CAShapeLayer {
         let layer = CAShapeLayer()
@@ -42,6 +47,7 @@ class ViewController: UIViewController {
         imageView.image = UIImage(named: "dog.jpg")
         imageView.contentMode = .ScaleAspectFit
         viewMain.addSubview(imageView)
+        viewMain.addSubview(maskView)
     }
 
     override func didReceiveMemoryWarning() {
