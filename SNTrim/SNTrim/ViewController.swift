@@ -103,6 +103,7 @@ extension ViewController {
             let context = UIGraphicsGetCurrentContext()!
             maskView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
             CGContextConcatCTM(context, imageTransform)
+            CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
             layer.renderInContext(context)
             maskView.image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
