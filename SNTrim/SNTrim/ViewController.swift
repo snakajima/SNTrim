@@ -24,6 +24,7 @@ class ViewController: UIViewController {
             builder.minSegment = 8.0 / xform.a
         }
     }
+    var anchor = CGPoint.zero
     var delta = CGPoint.zero
 
     var builder = SNPathBuilder(minSegment: 8.0)
@@ -173,16 +174,17 @@ extension ViewController {
 extension ViewController {
     @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
         let pt = recognizer.locationInView(viewMain)
+        let pt0 = recognizer.locationInView(view)
 
         switch(recognizer.state) {
         case .Began:
+            anchor = pt0
             delta = pt.delta(viewMain.center)
         case .Changed:
             if recognizer.numberOfTouches() == 2 {
-                var offset = pt.delta(delta)
+                var offset = pt0.delta(anchor)
                 offset.x /= xform.a
                 offset.y /= xform.a
-                offset = CGPoint.zero // DEBUG
                 var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
                 xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
                 xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
