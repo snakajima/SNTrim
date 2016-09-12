@@ -24,6 +24,10 @@ class ViewController: UIViewController {
             builder.minSegment = 8.0 / xform.a
         }
     }
+    // Image Cache
+    let cycle = 3
+    var imageCache = [(Int,UIImage?)]()
+    
     // Transient properties for handlePinch
     var anchor = CGPoint.zero
     var delta = CGPoint.zero
@@ -59,7 +63,7 @@ class ViewController: UIViewController {
         layer.lineWidth = 30 / xform.a
         layer.fillColor = UIColor.clearColor().CGColor
         layer.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).CGColor
-        layer.shadowRadius = 2.0
+        layer.shadowRadius = 3.0
         layer.shadowColor = layer.strokeColor
         layer.shadowOpacity = 1.0
         layer.shadowOffset = CGSize.zero
@@ -108,6 +112,7 @@ class ViewController: UIViewController {
             layer.removeFromSuperlayer()
         }
         layers.removeAll()
+        imageCache.removeAll()
         index = 0
         imageView.image = image
         setTransformAnimated(CGAffineTransformIdentity)
@@ -116,14 +121,29 @@ class ViewController: UIViewController {
     
     @IBAction func undo() {
         index -= 1
-        imageView.image = image
-        renderLayers(0..<index)
+        if let (i, image) = imageCache.last {
+            assert(i <= index)
+            print("using cache", i, index)
+            imageView.image = image
+            renderLayers(i..<index)
+        } else {
+            imageView.image = image
+            renderLayers(0..<index)
+        }
+        if let (i,_) = imageCache.last where i == index{
+            print("uncaching", index)
+            imageCache.removeLast()
+        }
         updateUI()
     }
 
     @IBAction func redo() {
         renderLayers(index...index)
         index += 1
+        if index % cycle == 0 {
+            print("caching", index)
+            imageCache.append((index, imageView.image))
+        }
         updateUI()
     }
     
@@ -160,9 +180,7 @@ extension ViewController {
             layer.path = builder.end()
             layers.removeRange(index..<layers.count)
             layers.append(layer)
-            renderLayers(index...index)
-            index += 1
-            updateUI()
+            redo()
         default:
             shapeLayer.path = nil
         }
