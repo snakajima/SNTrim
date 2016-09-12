@@ -44,12 +44,20 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    private func setTransformAnimated(xform:CGAffineTransform) {
+        self.xform = xform
+        UIView.animateWithDuration(0.2) { 
+            self.viewMain.transform = xform
+        }
+    }
 
     @IBAction func clear() {
         for layer in layers {
             layer.removeFromSuperlayer()
         }
         layers.removeAll()
+        setTransformAnimated(CGAffineTransformIdentity)
     }
 }
 
@@ -83,15 +91,17 @@ extension ViewController {
 //
 extension ViewController {
     @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
-        print("handlePinch")
         switch(recognizer.state) {
         case .Began:
             break
         case .Changed:
             self.viewMain.transform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
         case .Ended:
-            self.xform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
+            xform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
             self.viewMain.transform = xform
+            if xform.a < 1.0 {
+                setTransformAnimated(CGAffineTransformIdentity)
+            }
         default:
             self.viewMain.transform = xform
         }
