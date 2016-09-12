@@ -24,6 +24,7 @@ class ViewController: UIViewController {
             builder.minSegment = 8.0 / xform.a
         }
     }
+    // Transient properties for handlePinch
     var anchor = CGPoint.zero
     var delta = CGPoint.zero
 
@@ -173,16 +174,16 @@ extension ViewController {
 //
 extension ViewController {
     @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
-        let pt = recognizer.locationInView(viewMain)
-        let pt0 = recognizer.locationInView(view)
+        let ptMain = recognizer.locationInView(viewMain)
+        let ptView = recognizer.locationInView(view)
 
         switch(recognizer.state) {
         case .Began:
-            anchor = pt0
-            delta = pt.delta(viewMain.center)
+            anchor = ptView
+            delta = ptMain.delta(viewMain.center)
         case .Changed:
             if recognizer.numberOfTouches() == 2 {
-                var offset = pt0.delta(anchor)
+                var offset = ptView.delta(anchor)
                 offset.x /= xform.a
                 offset.y /= xform.a
                 var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
