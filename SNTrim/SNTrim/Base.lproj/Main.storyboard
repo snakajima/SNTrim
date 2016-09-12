@@ -33,6 +33,16 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="MO0-r6-LXk"/>
+                                    <barButtonItem title="Undo" id="tR1-I5-A7q">
+                                        <connections>
+                                            <action selector="undo" destination="BYZ-38-t0r" id="RqY-zz-Iyq"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="Redo" id="bKV-qC-psD">
+                                        <connections>
+                                            <action selector="redo" destination="BYZ-38-t0r" id="X2I-7H-KBl"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
@@ -55,6 +65,8 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="btnRedo" destination="bKV-qC-psD" id="8wJ-8d-gip"/>
+                        <outlet property="btnUndo" destination="tR1-I5-A7q" id="yJ2-9P-Ak6"/>
                         <outlet property="viewMain" destination="19n-K2-kCo" id="9b3-VZ-iUm"/>
                     </connections>
                 </viewController>

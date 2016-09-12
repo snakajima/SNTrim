@@ -10,8 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var viewMain:UIView!
+    @IBOutlet var btnUndo:UIBarButtonItem!
+    @IBOutlet var btnRedo:UIBarButtonItem!
+    
     let image = UIImage(named: "dog.jpg")!
     var layers = [CALayer]()
+    var index = 0
     var xform = CGAffineTransformIdentity
 
     var builder = SNPathBuilder(minSegment: 8.0)
@@ -40,6 +44,11 @@ class ViewController: UIViewController {
         }
     }()
     
+    private func updateUI() {
+        btnUndo.enabled = index > 0
+        btnRedo.enabled = index < layers.count
+    }
+    
     private func createShapeLayer() -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.contentsScale = UIScreen.mainScreen().scale
@@ -58,6 +67,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewMain.addSubview(maskView)
+        updateUI()
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,8 +87,18 @@ class ViewController: UIViewController {
             layer.removeFromSuperlayer()
         }
         layers.removeAll()
+        index = 0
         maskView.image = image
         setTransformAnimated(CGAffineTransformIdentity)
+        updateUI()
+    }
+    
+    @IBAction func undo() {
+        print("undo")
+    }
+
+    @IBAction func redo() {
+        print("redo")
     }
 }
 
@@ -99,7 +119,9 @@ extension ViewController {
             shapeLayer.path = nil
             let layer = createShapeLayer()
             layer.path = builder.end()
+            layers.removeRange(index..<layers.count)
             layers.append(layer)
+            index = layers.count
             UIGraphicsBeginImageContext(image.size)
             let context = UIGraphicsGetCurrentContext()!
             maskView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
@@ -108,6 +130,7 @@ extension ViewController {
             layer.renderInContext(context)
             maskView.image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
+            updateUI()
         default:
             shapeLayer.path = nil
         }
