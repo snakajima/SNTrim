@@ -25,8 +25,8 @@ class ViewController: UIViewController {
         }
     }
     // Image Cache
-    let cacheCycle = 3
-    let cacheMax = 3
+    let cacheCycle = 8
+    let cacheMax = 8
     var imageCache = [(Int,UIImage?)]()
     
     // Transient properties for handlePinch
