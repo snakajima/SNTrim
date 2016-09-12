@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         self.viewMain.layer.addSublayer(layer)
         return layer
     }()
-    lazy var maskView:UIImageView = {
+    lazy var imageView:UIImageView = {
         let view = UIImageView(frame: self.viewMain.bounds)
         view.image = self.image
         view.contentMode = .ScaleAspectFit
@@ -71,7 +71,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewMain.addSubview(maskView)
+        viewMain.addSubview(imageView)
         updateUI()
     }
 
@@ -93,14 +93,14 @@ class ViewController: UIViewController {
         }
         layers.removeAll()
         index = 0
-        maskView.image = image
+        imageView.image = image
         setTransformAnimated(CGAffineTransformIdentity)
         updateUI()
     }
     
     @IBAction func undo() {
         index -= 1
-        maskView.image = image
+        imageView.image = image
         renderLayers(0..<index)
         updateUI()
     }
@@ -114,13 +114,13 @@ class ViewController: UIViewController {
     private func renderLayers(range:Range<Int>) {
         UIGraphicsBeginImageContext(image.size)
         let context = UIGraphicsGetCurrentContext()!
-        maskView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
+        imageView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
         CGContextConcatCTM(context, imageTransform)
         CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
         for i in range {
             layers[i].renderInContext(context)
         }
-        maskView.image = UIGraphicsGetImageFromCurrentImageContext()
+        imageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
     }
 }
