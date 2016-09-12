@@ -88,7 +88,7 @@
                         <action selector="handlePinch:" destination="BYZ-38-t0r" id="8l6-mr-WIa"/>
                     </connections>
                 </pinchGestureRecognizer>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="Xeu-Nm-SUD">
+                <panGestureRecognizer minimumNumberOfTouches="1" maximumNumberOfTouches="1" id="Xeu-Nm-SUD">
                     <connections>
                         <action selector="handlePan:" destination="BYZ-38-t0r" id="KPs-7n-4N6"/>
                     </connections>

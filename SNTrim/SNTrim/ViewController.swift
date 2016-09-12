@@ -154,6 +154,9 @@ extension ViewController {
 //
 extension ViewController {
     @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
+        if recognizer.numberOfTouches() != 2 {
+            return
+        }
         let pt = recognizer.locationInView(view)
         let offset = pt.delta(anchor)
         let delta = anchor.delta(view.center)
