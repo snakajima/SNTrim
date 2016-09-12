@@ -14,21 +14,22 @@ class ViewController: UIViewController {
 
     var builder = SNPathBuilder(minSegment: 8.0)
     lazy var shapeLayer:CAShapeLayer = {
-        let layer = ViewController.createShapeLayer()
+        let layer = self.createShapeLayer()
+        layer.opacity = 0.8
         self.view.layer.addSublayer(layer)
         return layer
     }()
     
-    static private func createShapeLayer() -> CAShapeLayer {
+    private func createShapeLayer() -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.contentsScale = UIScreen.mainScreen().scale
         layer.lineWidth = 10
         layer.fillColor = UIColor.clearColor().CGColor
         layer.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).CGColor
-        layer.shadowRadius = 2.0
-        layer.shadowColor = layer.strokeColor
-        layer.shadowOpacity = 1.0
-        layer.shadowOffset = CGSize.zero
+        //layer.shadowRadius = 2.0
+        //layer.shadowColor = layer.strokeColor
+        //layer.shadowOpacity = 1.0
+        //layer.shadowOffset = CGSize.zero
         layer.lineCap = "round"
         layer.lineJoin = "round"
         return layer
@@ -66,7 +67,7 @@ extension ViewController {
             }
         case .Ended:
             shapeLayer.path = nil
-            let layer = ViewController.createShapeLayer()
+            let layer = createShapeLayer()
             layer.path = builder.end()
             self.view.layer.insertSublayer(layer, below: shapeLayer)
             layers.append(layer)
