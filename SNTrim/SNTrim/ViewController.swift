@@ -16,7 +16,12 @@ class ViewController: UIViewController {
     let image = UIImage(named: "dog.jpg")!
     var layers = [CALayer]()
     var index = 0
-    var xform = CGAffineTransformIdentity
+    var xform = CGAffineTransformIdentity {
+        didSet {
+            shapeLayer.lineWidth = 30 / xform.a
+            builder.minSegment = 8.0 / xform.a
+        }
+    }
 
     var builder = SNPathBuilder(minSegment: 8.0)
     lazy var shapeLayer:CAShapeLayer = {
@@ -52,7 +57,7 @@ class ViewController: UIViewController {
     private func createShapeLayer() -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.contentsScale = UIScreen.mainScreen().scale
-        layer.lineWidth = 10
+        layer.lineWidth = 30 / xform.a
         layer.fillColor = UIColor.clearColor().CGColor
         layer.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).CGColor
         layer.shadowRadius = 2.0
@@ -94,7 +99,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func undo() {
-        print("undo", index)
         index -= 1
         maskView.image = image
         renderLayers(0..<index)
@@ -102,7 +106,6 @@ class ViewController: UIViewController {
     }
 
     @IBAction func redo() {
-        print("redo", index)
         renderLayers(index...index)
         index += 1
         updateUI()
