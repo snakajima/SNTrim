@@ -25,7 +25,8 @@ class ViewController: UIViewController {
         }
     }
     // Image Cache
-    let cycle = 3
+    let cacheCycle = 3
+    let cacheMax = 3
     var imageCache = [(Int,UIImage?)]()
     
     // Transient properties for handlePinch
@@ -120,6 +121,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func undo() {
+        if let (i,_) = imageCache.last where i == index {
+            print("uncaching", index)
+            imageCache.removeLast()
+        }
         index -= 1
         if let (i, image) = imageCache.last {
             assert(i <= index)
@@ -130,17 +135,17 @@ class ViewController: UIViewController {
             imageView.image = image
             renderLayers(0..<index)
         }
-        if let (i,_) = imageCache.last where i == index{
-            print("uncaching", index)
-            imageCache.removeLast()
-        }
         updateUI()
     }
 
     @IBAction func redo() {
         renderLayers(index...index)
         index += 1
-        if index % cycle == 0 {
+        if index % cacheCycle == 0 {
+            if imageCache.count > cacheMax {
+                print("triming")
+                imageCache.removeFirst()
+            }
             print("caching", index)
             imageCache.append((index, imageView.image))
         }
