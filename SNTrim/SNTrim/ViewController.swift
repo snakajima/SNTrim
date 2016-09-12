@@ -10,20 +10,27 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var viewMain:UIView!
+    let image = UIImage(named: "dog.jpg")!
     var layers = [CALayer]()
     var xform = CGAffineTransformIdentity
 
     var builder = SNPathBuilder(minSegment: 8.0)
     lazy var shapeLayer:CAShapeLayer = {
         let layer = self.createShapeLayer()
-        layer.opacity = 0.8
+        layer.opacity = 0.5
         self.viewMain.layer.addSublayer(layer)
         return layer
     }()
+    lazy var imageView:UIImageView = {
+        let view = UIImageView(frame: self.viewMain.bounds)
+        view.image = self.image
+        view.contentMode = .ScaleAspectFit
+        return view
+    }()
     lazy var maskView:UIImageView = {
-        let maskView = UIImageView(frame: self.viewMain.bounds)
-        maskView.contentMode = .ScaleAspectFit
-        return maskView
+        let view = UIImageView(frame: self.viewMain.bounds)
+        view.contentMode = .ScaleAspectFit
+        return view
     }()
     
     private func createShapeLayer() -> CAShapeLayer {
@@ -32,10 +39,10 @@ class ViewController: UIViewController {
         layer.lineWidth = 10
         layer.fillColor = UIColor.clearColor().CGColor
         layer.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).CGColor
-        //layer.shadowRadius = 2.0
-        //layer.shadowColor = layer.strokeColor
-        //layer.shadowOpacity = 1.0
-        //layer.shadowOffset = CGSize.zero
+        layer.shadowRadius = 2.0
+        layer.shadowColor = layer.strokeColor
+        layer.shadowOpacity = 1.0
+        layer.shadowOffset = CGSize.zero
         layer.lineCap = "round"
         layer.lineJoin = "round"
         return layer
@@ -43,9 +50,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let imageView = UIImageView(frame: viewMain.bounds)
-        imageView.image = UIImage(named: "dog.jpg")
-        imageView.contentMode = .ScaleAspectFit
         viewMain.addSubview(imageView)
         viewMain.addSubview(maskView)
     }
@@ -88,8 +92,13 @@ extension ViewController {
             shapeLayer.path = nil
             let layer = createShapeLayer()
             layer.path = builder.end()
-            self.viewMain.layer.insertSublayer(layer, below: shapeLayer)
             layers.append(layer)
+            UIGraphicsBeginImageContext(image.size)
+            let context = UIGraphicsGetCurrentContext()!
+            layer.renderInContext(context)
+            maskView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
+            maskView.image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
         default:
             shapeLayer.path = nil
         }
