@@ -38,6 +38,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let imageView = UIImageView(frame: viewMain.bounds)
+        imageView.image = UIImage(named: "dog.jpg")
+        imageView.contentMode = .ScaleAspectFit
+        viewMain.addSubview(imageView)
     }
 
     override func didReceiveMemoryWarning() {

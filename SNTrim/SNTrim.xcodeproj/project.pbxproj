@@ -15,6 +15,7 @@
 		740247EB1D86FAFF003FAD89 /* SNDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247E81D86FAFF003FAD89 /* SNDrawView.swift */; };
 		740247EC1D86FAFF003FAD89 /* SNPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247E91D86FAFF003FAD89 /* SNPath.swift */; };
 		740247ED1D86FAFF003FAD89 /* SNPathBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247EA1D86FAFF003FAD89 /* SNPathBuilder.swift */; };
+		7402480C1D87111A003FAD89 /* dog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7402480B1D87111A003FAD89 /* dog.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		740248021D86FB32003FAD89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		740248031D86FB32003FAD89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		740248041D86FB32003FAD89 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7402480B1D87111A003FAD89 /* dog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				740247D51D86FAC3003FAD89 /* AppDelegate.swift */,
 				740247D71D86FAC3003FAD89 /* ViewController.swift */,
 				740247D91D86FAC3003FAD89 /* Main.storyboard */,
+				7402480B1D87111A003FAD89 /* dog.jpg */,
 				740247DC1D86FAC3003FAD89 /* Assets.xcassets */,
 				740247DE1D86FAC3003FAD89 /* LaunchScreen.storyboard */,
 				740247E11D86FAC3003FAD89 /* Info.plist */,
@@ -197,6 +200,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7402480C1D87111A003FAD89 /* dog.jpg in Resources */,
 				740247E01D86FAC3003FAD89 /* LaunchScreen.storyboard in Resources */,
 				740247DD1D86FAC3003FAD89 /* Assets.xcassets in Resources */,
 				740247DB1D86FAC3003FAD89 /* Main.storyboard in Resources */,
