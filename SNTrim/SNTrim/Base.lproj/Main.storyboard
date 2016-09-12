@@ -27,14 +27,12 @@
                                     <constraint firstAttribute="height" constant="44" id="ipj-gZ-7m2"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="Clear" id="jA9-m5-RLi"/>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="MO0-r6-LXk"/>
-                                    <barButtonItem style="plain" id="o9P-yC-wu2">
-                                        <slider key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="25" minValue="3" maxValue="50" id="UAm-jR-nU6">
-                                            <rect key="frame" x="112" y="6.5" width="194" height="31"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </slider>
+                                    <barButtonItem title="Clear" id="jA9-m5-RLi">
+                                        <connections>
+                                            <action selector="clear" destination="BYZ-38-t0r" id="ips-IF-xSk"/>
+                                        </connections>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="MO0-r6-LXk"/>
                                 </items>
                             </toolbar>
                         </subviews>

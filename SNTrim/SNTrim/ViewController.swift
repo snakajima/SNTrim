@@ -18,6 +18,7 @@ class ViewController: UIViewController {
         
         drawView.delegate = self
         drawView.shapeLayer.lineWidth = 12.0
+        drawView.builder.minSegment = 8.0
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,33 +32,23 @@ class ViewController: UIViewController {
         }
         layers.removeAll()
     }
-    
-    @IBAction func slide(slider:UISlider) {
-        drawView.builder.minSegment = CGFloat(slider.value)
-    }
 }
 
 extension ViewController : SNDrawViewDelegate {
     func didComplete(elements:[SNPathElement]) -> Bool {
-        print("complete", elements.count)
-
         let layerCurve = CAShapeLayer()
-        
-        // Extra round-trips to SVG and CGPath
-        let svg = SNPath.svgFrom(elements)
-        let es = SNPath.elementsFrom(svg)
-        let path = SNPath.pathFrom(es)
-        let es2 = SNPath.elementsFrom(path)
-        
-        layerCurve.path = SNPath.pathFrom(es2)
+        layerCurve.path = SNPath.pathFrom(elements)
         layerCurve.lineWidth = 12
         layerCurve.fillColor = UIColor.clearColor().CGColor
-        layerCurve.strokeColor = UIColor(red: 0, green: 1, blue: 0, alpha: 0.4).CGColor
+        layerCurve.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).CGColor
+        layerCurve.shadowRadius = 2.0
+        layerCurve.shadowColor = layerCurve.strokeColor
+        layerCurve.shadowOpacity = 1.0
+        layerCurve.shadowOffset = CGSize.zero
         layerCurve.lineCap = "round"
         layerCurve.lineJoin = "round"
         self.view.layer.addSublayer(layerCurve)
         layers.append(layerCurve)
-
         return true
     }
 }
