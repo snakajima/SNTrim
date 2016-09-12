@@ -94,20 +94,27 @@ class ViewController: UIViewController {
     }
     
     @IBAction func undo() {
-        print("undo")
+        print("undo", index)
+        index -= 1
+        maskView.image = image
+        renderLayers(0..<index)
+        updateUI()
     }
 
     @IBAction func redo() {
         print("redo")
+        updateUI()
     }
     
-    private func renderLayers(layers:[CALayer]) {
+    private func renderLayers(range:Range<Int>) {
         UIGraphicsBeginImageContext(image.size)
         let context = UIGraphicsGetCurrentContext()!
         maskView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
         CGContextConcatCTM(context, imageTransform)
         CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
-        layers.forEach { $0.renderInContext(context) }
+        for i in range {
+            layers[i].renderInContext(context)
+        }
         maskView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
     }
@@ -132,8 +139,8 @@ extension ViewController {
             layer.path = builder.end()
             layers.removeRange(index..<layers.count)
             layers.append(layer)
-            renderLayers([layer])
-            index = layers.count
+            renderLayers(index...index)
+            index += 1
             updateUI()
         default:
             shapeLayer.path = nil
