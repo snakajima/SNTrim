@@ -31,31 +31,21 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="MO0-r6-LXk"/>
                                 </items>
                             </toolbar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PMc-R4-5d1" customClass="SNDrawView" customModule="SNTrim" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="PMc-R4-5d1" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="6YW-c5-OTr"/>
                             <constraint firstItem="DSU-rI-PNS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Cjk-MN-aCJ"/>
                             <constraint firstAttribute="trailing" secondItem="DSU-rI-PNS" secondAttribute="trailing" id="POt-Mw-wLD"/>
-                            <constraint firstAttribute="trailing" secondItem="PMc-R4-5d1" secondAttribute="trailing" id="QAe-a4-DjV"/>
-                            <constraint firstItem="PMc-R4-5d1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="RBE-EB-X5M"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="DSU-rI-PNS" secondAttribute="bottom" id="v3Y-lW-Ptu"/>
-                            <constraint firstItem="DSU-rI-PNS" firstAttribute="top" secondItem="PMc-R4-5d1" secondAttribute="bottom" id="xKL-2V-sPU"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="W1m-iu-pYH" appends="YES" id="8Jy-Ey-Vd6"/>
+                            <outletCollection property="gestureRecognizers" destination="Xeu-Nm-SUD" appends="YES" id="Z6r-Kw-4Si"/>
                         </connections>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
-                    <connections>
-                        <outlet property="drawView" destination="PMc-R4-5d1" id="Fkk-dh-BJh"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <pinchGestureRecognizer id="W1m-iu-pYH">
@@ -63,6 +53,11 @@
                         <action selector="handlePinch:" destination="BYZ-38-t0r" id="8l6-mr-WIa"/>
                     </connections>
                 </pinchGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="Xeu-Nm-SUD">
+                    <connections>
+                        <action selector="handlePan:" destination="BYZ-38-t0r" id="KPs-7n-4N6"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
         </scene>
     </scenes>
