@@ -172,20 +172,21 @@ extension ViewController {
 //
 extension ViewController {
     @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
-        let pt = recognizer.locationInView(view)
+        let pt = recognizer.locationInView(viewMain)
 
         switch(recognizer.state) {
         case .Began:
-            anchor = pt
+            anchor = pt.delta(viewMain.center)
         case .Changed:
             if recognizer.numberOfTouches() == 2 {
                 var offset = pt.delta(anchor)
-                let delta = anchor.delta(view.center)
+                //let delta = anchor.delta(view.center)
                 offset.x /= xform.a
                 offset.y /= xform.a
-                var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
+                offset = CGPoint.zero // DEBUG
+                var xf = CGAffineTransformTranslate(xform, offset.x + anchor.x, offset.y + anchor.y)
                 xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
-                xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
+                xf = CGAffineTransformTranslate(xf, -anchor.x, -anchor.y)
                 self.viewMain.transform = xf
             }
         case .Ended:
