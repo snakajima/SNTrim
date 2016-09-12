@@ -23,6 +23,7 @@ class ViewController: UIViewController {
             builder.minSegment = 8.0 / xform.a
         }
     }
+    var anchor = CGPoint.zero
 
     var builder = SNPathBuilder(minSegment: 8.0)
     lazy var shapeLayer:CAShapeLayer = {
@@ -153,13 +154,21 @@ extension ViewController {
 //
 extension ViewController {
     @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
+        let pt = recognizer.locationInView(view)
+        let offset = pt.delta(anchor)
+        let delta = anchor.delta(view.center)
+        var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
+        xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
+        xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
+
         switch(recognizer.state) {
         case .Began:
+            anchor = recognizer.locationInView(self.viewMain)
             break
         case .Changed:
-            self.viewMain.transform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
+            self.viewMain.transform = xf
         case .Ended:
-            xform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
+            xform = xf
             self.viewMain.transform = xform
             if xform.a < 1.0 {
                 setTransformAnimated(CGAffineTransformIdentity)
