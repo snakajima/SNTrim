@@ -161,8 +161,10 @@ extension ViewController {
             anchor = pt
         case .Changed:
             if recognizer.numberOfTouches() == 2 {
-                let offset = pt.delta(anchor)
+                var offset = pt.delta(anchor)
                 let delta = anchor.delta(view.center)
+                offset.x /= xform.a
+                offset.y /= xform.a
                 var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
                 xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
                 xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
