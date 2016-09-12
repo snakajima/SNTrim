@@ -154,25 +154,22 @@ extension ViewController {
 //
 extension ViewController {
     @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
-        if recognizer.numberOfTouches() != 2 {
-            return
-        }
         let pt = recognizer.locationInView(view)
-        let offset = pt.delta(anchor)
-        let delta = anchor.delta(view.center)
-        var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
-        xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
-        xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
 
         switch(recognizer.state) {
         case .Began:
-            anchor = recognizer.locationInView(self.viewMain)
-            break
+            anchor = pt
         case .Changed:
-            self.viewMain.transform = xf
+            if recognizer.numberOfTouches() == 2 {
+                let offset = pt.delta(anchor)
+                let delta = anchor.delta(view.center)
+                var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
+                xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
+                xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
+                self.viewMain.transform = xf
+            }
         case .Ended:
-            xform = xf
-            self.viewMain.transform = xform
+            xform = self.viewMain.transform
             if xform.a < 1.0 {
                 setTransformAnimated(CGAffineTransformIdentity)
             }
