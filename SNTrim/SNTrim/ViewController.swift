@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var drawView:SNDrawView!
     var layers = [CALayer]()
+    var xform = CGAffineTransformIdentity
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +32,23 @@ class ViewController: UIViewController {
             layer.removeFromSuperlayer()
         }
         layers.removeAll()
+    }
+}
+
+extension ViewController {
+    @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
+        print("handlePinch")
+        switch(recognizer.state) {
+        case .Began:
+            break
+        case .Changed:
+            self.view.transform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
+        case .Ended:
+            self.xform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
+            self.view.transform = xform
+        default:
+            self.view.transform = xform
+        }
     }
 }
 

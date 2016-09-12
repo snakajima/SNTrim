@@ -17,10 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PMc-R4-5d1" customClass="SNDrawView" customModule="SNTrim" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DSU-rI-PNS">
                                 <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                                 <constraints>
@@ -35,8 +31,13 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="MO0-r6-LXk"/>
                                 </items>
                             </toolbar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PMc-R4-5d1" customClass="SNDrawView" customModule="SNTrim" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="PMc-R4-5d1" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="6YW-c5-OTr"/>
                             <constraint firstItem="DSU-rI-PNS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Cjk-MN-aCJ"/>
@@ -46,6 +47,9 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="DSU-rI-PNS" secondAttribute="bottom" id="v3Y-lW-Ptu"/>
                             <constraint firstItem="DSU-rI-PNS" firstAttribute="top" secondItem="PMc-R4-5d1" secondAttribute="bottom" id="xKL-2V-sPU"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="W1m-iu-pYH" appends="YES" id="8Jy-Ey-Vd6"/>
+                        </connections>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
@@ -54,6 +58,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="W1m-iu-pYH">
+                    <connections>
+                        <action selector="handlePinch:" destination="BYZ-38-t0r" id="8l6-mr-WIa"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
         </scene>
     </scenes>
