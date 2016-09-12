@@ -21,14 +21,9 @@ class ViewController: UIViewController {
         self.viewMain.layer.addSublayer(layer)
         return layer
     }()
-    lazy var imageView:UIImageView = {
-        let view = UIImageView(frame: self.viewMain.bounds)
-        view.image = self.image
-        view.contentMode = .ScaleAspectFit
-        return view
-    }()
     lazy var maskView:UIImageView = {
         let view = UIImageView(frame: self.viewMain.bounds)
+        view.image = self.image
         view.contentMode = .ScaleAspectFit
         return view
     }()
@@ -62,7 +57,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewMain.addSubview(imageView)
         viewMain.addSubview(maskView)
     }
 
