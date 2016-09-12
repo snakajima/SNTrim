@@ -24,7 +24,7 @@ class ViewController: UIViewController {
             builder.minSegment = 8.0 / xform.a
         }
     }
-    var anchor = CGPoint.zero
+    var delta = CGPoint.zero
 
     var builder = SNPathBuilder(minSegment: 8.0)
     lazy var shapeLayer:CAShapeLayer = {
@@ -176,17 +176,16 @@ extension ViewController {
 
         switch(recognizer.state) {
         case .Began:
-            anchor = pt.delta(viewMain.center)
+            delta = pt.delta(viewMain.center)
         case .Changed:
             if recognizer.numberOfTouches() == 2 {
-                var offset = pt.delta(anchor)
-                //let delta = anchor.delta(view.center)
+                var offset = pt.delta(delta)
                 offset.x /= xform.a
                 offset.y /= xform.a
                 offset = CGPoint.zero // DEBUG
-                var xf = CGAffineTransformTranslate(xform, offset.x + anchor.x, offset.y + anchor.y)
+                var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
                 xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
-                xf = CGAffineTransformTranslate(xf, -anchor.x, -anchor.y)
+                xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
                 self.viewMain.transform = xf
             }
         case .Ended:
