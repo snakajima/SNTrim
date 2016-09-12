@@ -102,7 +102,9 @@ class ViewController: UIViewController {
     }
 
     @IBAction func redo() {
-        print("redo")
+        print("redo", index)
+        renderLayers(index...index)
+        index += 1
         updateUI()
     }
     
