@@ -32,6 +32,18 @@ class ViewController: UIViewController {
         view.contentMode = .ScaleAspectFit
         return view
     }()
+    lazy var imageTransform:CGAffineTransform = {
+        let size = self.viewMain.bounds.size
+        let sx = self.image.size.width / size.width
+        let sy = self.image.size.height / size.height
+        if sx > sy {
+            let xf = CGAffineTransformMakeScale(sx, sx)
+            return CGAffineTransformTranslate(xf, 0, -(size.height - self.image.size.height / sx) / 2.0)
+        } else {
+            let xf = CGAffineTransformMakeScale(sy, sy)
+            return CGAffineTransformTranslate(xf, -(size.width - self.image.size.width / sy) / 2.0, 0)
+        }
+    }()
     
     private func createShapeLayer() -> CAShapeLayer {
         let layer = CAShapeLayer()
@@ -95,8 +107,9 @@ extension ViewController {
             layers.append(layer)
             UIGraphicsBeginImageContext(image.size)
             let context = UIGraphicsGetCurrentContext()!
-            layer.renderInContext(context)
             maskView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
+            CGContextConcatCTM(context, imageTransform)
+            layer.renderInContext(context)
             maskView.image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
         default:
