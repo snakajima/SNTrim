@@ -17,6 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="19n-K2-kCo">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DSU-rI-PNS">
                                 <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                                 <constraints>
@@ -32,12 +36,16 @@
                                 </items>
                             </toolbar>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="DSU-rI-PNS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Cjk-MN-aCJ"/>
+                            <constraint firstItem="19n-K2-kCo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="KZS-Ds-AYx"/>
                             <constraint firstAttribute="trailing" secondItem="DSU-rI-PNS" secondAttribute="trailing" id="POt-Mw-wLD"/>
+                            <constraint firstAttribute="trailing" secondItem="19n-K2-kCo" secondAttribute="trailing" id="T9L-bS-ROH"/>
+                            <constraint firstItem="DSU-rI-PNS" firstAttribute="top" secondItem="19n-K2-kCo" secondAttribute="bottom" id="aDk-pL-qbx"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="DSU-rI-PNS" secondAttribute="bottom" id="v3Y-lW-Ptu"/>
+                            <constraint firstItem="19n-K2-kCo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="yyQ-W4-wUO"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="W1m-iu-pYH" appends="YES" id="8Jy-Ey-Vd6"/>
@@ -46,6 +54,9 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="viewMain" destination="19n-K2-kCo" id="9b3-VZ-iUm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <pinchGestureRecognizer id="W1m-iu-pYH">
@@ -59,6 +70,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="305" y="281"/>
         </scene>
     </scenes>
 </document>

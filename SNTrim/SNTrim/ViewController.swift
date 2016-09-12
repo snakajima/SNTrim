@@ -9,6 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet var viewMain:UIView!
     var layers = [CALayer]()
     var xform = CGAffineTransformIdentity
 
@@ -16,7 +17,7 @@ class ViewController: UIViewController {
     lazy var shapeLayer:CAShapeLayer = {
         let layer = self.createShapeLayer()
         layer.opacity = 0.8
-        self.view.layer.addSublayer(layer)
+        self.viewMain.layer.addSublayer(layer)
         return layer
     }()
     
@@ -57,7 +58,7 @@ class ViewController: UIViewController {
 //
 extension ViewController {
     @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
-        let pt = recognizer.locationInView(view)
+        let pt = recognizer.locationInView(viewMain)
         switch(recognizer.state) {
         case .Began:
             shapeLayer.path = builder.start(pt)
@@ -69,7 +70,7 @@ extension ViewController {
             shapeLayer.path = nil
             let layer = createShapeLayer()
             layer.path = builder.end()
-            self.view.layer.insertSublayer(layer, below: shapeLayer)
+            self.viewMain.layer.insertSublayer(layer, below: shapeLayer)
             layers.append(layer)
         default:
             shapeLayer.path = nil
@@ -87,12 +88,12 @@ extension ViewController {
         case .Began:
             break
         case .Changed:
-            self.view.transform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
+            self.viewMain.transform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
         case .Ended:
             self.xform = CGAffineTransformScale(self.xform, recognizer.scale, recognizer.scale)
-            self.view.transform = xform
+            self.viewMain.transform = xform
         default:
-            self.view.transform = xform
+            self.viewMain.transform = xform
         }
     }
 }
