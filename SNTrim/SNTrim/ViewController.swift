@@ -77,6 +77,7 @@ class ViewController: UIViewController {
             layer.removeFromSuperlayer()
         }
         layers.removeAll()
+        maskView.image = image
         setTransformAnimated(CGAffineTransformIdentity)
     }
 }
