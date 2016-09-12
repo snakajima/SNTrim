@@ -17,6 +17,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bjL-G7-yTB">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="19n-K2-kCo">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
                                 <subviews>
@@ -24,7 +27,6 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="X3c-gp-IZ2" secondAttribute="trailing" id="3P4-sT-BxV"/>
                                     <constraint firstItem="X3c-gp-IZ2" firstAttribute="top" secondItem="19n-K2-kCo" secondAttribute="top" id="BI6-L8-zMw"/>
@@ -57,15 +59,19 @@
                                 </items>
                             </toolbar>
                         </subviews>
-                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="bjL-G7-yTB" secondAttribute="bottom" id="277-t1-1yq"/>
                             <constraint firstItem="DSU-rI-PNS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Cjk-MN-aCJ"/>
                             <constraint firstItem="19n-K2-kCo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="KZS-Ds-AYx"/>
+                            <constraint firstAttribute="trailing" secondItem="bjL-G7-yTB" secondAttribute="trailing" id="Nvd-0l-yRE"/>
                             <constraint firstAttribute="trailing" secondItem="DSU-rI-PNS" secondAttribute="trailing" id="POt-Mw-wLD"/>
                             <constraint firstAttribute="trailing" secondItem="19n-K2-kCo" secondAttribute="trailing" id="T9L-bS-ROH"/>
+                            <constraint firstItem="bjL-G7-yTB" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="XHZ-F6-GM9"/>
                             <constraint firstItem="DSU-rI-PNS" firstAttribute="top" secondItem="19n-K2-kCo" secondAttribute="bottom" id="aDk-pL-qbx"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="DSU-rI-PNS" secondAttribute="bottom" id="v3Y-lW-Ptu"/>
+                            <constraint firstItem="bjL-G7-yTB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="xmt-oG-e0m"/>
                             <constraint firstItem="19n-K2-kCo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="yyQ-W4-wUO"/>
                         </constraints>
                         <connections>
@@ -78,6 +84,7 @@
                     <connections>
                         <outlet property="btnRedo" destination="bKV-qC-psD" id="8wJ-8d-gip"/>
                         <outlet property="btnUndo" destination="tR1-I5-A7q" id="yJ2-9P-Ak6"/>
+                        <outlet property="checkerView" destination="bjL-G7-yTB" id="KVg-j7-ZQM"/>
                         <outlet property="imageView" destination="X3c-gp-IZ2" id="38v-wv-DwN"/>
                         <outlet property="viewMain" destination="19n-K2-kCo" id="9b3-VZ-iUm"/>
                     </connections>
