@@ -152,8 +152,12 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8hg-FT-ShD">
+                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8hg-FT-ShD">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="sdn-SK-1Ul" appends="YES" id="1tv-af-4Zj"/>
+                                </connections>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -175,6 +179,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K6Q-fP-6kO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="sdn-SK-1Ul">
+                    <connections>
+                        <action selector="handleTap:" destination="Yac-ZW-jxE" id="gjM-Qb-mbb"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="743" y="281"/>
         </scene>

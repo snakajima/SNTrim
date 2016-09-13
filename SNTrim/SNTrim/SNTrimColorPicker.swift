@@ -39,4 +39,8 @@ class SNTrimColorPicker: UIViewController {
     @IBAction func done() {
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    @IBAction func handleTap(recognizer:UITapGestureRecognizer) {
+        print("handleTap")
+    }
 }
