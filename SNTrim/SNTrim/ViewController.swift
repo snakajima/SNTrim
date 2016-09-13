@@ -197,7 +197,11 @@ extension ViewController {
 //
 // MARK: Magic Eraser
 //
-extension ViewController {
+extension ViewController: SNTrimColorPickerDelegate {
+    func didColorSelected(vc:SNTrimColorPicker, color:UIColor) {
+        print("didColorSelected")
+    }
+    
     @IBAction func segmentSelected() {
         print("segment", segment.selectedSegmentIndex)
         if segment.selectedSegmentIndex == 1 {
@@ -209,6 +213,7 @@ extension ViewController {
         if let vc = segue.destinationViewController as? SNTrimColorPicker {
             vc.image = image
             vc.color = UIColor.yellowColor()
+            vc.delegate = self
         }
     }
 }

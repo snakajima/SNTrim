@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol SNTrimColorPickerDelegate: class {
+    func didColorSelected(vc:SNTrimColorPicker, color:UIColor)
+}
+
 class SNTrimColorPicker: UIViewController {
     @IBOutlet var mainView:UIView!
     @IBOutlet var colorView:UIView!
+    weak var delegate:SNTrimColorPickerDelegate!
     var image:UIImage!
     var color:UIColor!
     let imageLayer = CALayer()
@@ -46,7 +51,9 @@ class SNTrimColorPicker: UIViewController {
     */
 
     @IBAction func done() {
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        self.presentingViewController?.dismissViewControllerAnimated(true) {
+            self.delegate.didColorSelected(self, color: self.color)
+        }
     }
     
     @IBAction func handleTap(recognizer:UITapGestureRecognizer) {
