@@ -144,16 +144,26 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8hg-FT-ShD">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="8hg-FT-ShD" secondAttribute="trailing" id="Tc8-Sk-usv"/>
                             <constraint firstAttribute="trailing" secondItem="klv-sm-kgO" secondAttribute="trailing" id="ZY8-iB-qZ8"/>
                             <constraint firstItem="klv-sm-kgO" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="h4s-zW-kQc"/>
                             <constraint firstItem="dUL-sh-Ipu" firstAttribute="top" secondItem="klv-sm-kgO" secondAttribute="bottom" id="iHe-ag-If9"/>
+                            <constraint firstItem="klv-sm-kgO" firstAttribute="top" secondItem="8hg-FT-ShD" secondAttribute="bottom" id="iQz-ER-rGf"/>
+                            <constraint firstItem="8hg-FT-ShD" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" id="u0U-ab-b8m"/>
+                            <constraint firstItem="8hg-FT-ShD" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="zbu-DW-fkO"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="imageView" destination="8hg-FT-ShD" id="EeA-Xu-BCy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K6Q-fP-6kO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

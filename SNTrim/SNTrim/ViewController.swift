@@ -204,6 +204,12 @@ extension ViewController {
             self.performSegueWithIdentifier("color", sender: nil)
         }
     }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let vc = segue.destinationViewController as? SNTrimColorPicker {
+            vc.image = image
+        }
+    }
 }
 
 //
