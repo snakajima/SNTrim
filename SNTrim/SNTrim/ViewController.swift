@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet var btnRedo:UIBarButtonItem!
     @IBOutlet var checkerView:UIImageView!
     @IBOutlet var imageView:UIImageView!
+    @IBOutlet var segment:UISegmentedControl!
     
     let image = UIImage(named: "dog.jpg")!
     var layers = [CALayer]()
@@ -76,6 +77,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.image = image
+        segment.selectedSegmentIndex = 0
         updateUI()
     }
     
@@ -189,6 +191,15 @@ extension ViewController {
         default:
             shapeLayer.path = nil
         }
+    }
+}
+
+//
+// MARK: Magic Eraser
+//
+extension ViewController {
+    @IBAction func segmentSelected() {
+        print("segment", segment.selectedSegmentIndex)
     }
 }
 
