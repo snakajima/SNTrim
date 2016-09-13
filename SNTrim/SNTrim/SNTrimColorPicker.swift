@@ -10,11 +10,14 @@ import UIKit
 
 class SNTrimColorPicker: UIViewController {
     @IBOutlet var imageView:UIImageView!
+    @IBOutlet var colorView:UIView!
     var image:UIImage!
+    var color:UIColor!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.image = image
+        colorView.backgroundColor = color
     }
 
     override func didReceiveMemoryWarning() {
