@@ -152,30 +152,31 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8hg-FT-ShD">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YLB-X6-TXW">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="sdn-SK-1Ul" appends="YES" id="1tv-af-4Zj"/>
+                                    <outletCollection property="gestureRecognizers" destination="sdn-SK-1Ul" appends="YES" id="fMn-E7-d6O"/>
                                 </connections>
-                            </imageView>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="8hg-FT-ShD" secondAttribute="trailing" id="Tc8-Sk-usv"/>
+                            <constraint firstItem="YLB-X6-TXW" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" id="2nU-zU-UZA"/>
+                            <constraint firstItem="klv-sm-kgO" firstAttribute="top" secondItem="YLB-X6-TXW" secondAttribute="bottom" id="8Tz-Ag-FQd"/>
+                            <constraint firstAttribute="trailing" secondItem="YLB-X6-TXW" secondAttribute="trailing" id="NCM-Fa-rfa"/>
                             <constraint firstAttribute="trailing" secondItem="klv-sm-kgO" secondAttribute="trailing" id="ZY8-iB-qZ8"/>
                             <constraint firstItem="klv-sm-kgO" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="h4s-zW-kQc"/>
                             <constraint firstItem="dUL-sh-Ipu" firstAttribute="top" secondItem="klv-sm-kgO" secondAttribute="bottom" id="iHe-ag-If9"/>
-                            <constraint firstItem="klv-sm-kgO" firstAttribute="top" secondItem="8hg-FT-ShD" secondAttribute="bottom" id="iQz-ER-rGf"/>
-                            <constraint firstItem="8hg-FT-ShD" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" id="u0U-ab-b8m"/>
-                            <constraint firstItem="8hg-FT-ShD" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="zbu-DW-fkO"/>
+                            <constraint firstItem="YLB-X6-TXW" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="kIc-47-yNx"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="colorView" destination="fgO-LR-b1l" id="7Dq-0e-lXd"/>
-                        <outlet property="imageView" destination="8hg-FT-ShD" id="EeA-Xu-BCy"/>
+                        <outlet property="mainView" destination="YLB-X6-TXW" id="8Oo-uA-jaE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K6Q-fP-6kO" userLabel="First Responder" sceneMemberID="firstResponder"/>

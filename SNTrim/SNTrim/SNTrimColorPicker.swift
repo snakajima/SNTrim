@@ -9,7 +9,7 @@
 import UIKit
 
 class SNTrimColorPicker: UIViewController {
-    @IBOutlet var imageView:UIImageView!
+    @IBOutlet var mainView:UIView!
     @IBOutlet var colorView:UIView!
     var image:UIImage!
     var color:UIColor!
@@ -17,8 +17,8 @@ class SNTrimColorPicker: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //imageView.image = image
-        imageView.layer.addSublayer(imageLayer)
+        //mainView.image = image
+        mainView.layer.addSublayer(imageLayer)
         imageLayer.contents = image.CGImage
         imageLayer.contentsGravity = kCAGravityResizeAspect
         colorView.backgroundColor = color
@@ -26,7 +26,7 @@ class SNTrimColorPicker: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        imageLayer.frame = imageView.layer.bounds
+        imageLayer.frame = mainView.layer.bounds
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,7 +52,7 @@ class SNTrimColorPicker: UIViewController {
     @IBAction func handleTap(recognizer:UITapGestureRecognizer) {
         print("handleTap")
         //let size = image.size
-        let pt = recognizer.locationInView(imageView)
+        let pt = recognizer.locationInView(mainView)
         let data = NSMutableData(length: 4)!
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
         let context = CGBitmapContextCreate(data.mutableBytes, 1, 1, 8, 4, CGColorSpaceCreateDeviceRGB(), bitmapInfo.rawValue)!
