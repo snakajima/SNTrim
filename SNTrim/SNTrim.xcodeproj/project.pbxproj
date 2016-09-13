@@ -16,6 +16,7 @@
 		740247EC1D86FAFF003FAD89 /* SNPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247E91D86FAFF003FAD89 /* SNPath.swift */; };
 		740247ED1D86FAFF003FAD89 /* SNPathBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247EA1D86FAFF003FAD89 /* SNPathBuilder.swift */; };
 		7402480C1D87111A003FAD89 /* dog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7402480B1D87111A003FAD89 /* dog.jpg */; };
+		7402480E1D87ABC9003FAD89 /* street.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 7402480D1D87ABC9003FAD89 /* street.JPG */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		740248031D86FB32003FAD89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		740248041D86FB32003FAD89 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7402480B1D87111A003FAD89 /* dog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog.jpg; sourceTree = "<group>"; };
+		7402480D1D87ABC9003FAD89 /* street.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = street.JPG; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				740247D51D86FAC3003FAD89 /* AppDelegate.swift */,
 				740247D71D86FAC3003FAD89 /* ViewController.swift */,
 				740247D91D86FAC3003FAD89 /* Main.storyboard */,
+				7402480D1D87ABC9003FAD89 /* street.JPG */,
 				7402480B1D87111A003FAD89 /* dog.jpg */,
 				740247DC1D86FAC3003FAD89 /* Assets.xcassets */,
 				740247DE1D86FAC3003FAD89 /* LaunchScreen.storyboard */,
@@ -203,6 +206,7 @@
 				7402480C1D87111A003FAD89 /* dog.jpg in Resources */,
 				740247E01D86FAC3003FAD89 /* LaunchScreen.storyboard in Resources */,
 				740247DD1D86FAC3003FAD89 /* Assets.xcassets in Resources */,
+				7402480E1D87ABC9003FAD89 /* street.JPG in Resources */,
 				740247DB1D86FAC3003FAD89 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
