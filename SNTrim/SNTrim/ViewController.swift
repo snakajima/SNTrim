@@ -86,8 +86,8 @@ class ViewController: UIViewController {
         UIGraphicsBeginImageContext(size)
         let context = UIGraphicsGetCurrentContext()!
         CGContextSetFillColorWithColor(context, UIColor.lightGrayColor().CGColor)
-        for x in 0..<Int(size.width / 32) {
-            for y in 0..<Int(size.height / 32) {
+        for x in 0...Int(size.width / 32) {
+            for y in 0...Int(size.height / 32) {
                 CGContextFillRect(context, CGRect(x: x * 32, y: y * 32, width: 16, height: 16))
                 CGContextFillRect(context, CGRect(x: x * 32 + 16, y: y * 32 + 16, width: 16, height: 16))
             }
