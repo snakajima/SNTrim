@@ -17,6 +17,7 @@
 		740247ED1D86FAFF003FAD89 /* SNPathBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247EA1D86FAFF003FAD89 /* SNPathBuilder.swift */; };
 		7402480C1D87111A003FAD89 /* dog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7402480B1D87111A003FAD89 /* dog.jpg */; };
 		7402480E1D87ABC9003FAD89 /* street.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 7402480D1D87ABC9003FAD89 /* street.JPG */; };
+		740248101D889F8C003FAD89 /* SNTrimColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		740248041D86FB32003FAD89 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7402480B1D87111A003FAD89 /* dog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog.jpg; sourceTree = "<group>"; };
 		7402480D1D87ABC9003FAD89 /* street.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = street.JPG; sourceTree = "<group>"; };
+		7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNTrimColorPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				740247D51D86FAC3003FAD89 /* AppDelegate.swift */,
 				740247D71D86FAC3003FAD89 /* ViewController.swift */,
+				7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */,
 				740247D91D86FAC3003FAD89 /* Main.storyboard */,
 				7402480D1D87ABC9003FAD89 /* street.JPG */,
 				7402480B1D87111A003FAD89 /* dog.jpg */,
@@ -223,6 +226,7 @@
 				740247EC1D86FAFF003FAD89 /* SNPath.swift in Sources */,
 				740247EB1D86FAFF003FAD89 /* SNDrawView.swift in Sources */,
 				740247D61D86FAC3003FAD89 /* AppDelegate.swift in Sources */,
+				740248101D889F8C003FAD89 /* SNTrimColorPicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

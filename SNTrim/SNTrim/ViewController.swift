@@ -200,6 +200,9 @@ extension ViewController {
 extension ViewController {
     @IBAction func segmentSelected() {
         print("segment", segment.selectedSegmentIndex)
+        if segment.selectedSegmentIndex == 1 {
+            self.performSegueWithIdentifier("color", sender: nil)
+        }
     }
 }
 

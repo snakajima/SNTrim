@@ -102,6 +102,7 @@
                         <outlet property="imageView" destination="X3c-gp-IZ2" id="38v-wv-DwN"/>
                         <outlet property="segment" destination="3qf-gd-QpI" id="CwG-It-t5X"/>
                         <outlet property="viewMain" destination="19n-K2-kCo" id="9b3-VZ-iUm"/>
+                        <segue destination="Yac-ZW-jxE" kind="show" identifier="color" id="XTz-Gh-Awv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -117,6 +118,46 @@
                 </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="305" y="281"/>
+        </scene>
+        <!--Trim Color Picker-->
+        <scene sceneID="d6W-Om-G0Z">
+            <objects>
+                <viewController id="Yac-ZW-jxE" customClass="SNTrimColorPicker" customModule="SNTrim" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lUQ-VF-uLZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="dUL-sh-Ipu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eAe-RR-awc">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="klv-sm-kgO">
+                                <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="9rv-ac-hqC"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem systemItem="done" id="Emq-FS-MMf">
+                                        <connections>
+                                            <action selector="done" destination="Yac-ZW-jxE" id="FOg-fw-NIc"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="klv-sm-kgO" secondAttribute="trailing" id="ZY8-iB-qZ8"/>
+                            <constraint firstItem="klv-sm-kgO" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="h4s-zW-kQc"/>
+                            <constraint firstItem="dUL-sh-Ipu" firstAttribute="top" secondItem="klv-sm-kgO" secondAttribute="bottom" id="iHe-ag-If9"/>
+                        </constraints>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K6Q-fP-6kO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="743" y="281"/>
         </scene>
     </scenes>
 </document>
