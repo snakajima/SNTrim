@@ -22,7 +22,7 @@ class SNTrimController: UIViewController {
     @IBOutlet var imageView:UIImageView!
     @IBOutlet var segment:UISegmentedControl!
     
-    let image = UIImage(named: "dog.jpg")!
+    var image:UIImage!
     private var maskColor:UIColor?
     private var maskImage:UIImage?
     private var layers = [Layer]()

@@ -83,6 +83,7 @@
 		740247D41D86FAC3003FAD89 /* SNTrim */ = {
 			isa = PBXGroup;
 			children = (
+				740248131D89A75F003FAD89 /* ViewController.swift */,
 				740247D51D86FAC3003FAD89 /* AppDelegate.swift */,
 				740247D71D86FAC3003FAD89 /* SNTrimController.swift */,
 				7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */,
@@ -92,7 +93,6 @@
 				740247DC1D86FAC3003FAD89 /* Assets.xcassets */,
 				740247DE1D86FAC3003FAD89 /* LaunchScreen.storyboard */,
 				740247E11D86FAC3003FAD89 /* Info.plist */,
-				740248131D89A75F003FAD89 /* ViewController.swift */,
 				740248151D89A777003FAD89 /* Main.storyboard */,
 			);
 			path = SNTrim;

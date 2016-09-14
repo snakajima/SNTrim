@@ -22,14 +22,10 @@ class ViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        print("segue", segue.destinationViewController)
+        if let vc = segue.destinationViewController as? SNTrimController {
+            vc.image = UIImage(named: "dog.jpg")!
+        }
     }
-    */
-
 }
