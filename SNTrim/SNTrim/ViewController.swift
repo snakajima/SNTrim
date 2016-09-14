@@ -9,6 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet var imageView:UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,7 @@ extension ViewController: SNTrimControllerDelegate {
     func wasImageTrimmed(controller:SNTrimController, image:UIImage) {
         print("wasImageTrimmed")
         self.dismissViewControllerAnimated(true, completion: nil)
+        imageView.image = image
     }
 }
 

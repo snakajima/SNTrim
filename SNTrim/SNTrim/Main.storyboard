@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0SO-Jw-7cN">
-                                <rect key="frame" x="137" y="225" width="46" height="30"/>
+                                <rect key="frame" x="137" y="420" width="46" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="HQj-dL-W39"/>
                                     <constraint firstAttribute="width" constant="46" id="uEP-Dn-omB"/>
@@ -28,16 +28,24 @@
                                     <action selector="pickImage:" destination="hAI-So-cfh" eventType="touchUpInside" id="5Of-9s-9TV"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YFY-cf-unZ">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="390"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="0SO-Jw-7cN" firstAttribute="centerY" secondItem="hUe-zF-cqM" secondAttribute="centerY" id="mdZ-8p-twd"/>
+                            <constraint firstItem="0SO-Jw-7cN" firstAttribute="top" secondItem="YFY-cf-unZ" secondAttribute="bottom" constant="30" id="098-9r-3ek"/>
+                            <constraint firstAttribute="trailing" secondItem="YFY-cf-unZ" secondAttribute="trailing" id="58f-OL-5Vw"/>
+                            <constraint firstItem="YFY-cf-unZ" firstAttribute="top" secondItem="8or-c6-a3S" secondAttribute="bottom" id="5ex-WC-1Vq"/>
+                            <constraint firstItem="Z3j-8j-H9W" firstAttribute="top" secondItem="0SO-Jw-7cN" secondAttribute="bottom" constant="30" id="jgf-Ud-f3Z"/>
                             <constraint firstItem="0SO-Jw-7cN" firstAttribute="centerX" secondItem="hUe-zF-cqM" secondAttribute="centerX" id="vEN-R0-HLB"/>
+                            <constraint firstItem="YFY-cf-unZ" firstAttribute="leading" secondItem="hUe-zF-cqM" secondAttribute="leading" id="weB-7C-5lw"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="imageView" destination="YFY-cf-unZ" id="3Rw-vf-9Na"/>
                         <segue destination="sWR-3w-LSi" kind="show" identifier="trim" id="ySC-4s-GcQ"/>
                     </connections>
                 </viewController>
