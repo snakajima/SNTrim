@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		740247D61D86FAC3003FAD89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247D51D86FAC3003FAD89 /* AppDelegate.swift */; };
-		740247D81D86FAC3003FAD89 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247D71D86FAC3003FAD89 /* ViewController.swift */; };
+		740247D81D86FAC3003FAD89 /* SNTrimController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247D71D86FAC3003FAD89 /* SNTrimController.swift */; };
 		740247DB1D86FAC3003FAD89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 740247D91D86FAC3003FAD89 /* Main.storyboard */; };
 		740247DD1D86FAC3003FAD89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 740247DC1D86FAC3003FAD89 /* Assets.xcassets */; };
 		740247E01D86FAC3003FAD89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 740247DE1D86FAC3003FAD89 /* LaunchScreen.storyboard */; };
@@ -23,7 +23,7 @@
 /* Begin PBXFileReference section */
 		740247D21D86FAC3003FAD89 /* SNTrim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SNTrim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		740247D51D86FAC3003FAD89 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		740247D71D86FAC3003FAD89 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		740247D71D86FAC3003FAD89 /* SNTrimController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNTrimController.swift; sourceTree = "<group>"; };
 		740247DA1D86FAC3003FAD89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		740247DC1D86FAC3003FAD89 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		740247DF1D86FAC3003FAD89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -80,7 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				740247D51D86FAC3003FAD89 /* AppDelegate.swift */,
-				740247D71D86FAC3003FAD89 /* ViewController.swift */,
+				740247D71D86FAC3003FAD89 /* SNTrimController.swift */,
 				7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */,
 				740247D91D86FAC3003FAD89 /* Main.storyboard */,
 				7402480D1D87ABC9003FAD89 /* street.JPG */,
@@ -222,7 +222,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				740247ED1D86FAFF003FAD89 /* SNPathBuilder.swift in Sources */,
-				740247D81D86FAC3003FAD89 /* ViewController.swift in Sources */,
+				740247D81D86FAC3003FAD89 /* SNTrimController.swift in Sources */,
 				740247EC1D86FAFF003FAD89 /* SNPath.swift in Sources */,
 				740247EB1D86FAFF003FAD89 /* SNDrawView.swift in Sources */,
 				740247D61D86FAC3003FAD89 /* AppDelegate.swift in Sources */,

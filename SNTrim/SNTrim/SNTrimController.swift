@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  SNTrimController.swift
 //  SNTrim
 //
 //  Created by satoshi on 9/12/16.
@@ -14,7 +14,7 @@ private struct Layer {
     let fPlus:Bool
 }
 
-class ViewController: UIViewController {
+class SNTrimController: UIViewController {
     @IBOutlet var viewMain:UIView!
     @IBOutlet var btnUndo:UIBarButtonItem!
     @IBOutlet var btnRedo:UIBarButtonItem!
@@ -206,7 +206,7 @@ class ViewController: UIViewController {
 //
 // MARK: HandlePan
 //
-extension ViewController {
+extension SNTrimController {
     @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
         let pt = recognizer.locationInView(viewMain)
         switch(recognizer.state) {
@@ -233,7 +233,7 @@ extension ViewController {
 //
 // MARK: Magic Eraser
 //
-extension ViewController: SNTrimColorPickerDelegate {
+extension SNTrimController: SNTrimColorPickerDelegate {
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
         if maskColor == color {
             return
@@ -333,7 +333,7 @@ extension ViewController: SNTrimColorPickerDelegate {
 //
 // MARK: HandlePinch
 //
-extension ViewController {
+extension SNTrimController {
     @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
         let ptMain = recognizer.locationInView(viewMain)
         let ptView = recognizer.locationInView(view)
