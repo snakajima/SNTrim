@@ -393,7 +393,8 @@ extension SNTrimController {
     
     func boundCheck() -> CGRect {
         let size = trimmedImage.size
-        let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
+        let (width, height) = (Int(size.width), Int(size.height))
+        let data = NSMutableData(length: 4 * width * height)!
         //let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
@@ -412,6 +413,12 @@ extension SNTrimController {
             let row = y * Int(size.width)
             if (0..<Int(size.width)).reduce(0, combine: { $0 | words[row + $1]}) != 0 {
                 frame.size.height = CGFloat(y) - frame.origin.y + 1
+                break
+            }
+        }
+        for x in 0..<Int(size.width) {
+            if (0..<Int(size.height)).reduce(0, combine: { $0 | words[$1 * Int(size.width) + x]}) != 0 {
+                frame.origin.x = CGFloat(x)
                 break
             }
         }
