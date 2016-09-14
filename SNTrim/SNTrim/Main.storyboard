@@ -23,9 +23,9 @@
                                     <constraint firstAttribute="height" constant="30" id="HQj-dL-W39"/>
                                     <constraint firstAttribute="width" constant="46" id="uEP-Dn-omB"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Pick"/>
                                 <connections>
-                                    <segue destination="sWR-3w-LSi" kind="show" identifier="trim" id="KtB-UK-cn8"/>
+                                    <action selector="pickImage" destination="hAI-So-cfh" eventType="touchUpInside" id="QVW-EJ-aXv"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -37,6 +37,9 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <segue destination="sWR-3w-LSi" kind="show" identifier="trim" id="ySC-4s-GcQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fBv-ih-ebm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

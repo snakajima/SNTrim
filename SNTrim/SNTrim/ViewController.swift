@@ -28,4 +28,8 @@ class ViewController: UIViewController {
             vc.image = UIImage(named: "dog.jpg")!
         }
     }
+    
+    @IBAction func pickImage() {
+        self.performSegueWithIdentifier("trim", sender: nil)
+    }
 }
