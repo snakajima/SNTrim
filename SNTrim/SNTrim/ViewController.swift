@@ -201,36 +201,48 @@ extension ViewController: SNTrimColorPickerDelegate {
     func didColorSelected(vc:SNTrimColorPicker, color:UIColor) {
         var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        var hue:CGFloat = 0, saturation:CGFloat = 0, brightness:CGFloat = 0
-        color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-        let (h, s, v) = convert(red, g: green, b: blue)
-        print("didColorSelected", hue, saturation, brightness)
-        print("didColorSelected", h, s, v)
+        let (h0, s0, v0) = colorHSV(red, g: green, b: blue)
+        let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
+        print("didColorSelected", h0, s0, v0)
+        print("didColorSelected", x0, y0, z0)
         
         let size = image.size
         let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
-        let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo.rawValue)!
+        //let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
+        var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
+        bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
+        let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         for i in 0..<(data.length/4) {
             let (r, g, b) = (CGFloat(bytes[i*4])/255, CGFloat(bytes[i*4+1])/255, CGFloat(bytes[i*4+2])/255)
-            let (dr, dg, db) = (r - red, g - green, b - blue)
-            let d = (sqrt(dr * dr + dg * dg + db * db) - 0.3) * 4.0
+            let (h, s, v) = colorHSV(r, g: g, b: b)
+            let (x, y, z) = colorCone(h, s: s, v: v)
+            let (dx, dy, dz) = (x - x0, y - y0, z - z0)
+            let d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.4) * 10.0
             let a = max(0, min(255, Int(d * 255)))
-            
-            bytes[i*4 + 3] = UInt8(a)
+            bytes[i*4 + 3] = 0 // UInt8(a)
         }
         let maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
         imageView.image = maskImage
     }
+    
+    func colorCone(h:CGFloat, s:CGFloat, v:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
+        let radian = h * CGFloat(M_PI * 2)
+        let x = cos(radian) * v * s
+        let y = sin(radian) * v * s
+        return (x, y, v)
+    }
 
-    func convert(r:CGFloat, g:CGFloat, b:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
+    func colorHSV(r:CGFloat, g:CGFloat, b:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
         let maxC = max(r, max(g, b))
         if maxC == 0 {
             return (0, 0, 0)
         }
         let delta = maxC - min(r, min(g, b))
+        if delta == 0 {
+            return (0, 0, maxC)
+        }
 
         let delR = (((maxC - r)/6) + (delta / 2)) / delta
         let delG = (((maxC - g)/6) + (delta / 2)) / delta
@@ -244,7 +256,6 @@ extension ViewController: SNTrimColorPickerDelegate {
                 return 2/3 + delG - delR
             }
         }()
-        
         return (h < 0 ? h + 1 : (h > 1 ? h - 1 : h), delta / maxC, maxC)
     }
     
@@ -258,7 +269,7 @@ extension ViewController: SNTrimColorPickerDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let vc = segue.destinationViewController as? SNTrimColorPicker {
             vc.image = image
-            vc.color = UIColor.yellowColor()
+            vc.color = UIColor.whiteColor()
             vc.delegate = self
         }
     }
