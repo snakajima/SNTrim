@@ -15,6 +15,7 @@ protocol SNTrimColorPickerDelegate: class {
 class SNTrimColorPicker: UIViewController {
     @IBOutlet var mainView:UIView!
     @IBOutlet var colorView:UIView!
+    let preView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 80, height: 80)))
     weak var delegate:SNTrimColorPickerDelegate!
     var image:UIImage!
     var color:UIColor!
@@ -33,6 +34,11 @@ class SNTrimColorPicker: UIViewController {
         imageLayer.contents = image.CGImage
         imageLayer.contentsGravity = kCAGravityResizeAspect
         colorView.backgroundColor = color
+        
+        self.view.addSubview(preView)
+        preView.alpha = 0
+        preView.layer.cornerRadius = preView.bounds.size.width / 2.0
+        preView.layer.masksToBounds = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -73,6 +79,13 @@ class SNTrimColorPicker: UIViewController {
         let bytes = UnsafePointer<UInt8>(data.bytes)
         color = UIColor(red: CGFloat(bytes[0]) / 255, green: CGFloat(bytes[1]) / 255, blue: CGFloat(bytes[2]) / 255, alpha: 1.0)
         colorView.backgroundColor = color
+        
+        preView.backgroundColor = color
+        preView.center = recognizer.locationInView(view)
+        preView.alpha = 1.0
+        UIView.animateWithDuration(1.0) {
+            self.preView.alpha = 0.0
+        }
     }
 }
 
