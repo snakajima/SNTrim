@@ -11,6 +11,7 @@ import UIKit
 private struct Layer {
     let layer:CALayer
     let maskColor:UIColor?
+    let fPlus:Bool
 }
 
 class ViewController: UIViewController {
@@ -166,7 +167,7 @@ class ViewController: UIViewController {
         let context = UIGraphicsGetCurrentContext()!
         imageView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
         for i in range {
-            updateMaskColor(layers[i].maskColor)
+            updateMaskColor(layers[i].maskColor, fPlus: layers[i].fPlus)
             if let maskImage = maskImage {
                 let rc = CGRect(origin: .zero, size: image.size)
                 UIGraphicsBeginImageContext(image.size)
@@ -215,7 +216,7 @@ extension ViewController {
             let layer = createShapeLayer()
             layer.path = builder.end()
             layers.removeRange(index..<layers.count)
-            layers.append(Layer(layer: layer, maskColor: maskColor))
+            layers.append(Layer(layer: layer, maskColor: maskColor, fPlus: segment.selectedSegmentIndex==2))
             redo()
         default:
             shapeLayer.path = nil
@@ -227,7 +228,7 @@ extension ViewController {
 // MARK: Magic Eraser
 //
 extension ViewController: SNTrimColorPickerDelegate {
-    func updateMaskColor(color:UIColor?) {
+    func updateMaskColor(color:UIColor?, fPlus:Bool) {
         if maskColor == color {
             return
         }
@@ -257,7 +258,10 @@ extension ViewController: SNTrimColorPickerDelegate {
             let (x, y, z) = colorCone(h, s: s, v: v)
             let (dx, dy, dz) = (x - x0, y - y0, z - z0)
             let d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.0025) * 4.0
-            let a = max(0, min(255, Int(d * 255)))
+            var a = max(0, min(255, Int(d * 255)))
+            if fPlus {
+                a = 255 - a
+            }
             bytes[i*4 + 0] = UInt8(r * CGFloat(a))
             bytes[i*4 + 1] = UInt8(g * CGFloat(a))
             bytes[i*4 + 2] = UInt8(b * CGFloat(a))
@@ -267,7 +271,7 @@ extension ViewController: SNTrimColorPickerDelegate {
     }
 
     func didColorSelected(vc:SNTrimColorPicker, color:UIColor) {
-        updateMaskColor(color)
+        updateMaskColor(color, fPlus: segment.selectedSegmentIndex==2)
     }
     
     func colorCone(h:CGFloat, s:CGFloat, v:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
@@ -305,7 +309,7 @@ extension ViewController: SNTrimColorPickerDelegate {
     @IBAction func segmentSelected() {
         print("segment", segment.selectedSegmentIndex)
         if segment.selectedSegmentIndex == 0 {
-            updateMaskColor(nil)
+            updateMaskColor(nil, fPlus: false)
         } else {
             self.performSegueWithIdentifier("color", sender: nil)
         }
