@@ -341,6 +341,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         if let vc = segue.destinationViewController as? SNTrimColorPicker {
             vc.image = image
             vc.color = UIColor.whiteColor()
+            vc.xform = xform
             vc.delegate = self
         }
     }

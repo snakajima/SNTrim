@@ -18,10 +18,10 @@ class SNTrimColorPicker: UIViewController {
     weak var delegate:SNTrimColorPickerDelegate!
     var image:UIImage!
     var color:UIColor!
+    var xform = CGAffineTransformIdentity
     let imageLayer = CALayer()
 
     // Transient properties for handlePinch
-    private var xform = CGAffineTransformIdentity
     private var anchor = CGPoint.zero
     private var delta = CGPoint.zero
 
@@ -29,6 +29,7 @@ class SNTrimColorPicker: UIViewController {
         super.viewDidLoad()
         //mainView.image = image
         mainView.layer.addSublayer(imageLayer)
+        mainView.transform = xform
         imageLayer.contents = image.CGImage
         imageLayer.contentsGravity = kCAGravityResizeAspect
         colorView.backgroundColor = color
