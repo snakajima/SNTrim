@@ -402,27 +402,32 @@ extension SNTrimController {
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage)
         let words = UnsafeMutablePointer<UInt32>(data.mutableBytes)
         var frame = CGRect(origin: .zero, size: size)
-        for y in 0..<Int(size.height) {
-            let row = y * Int(size.width)
+        for y in 0..<height {
+            let row = y * width
             if (0..<Int(size.width)).reduce(0, combine: { $0 | words[row + $1]}) != 0 {
                 frame.origin.y = CGFloat(y)
                 break
             }
         }
-        for y in (Int(frame.origin.y+1)..<Int(size.height)).reverse() {
-            let row = y * Int(size.width)
+        for y in (Int(frame.origin.y+1)..<height).reverse() {
+            let row = y * width
             if (0..<Int(size.width)).reduce(0, combine: { $0 | words[row + $1]}) != 0 {
                 frame.size.height = CGFloat(y) - frame.origin.y + 1
                 break
             }
         }
-        for x in 0..<Int(size.width) {
-            if (0..<Int(size.height)).reduce(0, combine: { $0 | words[$1 * Int(size.width) + x]}) != 0 {
+        for x in 0..<width {
+            if (0..<height).reduce(0, combine: { $0 | words[$1 * width + x]}) != 0 {
                 frame.origin.x = CGFloat(x)
                 break
             }
         }
-        print("bound", frame)
+        for x in (Int(frame.origin.x)..<width).reverse() {
+            if (0..<height).reduce(0, combine: { $0 | words[$1 * width + x]}) != 0 {
+                frame.size.width = CGFloat(x) - frame.origin.x + 1
+                break
+            }
+        }
         return frame
     }
 }
