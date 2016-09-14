@@ -35,7 +35,15 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         self.dismissViewControllerAnimated(true) { 
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                self.performSegueWithIdentifier("trim", sender: image)
+                let sx = 1024 / image.size.width
+                let sy = 1024 / image.size.height
+                let scale = min(sx, sy)
+                let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+                UIGraphicsBeginImageContext(size)
+                image.drawInRect(CGRect(origin: .zero, size: size))
+                let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                self.performSegueWithIdentifier("trim", sender: resizedImage)
             }
         }
     }
