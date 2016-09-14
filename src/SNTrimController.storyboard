@@ -129,10 +129,19 @@
                         <viewControllerLayoutGuide type="top" id="lUQ-VF-uLZ"/>
                         <viewControllerLayoutGuide type="bottom" id="dUL-sh-Ipu"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="eAe-RR-awc">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="eAe-RR-awc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YLB-X6-TXW">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="sdn-SK-1Ul" appends="YES" id="fMn-E7-d6O"/>
+                                    <outletCollection property="gestureRecognizers" destination="Azl-Dm-y90" appends="YES" id="sGy-To-5Pj"/>
+                                </connections>
+                            </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="klv-sm-kgO">
                                 <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                                 <constraints>
@@ -154,14 +163,6 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YLB-X6-TXW">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="sdn-SK-1Ul" appends="YES" id="fMn-E7-d6O"/>
-                                </connections>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -187,6 +188,11 @@
                         <action selector="handleTap:" destination="Yac-ZW-jxE" id="gjM-Qb-mbb"/>
                     </connections>
                 </tapGestureRecognizer>
+                <pinchGestureRecognizer id="Azl-Dm-y90">
+                    <connections>
+                        <action selector="handlePinch:" destination="Yac-ZW-jxE" id="ChU-0u-2aj"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="743" y="281"/>
         </scene>

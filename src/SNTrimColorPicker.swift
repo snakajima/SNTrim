@@ -20,6 +20,11 @@ class SNTrimColorPicker: UIViewController {
     var color:UIColor!
     let imageLayer = CALayer()
 
+    // Transient properties for handlePinch
+    private var xform = CGAffineTransformIdentity
+    private var anchor = CGPoint.zero
+    private var delta = CGPoint.zero
+
     override func viewDidLoad() {
         super.viewDidLoad()
         //mainView.image = image
@@ -69,3 +74,44 @@ class SNTrimColorPicker: UIViewController {
         colorView.backgroundColor = color
     }
 }
+
+//
+// MARK: HandlePinch
+//
+extension SNTrimColorPicker {
+    private func setTransformAnimated(xform:CGAffineTransform) {
+        self.xform = xform
+        UIView.animateWithDuration(0.2) { 
+            self.mainView.transform = xform
+        }
+    }
+
+    @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
+        let ptMain = recognizer.locationInView(mainView)
+        let ptView = recognizer.locationInView(view)
+
+        switch(recognizer.state) {
+        case .Began:
+            anchor = ptView
+            delta = ptMain.delta(mainView.center)
+        case .Changed:
+            if recognizer.numberOfTouches() == 2 {
+                var offset = ptView.delta(anchor)
+                offset.x /= xform.a
+                offset.y /= xform.a
+                var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
+                xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
+                xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
+                self.mainView.transform = xf
+            }
+        case .Ended:
+            xform = self.mainView.transform
+            if xform.a < 1.0 {
+                setTransformAnimated(CGAffineTransformIdentity)
+            }
+        default:
+            self.mainView.transform = xform
+        }
+    }
+}
+
