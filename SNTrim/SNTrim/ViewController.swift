@@ -63,6 +63,7 @@ class ViewController: UIViewController {
     }()
     
     private func updateUI() {
+        print("updateUI", index, layers.count)
         btnUndo.enabled = index > 0
         btnRedo.enabled = index < layers.count
     }
@@ -122,6 +123,8 @@ class ViewController: UIViewController {
         for layer in layers {
             layer.layer.removeFromSuperlayer()
         }
+        segment.selectedSegmentIndex = 0
+        updateMaskColor(nil, fPlus: false)
         layers.removeAll()
         imageCache.removeAll()
         index = 0
