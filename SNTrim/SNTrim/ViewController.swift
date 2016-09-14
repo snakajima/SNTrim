@@ -241,8 +241,6 @@ extension ViewController: SNTrimColorPickerDelegate {
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         let (h0, s0, v0) = colorHSV(red, g: green, b: blue)
         let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
-        print("didColorSelected", h0, s0, v0)
-        print("didColorSelected", x0, y0, z0)
         
         let size = image.size
         let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
@@ -257,11 +255,12 @@ extension ViewController: SNTrimColorPickerDelegate {
             let (h, s, v) = colorHSV(r, g: g, b: b)
             let (x, y, z) = colorCone(h, s: s, v: v)
             let (dx, dy, dz) = (x - x0, y - y0, z - z0)
+            let distance = sqrt(dx * dx + dy * dy + dz * dz)
             let d:CGFloat
             if fPlus {
-                d = 1.0 - (sqrt(dx * dx + dy * dy + dz * dz) - 0.3) * 4.0
+                d = 1.0 - (distance - 0.3) * 4.0
             } else {
-                d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.0025) * 4.0
+                d = (distance - 0.0025) * 4.0
             }
             let a = max(0, min(255, Int(d * 255)))
             bytes[i*4 + 0] = UInt8(r * CGFloat(a))
@@ -309,7 +308,6 @@ extension ViewController: SNTrimColorPickerDelegate {
     }
     
     @IBAction func segmentSelected() {
-        print("segment", segment.selectedSegmentIndex)
         if segment.selectedSegmentIndex == 0 {
             updateMaskColor(nil, fPlus: false)
         } else {

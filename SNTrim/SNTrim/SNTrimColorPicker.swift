@@ -57,7 +57,6 @@ class SNTrimColorPicker: UIViewController {
     }
     
     @IBAction func handleTap(recognizer:UITapGestureRecognizer) {
-        print("handleTap")
         //let size = image.size
         let pt = recognizer.locationInView(mainView)
         let data = NSMutableData(length: 4)!
@@ -65,9 +64,7 @@ class SNTrimColorPicker: UIViewController {
         let context = CGBitmapContextCreate(data.mutableBytes, 1, 1, 8, 4, CGColorSpaceCreateDeviceRGB(), bitmapInfo.rawValue)!
         CGContextConcatCTM(context, CGAffineTransformMakeTranslation(-pt.x, -pt.y))
         imageLayer.renderInContext(context)
-        //CGContextDrawImage(context, CGRect(origin:CGPoint(x:-pt.x, y:-pt.y), size:size), image.CGImage)
         let bytes = UnsafePointer<UInt8>(data.bytes)
-        print("colors", bytes[0], bytes[1], bytes[2], bytes[3])
         color = UIColor(red: CGFloat(bytes[0]) / 255, green: CGFloat(bytes[1]) / 255, blue: CGFloat(bytes[2]) / 255, alpha: 1.0)
         colorView.backgroundColor = color
     }
