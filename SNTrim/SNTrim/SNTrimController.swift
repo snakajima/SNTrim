@@ -14,6 +14,10 @@ private struct Layer {
     let fPlus:Bool
 }
 
+protocol SNTrimControllerDelegate : class {
+    func wasImageTrimmed(controller:SNTrimController, image:UIImage)
+}
+
 class SNTrimController: UIViewController {
     @IBOutlet var viewMain:UIView!
     @IBOutlet var btnUndo:UIBarButtonItem!
@@ -23,33 +27,41 @@ class SNTrimController: UIViewController {
     @IBOutlet var segment:UISegmentedControl!
     
     var image:UIImage!
+    var delegate:SNTrimControllerDelegate!
+
+    private var trimmedImage:UIImage! {
+        didSet {
+            imageView.image = trimmedImage
+        }
+    }
+    
     private var maskColor:UIColor?
     private var maskImage:UIImage?
     private var layers = [Layer]()
     private var index = 0
-    var xform = CGAffineTransformIdentity {
+    private var xform = CGAffineTransformIdentity {
         didSet {
             shapeLayer.lineWidth = 30 / xform.a
             builder.minSegment = 8.0 / xform.a
         }
     }
     // Image Cache
-    let cacheCycle = 8
-    let cacheMax = 8
-    var imageCache = [(Int,UIImage?)]()
+    private let cacheCycle = 8
+    private let cacheMax = 8
+    private var imageCache = [(Int,UIImage?)]()
     
     // Transient properties for handlePinch
-    var anchor = CGPoint.zero
-    var delta = CGPoint.zero
+    private var anchor = CGPoint.zero
+    private var delta = CGPoint.zero
 
-    var builder = SNPathBuilder(minSegment: 8.0)
-    lazy var shapeLayer:CAShapeLayer = {
+    private var builder = SNPathBuilder(minSegment: 8.0)
+    private lazy var shapeLayer:CAShapeLayer = {
         let layer = self.createShapeLayer()
         layer.opacity = 0.5
         self.viewMain.layer.addSublayer(layer)
         return layer
     }()
-    lazy var imageTransform:CGAffineTransform = {
+    private lazy var imageTransform:CGAffineTransform = {
         let size = self.viewMain.bounds.size
         let sx = self.image.size.width / size.width
         let sy = self.image.size.height / size.height
@@ -85,7 +97,7 @@ class SNTrimController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
+        trimmedImage = image
         segment.selectedSegmentIndex = 0
         updateUI()
     }
@@ -119,6 +131,10 @@ class SNTrimController: UIViewController {
         }
     }
 
+    @IBAction func done() {
+        delegate.wasImageTrimmed(self, image: trimmedImage)
+    }
+    
     @IBAction func clear() {
         for layer in layers {
             layer.layer.removeFromSuperlayer()
@@ -128,7 +144,7 @@ class SNTrimController: UIViewController {
         layers.removeAll()
         imageCache.removeAll()
         index = 0
-        imageView.image = image
+        trimmedImage = image
         setTransformAnimated(CGAffineTransformIdentity)
         updateUI()
     }
@@ -142,10 +158,10 @@ class SNTrimController: UIViewController {
         if let (i, image) = imageCache.last {
             assert(i <= index)
             print("using cache", i, index)
-            imageView.image = image
+            trimmedImage = image
             renderLayers(i..<index)
         } else {
-            imageView.image = image
+            trimmedImage = image
             renderLayers(0..<index)
         }
         updateUI()
@@ -160,7 +176,7 @@ class SNTrimController: UIViewController {
                 imageCache.removeFirst()
             }
             print("caching", index)
-            imageCache.append((index, imageView.image))
+            imageCache.append((index, trimmedImage))
         }
         updateUI()
     }
@@ -168,7 +184,7 @@ class SNTrimController: UIViewController {
     private func renderLayers(range:Range<Int>) {
         UIGraphicsBeginImageContext(image.size)
         let context = UIGraphicsGetCurrentContext()!
-        imageView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
+        trimmedImage.drawInRect(CGRect(origin: .zero, size: image.size))
         for i in range {
             updateMaskColor(layers[i].maskColor, fPlus: layers[i].fPlus)
             CGContextSaveGState(context)
@@ -198,7 +214,7 @@ class SNTrimController: UIViewController {
             }
             CGContextRestoreGState(context)
         }
-        imageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        trimmedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
     }
 }

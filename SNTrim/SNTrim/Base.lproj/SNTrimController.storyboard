@@ -41,9 +41,9 @@
                                     <constraint firstAttribute="height" constant="44" id="ipj-gZ-7m2"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="Clear" id="jA9-m5-RLi">
+                                    <barButtonItem title="Done" id="jA9-m5-RLi">
                                         <connections>
-                                            <action selector="clear" destination="BYZ-38-t0r" id="ips-IF-xSk"/>
+                                            <action selector="done" destination="BYZ-38-t0r" id="QcU-BZ-Yta"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="MO0-r6-LXk"/>

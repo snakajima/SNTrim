@@ -27,7 +27,15 @@ class ViewController: UIViewController {
         if let vc = segue.destinationViewController as? SNTrimController,
            let image = sender as? UIImage {
             vc.image = image
+            vc.delegate = self
         }
+    }
+}
+
+extension ViewController: SNTrimControllerDelegate {
+    func wasImageTrimmed(controller:SNTrimController, image:UIImage) {
+        print("wasImageTrimmed")
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
