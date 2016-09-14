@@ -172,6 +172,8 @@ class ViewController: UIViewController {
                 UIGraphicsBeginImageContext(image.size)
                 let imageContext = UIGraphicsGetCurrentContext()!
                 CGContextSaveGState(imageContext)
+                CGContextConcatCTM(imageContext, CGAffineTransformMakeTranslation(0, image.size.height))
+                CGContextConcatCTM(imageContext, CGAffineTransformMakeScale(1, -1))
                 CGContextConcatCTM(imageContext, imageTransform)
                 layers[i].layer.renderInContext(imageContext)
                 CGContextRestoreGState(imageContext)
