@@ -200,6 +200,25 @@ extension ViewController {
 extension ViewController: SNTrimColorPickerDelegate {
     func didColorSelected(vc:SNTrimColorPicker, color:UIColor) {
         print("didColorSelected")
+        var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        let size = image.size
+        let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
+        let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo.rawValue)!
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
+        let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
+        for i in 0..<(data.length/4) {
+            let (r, g, b) = (CGFloat(bytes[i*4])/255, CGFloat(bytes[i*4+1])/255, CGFloat(bytes[i*4+2])/255)
+            let (dr, dg, db) = (r - red, g - green, b - blue)
+            let d = (sqrt(dr * dr + dg * dg + db * db) - 0.3) * 4.0
+            let a = max(0, min(255, Int(d * 255)))
+            
+            bytes[i*4 + 3] = UInt8(a)
+        }
+        let maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
+        imageView.image = maskImage
     }
     
     @IBAction func segmentSelected() {
