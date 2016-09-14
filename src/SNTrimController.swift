@@ -141,7 +141,13 @@ class SNTrimController: UIViewController {
     }
 
     @IBAction func done() {
-        delegate.wasImageTrimmed(self, image: trimmedImage)
+        let frame = boundsRect()
+        let size = trimmedImage.size
+        UIGraphicsBeginImageContext(frame.size)
+        trimmedImage.drawInRect(CGRect(x: -frame.origin.x, y: -frame.origin.y, width: size.width, height: size.height))
+        let croppedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        delegate.wasImageTrimmed(self, image: croppedImage)
     }
     
     @IBAction func clear() {
@@ -380,7 +386,7 @@ extension SNTrimController {
             }
         case .Ended:
             xform = self.viewMain.transform
-            let frame = boundCheck()
+            let frame = boundsRect()
             self.borderView.frame = CGRectApplyAffineTransform(frame, CGAffineTransformInvert(self.imageTransform))
             self.borderView.alpha = 1.0
             UIView.animateWithDuration(0.5, animations: {
@@ -391,7 +397,7 @@ extension SNTrimController {
         }
     }
     
-    func boundCheck() -> CGRect {
+    func boundsRect() -> CGRect {
         let size = trimmedImage.size
         let (width, height) = (Int(size.width), Int(size.height))
         let data = NSMutableData(length: 4 * width * height)!
