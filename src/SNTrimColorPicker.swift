@@ -107,7 +107,7 @@ extension SNTrimColorPicker {
             }
         case .Ended:
             xform = self.mainView.transform
-            if xform.a < 1.0 {
+            if xform.a < 0.5 {
                 setTransformAnimated(CGAffineTransformIdentity)
             }
         default:

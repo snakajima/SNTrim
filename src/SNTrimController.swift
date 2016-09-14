@@ -371,7 +371,7 @@ extension SNTrimController {
             }
         case .Ended:
             xform = self.viewMain.transform
-            if xform.a < 1.0 {
+            if xform.a < 0.5 {
                 setTransformAnimated(CGAffineTransformIdentity)
             }
         default:
