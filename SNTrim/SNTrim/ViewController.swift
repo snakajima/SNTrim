@@ -29,8 +29,23 @@ class ViewController: UIViewController {
             vc.image = image
         }
     }
+}
+
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        self.dismissViewControllerAnimated(true) { 
+            if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+                self.performSegueWithIdentifier("trim", sender: image)
+            }
+        }
+    }
     
-    @IBAction func pickImage() {
-        self.performSegueWithIdentifier("trim", sender: UIImage(named: "dog.jpg"))
+     @IBAction func pickImage(sender:UIButton) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        picker.modalPresentationStyle = .Popover
+        picker.popoverPresentationController?.sourceView = sender
+        self.presentViewController(picker, animated: true, completion: nil)
     }
 }

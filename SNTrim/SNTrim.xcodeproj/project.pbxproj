@@ -88,12 +88,12 @@
 				740247D71D86FAC3003FAD89 /* SNTrimController.swift */,
 				7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */,
 				740247D91D86FAC3003FAD89 /* SNTrimController.storyboard */,
+				740248151D89A777003FAD89 /* Main.storyboard */,
 				7402480D1D87ABC9003FAD89 /* street.JPG */,
 				7402480B1D87111A003FAD89 /* dog.jpg */,
 				740247DC1D86FAC3003FAD89 /* Assets.xcassets */,
 				740247DE1D86FAC3003FAD89 /* LaunchScreen.storyboard */,
 				740247E11D86FAC3003FAD89 /* Info.plist */,
-				740248151D89A777003FAD89 /* Main.storyboard */,
 			);
 			path = SNTrim;
 			sourceTree = "<group>";
