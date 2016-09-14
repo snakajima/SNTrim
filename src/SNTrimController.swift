@@ -374,9 +374,43 @@ extension SNTrimController {
             if xform.a < 0.5 {
                 setTransformAnimated(CGAffineTransformIdentity)
             }
+            boundCheck()
         default:
             self.viewMain.transform = xform
         }
+    }
+    
+    func boundCheck() {
+        let size = trimmedImage.size
+        let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
+        //let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
+        var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
+        bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
+        let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage)
+        let words = UnsafeMutablePointer<UInt32>(data.mutableBytes)
+        var frame = CGRect(origin: .zero, size: size)
+        for y in 0..<Int(size.height) {
+            let row = y * Int(size.width)
+            let sum = (0..<Int(size.width)).reduce(0, combine: { (sum, x) -> UInt32 in
+                return sum | words[row + x]
+            })
+            if sum != 0 {
+                frame.origin.y = CGFloat(y)
+                break
+            }
+        }
+        for y in (Int(frame.origin.y+1)..<Int(size.height)).reverse() {
+            let row = y * Int(size.width)
+            let sum = (0..<Int(size.width)).reduce(0, combine: { (sum, x) -> UInt32 in
+                return sum | words[row + x]
+            })
+            if sum != 0 {
+                frame.size.height = CGFloat(y) - frame.origin.y + 1
+                break
+            }
+        }
+        print("bound", frame)
     }
 }
 
