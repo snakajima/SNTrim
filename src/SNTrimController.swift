@@ -392,20 +392,14 @@ extension SNTrimController {
         var frame = CGRect(origin: .zero, size: size)
         for y in 0..<Int(size.height) {
             let row = y * Int(size.width)
-            let sum = (0..<Int(size.width)).reduce(0, combine: { (sum, x) -> UInt32 in
-                return sum | words[row + x]
-            })
-            if sum != 0 {
+            if (0..<Int(size.width)).reduce(0, combine: { $0 | words[row + $1]}) != 0 {
                 frame.origin.y = CGFloat(y)
                 break
             }
         }
         for y in (Int(frame.origin.y+1)..<Int(size.height)).reverse() {
             let row = y * Int(size.width)
-            let sum = (0..<Int(size.width)).reduce(0, combine: { (sum, x) -> UInt32 in
-                return sum | words[row + x]
-            })
-            if sum != 0 {
+            if (0..<Int(size.width)).reduce(0, combine: { $0 | words[row + $1]}) != 0 {
                 frame.size.height = CGFloat(y) - frame.origin.y + 1
                 break
             }
