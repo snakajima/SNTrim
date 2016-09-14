@@ -8,6 +8,11 @@
 
 import UIKit
 
+private struct Layer {
+    let layer:CALayer
+    let maskImage:UIImage?
+}
+
 class ViewController: UIViewController {
     @IBOutlet var viewMain:UIView!
     @IBOutlet var btnUndo:UIBarButtonItem!
@@ -17,8 +22,9 @@ class ViewController: UIViewController {
     @IBOutlet var segment:UISegmentedControl!
     
     let image = UIImage(named: "dog.jpg")!
-    var layers = [CALayer]()
-    var index = 0
+    private var maskImage:UIImage?
+    private var layers = [Layer]()
+    private var index = 0
     var xform = CGAffineTransformIdentity {
         didSet {
             shapeLayer.lineWidth = 30 / xform.a
@@ -112,7 +118,7 @@ class ViewController: UIViewController {
 
     @IBAction func clear() {
         for layer in layers {
-            layer.removeFromSuperlayer()
+            layer.layer.removeFromSuperlayer()
         }
         layers.removeAll()
         imageCache.removeAll()
@@ -161,7 +167,7 @@ class ViewController: UIViewController {
         CGContextConcatCTM(context, imageTransform)
         CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
         for i in range {
-            layers[i].renderInContext(context)
+            layers[i].layer.renderInContext(context)
         }
         imageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -186,7 +192,7 @@ extension ViewController {
             let layer = createShapeLayer()
             layer.path = builder.end()
             layers.removeRange(index..<layers.count)
-            layers.append(layer)
+            layers.append(Layer(layer: layer, maskImage: maskImage))
             redo()
         default:
             shapeLayer.path = nil
@@ -226,8 +232,7 @@ extension ViewController: SNTrimColorPickerDelegate {
             bytes[i*4 + 2] = UInt8(b * CGFloat(a))
             bytes[i*4 + 3] = UInt8(a)
         }
-        let maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
-        imageView.image = maskImage
+        maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
     }
     
     func colorCone(h:CGFloat, s:CGFloat, v:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
@@ -266,6 +271,8 @@ extension ViewController: SNTrimColorPickerDelegate {
         print("segment", segment.selectedSegmentIndex)
         if segment.selectedSegmentIndex == 1 {
             self.performSegueWithIdentifier("color", sender: nil)
+        } else {
+            maskImage = nil
         }
     }
 
