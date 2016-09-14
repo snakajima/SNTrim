@@ -171,6 +171,7 @@ class ViewController: UIViewController {
         imageView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
         for i in range {
             updateMaskColor(layers[i].maskColor, fPlus: layers[i].fPlus)
+            CGContextSaveGState(context)
             if let maskImage = maskImage {
                 let rc = CGRect(origin: .zero, size: image.size)
                 UIGraphicsBeginImageContext(image.size)
@@ -195,6 +196,7 @@ class ViewController: UIViewController {
                 CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
                 layers[i].layer.renderInContext(context)
             }
+            CGContextRestoreGState(context)
         }
         imageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -218,6 +220,7 @@ extension ViewController {
             shapeLayer.path = nil
             let layer = createShapeLayer()
             layer.path = builder.end()
+            print("Ended")
             layers.removeRange(index..<layers.count)
             layers.append(Layer(layer: layer, maskColor: maskColor, fPlus: segment.selectedSegmentIndex==2))
             redo()
