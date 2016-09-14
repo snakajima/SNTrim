@@ -165,11 +165,30 @@ class ViewController: UIViewController {
         UIGraphicsBeginImageContext(image.size)
         let context = UIGraphicsGetCurrentContext()!
         imageView.image?.drawInRect(CGRect(origin: .zero, size: image.size))
-        CGContextConcatCTM(context, imageTransform)
-        CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
         for i in range {
             updateMaskColor(layers[i].maskColor)
-            layers[i].layer.renderInContext(context)
+            if let maskImage = maskImage {
+                let rc = CGRect(origin: .zero, size: image.size)
+                UIGraphicsBeginImageContext(image.size)
+                let imageContext = UIGraphicsGetCurrentContext()!
+                CGContextSaveGState(imageContext)
+                CGContextConcatCTM(imageContext, imageTransform)
+                layers[i].layer.renderInContext(imageContext)
+                CGContextRestoreGState(imageContext)
+
+                CGContextSetBlendMode(imageContext, CGBlendMode.DestinationOut)
+                CGContextDrawImage(imageContext, rc, maskImage.CGImage)
+
+                let imageBrush = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+
+                CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
+                CGContextDrawImage(context, rc, imageBrush.CGImage)
+            } else {
+                CGContextConcatCTM(context, imageTransform)
+                CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
+                layers[i].layer.renderInContext(context)
+            }
         }
         imageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
