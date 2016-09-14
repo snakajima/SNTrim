@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G24b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hAI-So-cfh">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="VaE-KW-hbU">
+            <objects>
+                <viewController id="hAI-So-cfh" customClass="ViewController" customModule="SNTrim" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8or-c6-a3S"/>
+                        <viewControllerLayoutGuide type="bottom" id="Z3j-8j-H9W"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hUe-zF-cqM">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0SO-Jw-7cN">
+                                <rect key="frame" x="137" y="225" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="HQj-dL-W39"/>
+                                    <constraint firstAttribute="width" constant="46" id="uEP-Dn-omB"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="sWR-3w-LSi" kind="show" identifier="trim" id="KtB-UK-cn8"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0SO-Jw-7cN" firstAttribute="centerY" secondItem="hUe-zF-cqM" secondAttribute="centerY" id="mdZ-8p-twd"/>
+                            <constraint firstItem="0SO-Jw-7cN" firstAttribute="centerX" secondItem="hUe-zF-cqM" secondAttribute="centerX" id="vEN-R0-HLB"/>
+                        </constraints>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fBv-ih-ebm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="271" y="324"/>
+        </scene>
+        <!--SNTrimController-->
+        <scene sceneID="7oG-JZ-269">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SNTrimController" id="sWR-3w-LSi" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OzJ-Px-omK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="552" y="324"/>
+        </scene>
+    </scenes>
+</document>
