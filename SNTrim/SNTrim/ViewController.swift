@@ -199,9 +199,13 @@ extension ViewController {
 //
 extension ViewController: SNTrimColorPickerDelegate {
     func didColorSelected(vc:SNTrimColorPicker, color:UIColor) {
-        print("didColorSelected")
         var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        var hue:CGFloat = 0, saturation:CGFloat = 0, brightness:CGFloat = 0
+        color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        let (h, s, v) = convert(red, g: green, b: blue)
+        print("didColorSelected", hue, saturation, brightness)
+        print("didColorSelected", h, s, v)
         
         let size = image.size
         let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
@@ -219,6 +223,29 @@ extension ViewController: SNTrimColorPickerDelegate {
         }
         let maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
         imageView.image = maskImage
+    }
+
+    func convert(r:CGFloat, g:CGFloat, b:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
+        let maxC = max(r, max(g, b))
+        if maxC == 0 {
+            return (0, 0, 0)
+        }
+        let delta = maxC - min(r, min(g, b))
+
+        let delR = (((maxC - r)/6) + (delta / 2)) / delta
+        let delG = (((maxC - g)/6) + (delta / 2)) / delta
+        let delB = (((maxC - b)/6) + (delta / 2)) / delta
+        let h:CGFloat = {
+            if r == maxC {
+                return delB - delG
+            } else if g == maxC {
+                return 1/3 + delR - delB
+            } else {
+                return 2/3 + delG - delR
+            }
+        }()
+        
+        return (h < 0 ? h + 1 : (h > 1 ? h - 1 : h), delta / maxC, maxC)
     }
     
     @IBAction func segmentSelected() {
