@@ -29,6 +29,14 @@ class SNTrimController: UIViewController {
     var image:UIImage!
     var delegate:SNTrimControllerDelegate!
 
+    private let borderView:UIView = {
+        let borderView = UIView()
+        borderView.backgroundColor = UIColor.clearColor()
+        borderView.layer.borderColor = UIColor.greenColor().CGColor
+        borderView.layer.borderWidth = 4.0
+        borderView.alpha = 0.0
+        return borderView
+    }()
     private var trimmedImage:UIImage! {
         didSet {
             imageView.image = trimmedImage
@@ -99,6 +107,7 @@ class SNTrimController: UIViewController {
         super.viewDidLoad()
         trimmedImage = image
         segment.selectedSegmentIndex = 0
+        viewMain.addSubview(borderView)
         updateUI()
     }
     
@@ -124,11 +133,11 @@ class SNTrimController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    private func setTransformAnimated(xform:CGAffineTransform) {
+    private func setTransformAnimated(xform:CGAffineTransform, completion:((Bool) -> Void)? = nil) {
         self.xform = xform
-        UIView.animateWithDuration(0.2) { 
+        UIView.animateWithDuration(0.2, animations:{
             self.viewMain.transform = xform
-        }
+        }, completion: completion)
     }
 
     @IBAction func done() {
@@ -371,16 +380,18 @@ extension SNTrimController {
             }
         case .Ended:
             xform = self.viewMain.transform
-            if xform.a < 0.5 {
-                setTransformAnimated(CGAffineTransformIdentity)
-            }
-            boundCheck()
+            let frame = boundCheck()
+            self.borderView.frame = CGRectApplyAffineTransform(frame, CGAffineTransformInvert(self.imageTransform))
+            self.borderView.alpha = 1.0
+            UIView.animateWithDuration(0.5, animations: {
+                self.borderView.alpha = 0.0
+            })
         default:
             self.viewMain.transform = xform
         }
     }
     
-    func boundCheck() {
+    func boundCheck() -> CGRect {
         let size = trimmedImage.size
         let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
         //let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
@@ -405,6 +416,7 @@ extension SNTrimController {
             }
         }
         print("bound", frame)
+        return frame
     }
 }
 
