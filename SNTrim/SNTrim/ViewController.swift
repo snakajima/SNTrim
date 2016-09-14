@@ -304,10 +304,10 @@ extension ViewController: SNTrimColorPickerDelegate {
     
     @IBAction func segmentSelected() {
         print("segment", segment.selectedSegmentIndex)
-        if segment.selectedSegmentIndex == 1 {
-            self.performSegueWithIdentifier("color", sender: nil)
-        } else {
+        if segment.selectedSegmentIndex == 0 {
             updateMaskColor(nil)
+        } else {
+            self.performSegueWithIdentifier("color", sender: nil)
         }
     }
 

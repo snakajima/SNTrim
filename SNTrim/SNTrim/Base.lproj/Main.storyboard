@@ -49,11 +49,12 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="MO0-r6-LXk"/>
                                     <barButtonItem style="plain" id="8ap-aB-Lai">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="3qf-gd-QpI">
-                                            <rect key="frame" x="74" y="7" width="121" height="30"/>
+                                            <rect key="frame" x="62" y="7" width="148" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="Eraser"/>
-                                                <segment title="Magic"/>
+                                                <segment title="-Color"/>
+                                                <segment title="+Color"/>
                                             </segments>
                                             <connections>
                                                 <action selector="segmentSelected" destination="BYZ-38-t0r" eventType="valueChanged" id="uI5-9F-JIv"/>
