@@ -24,12 +24,13 @@ class ViewController: UIViewController {
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         print("segue", segue.destinationViewController)
-        if let vc = segue.destinationViewController as? SNTrimController {
-            vc.image = UIImage(named: "dog.jpg")!
+        if let vc = segue.destinationViewController as? SNTrimController,
+           let image = sender as? UIImage {
+            vc.image = image
         }
     }
     
     @IBAction func pickImage() {
-        self.performSegueWithIdentifier("trim", sender: nil)
+        self.performSegueWithIdentifier("trim", sender: UIImage(named: "dog.jpg"))
     }
 }
