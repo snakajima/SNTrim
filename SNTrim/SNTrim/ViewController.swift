@@ -219,9 +219,12 @@ extension ViewController: SNTrimColorPickerDelegate {
             let (h, s, v) = colorHSV(r, g: g, b: b)
             let (x, y, z) = colorCone(h, s: s, v: v)
             let (dx, dy, dz) = (x - x0, y - y0, z - z0)
-            let d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.4) * 10.0
+            let d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.0025) * 4.0
             let a = max(0, min(255, Int(d * 255)))
-            bytes[i*4 + 3] = 0 // UInt8(a)
+            bytes[i*4 + 0] = UInt8(r * CGFloat(a))
+            bytes[i*4 + 1] = UInt8(g * CGFloat(a))
+            bytes[i*4 + 2] = UInt8(b * CGFloat(a))
+            bytes[i*4 + 3] = UInt8(a)
         }
         let maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
         imageView.image = maskImage
