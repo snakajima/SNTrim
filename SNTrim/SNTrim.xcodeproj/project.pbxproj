@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		740247D61D86FAC3003FAD89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247D51D86FAC3003FAD89 /* AppDelegate.swift */; };
-		740247D81D86FAC3003FAD89 /* SNTrimController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247D71D86FAC3003FAD89 /* SNTrimController.swift */; };
 		740247DB1D86FAC3003FAD89 /* SNTrimController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 740247D91D86FAC3003FAD89 /* SNTrimController.storyboard */; };
 		740247DD1D86FAC3003FAD89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 740247DC1D86FAC3003FAD89 /* Assets.xcassets */; };
 		740247E01D86FAC3003FAD89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 740247DE1D86FAC3003FAD89 /* LaunchScreen.storyboard */; };
@@ -17,15 +16,15 @@
 		740247ED1D86FAFF003FAD89 /* SNPathBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740247EA1D86FAFF003FAD89 /* SNPathBuilder.swift */; };
 		7402480C1D87111A003FAD89 /* dog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7402480B1D87111A003FAD89 /* dog.jpg */; };
 		7402480E1D87ABC9003FAD89 /* street.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 7402480D1D87ABC9003FAD89 /* street.JPG */; };
-		740248101D889F8C003FAD89 /* SNTrimColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */; };
 		740248141D89A75F003FAD89 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740248131D89A75F003FAD89 /* ViewController.swift */; };
 		740248161D89A777003FAD89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 740248151D89A777003FAD89 /* Main.storyboard */; };
+		7402481A1D89BA9A003FAD89 /* SNTrimColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */; };
+		7402481B1D89BA9A003FAD89 /* SNTrimController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740248191D89BA9A003FAD89 /* SNTrimController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		740247D21D86FAC3003FAD89 /* SNTrim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SNTrim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		740247D51D86FAC3003FAD89 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		740247D71D86FAC3003FAD89 /* SNTrimController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNTrimController.swift; sourceTree = "<group>"; };
 		740247DA1D86FAC3003FAD89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SNTrimController.storyboard; sourceTree = "<group>"; };
 		740247DC1D86FAC3003FAD89 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		740247DF1D86FAC3003FAD89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,9 +46,10 @@
 		740248041D86FB32003FAD89 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7402480B1D87111A003FAD89 /* dog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog.jpg; sourceTree = "<group>"; };
 		7402480D1D87ABC9003FAD89 /* street.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = street.JPG; sourceTree = "<group>"; };
-		7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNTrimColorPicker.swift; sourceTree = "<group>"; };
 		740248131D89A75F003FAD89 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		740248151D89A777003FAD89 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNTrimColorPicker.swift; sourceTree = "<group>"; };
+		740248191D89BA9A003FAD89 /* SNTrimController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNTrimController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,10 +83,9 @@
 		740247D41D86FAC3003FAD89 /* SNTrim */ = {
 			isa = PBXGroup;
 			children = (
+				740248171D89BA9A003FAD89 /* src */,
 				740248131D89A75F003FAD89 /* ViewController.swift */,
 				740247D51D86FAC3003FAD89 /* AppDelegate.swift */,
-				740247D71D86FAC3003FAD89 /* SNTrimController.swift */,
-				7402480F1D889F8C003FAD89 /* SNTrimColorPicker.swift */,
 				740247D91D86FAC3003FAD89 /* SNTrimController.storyboard */,
 				740248151D89A777003FAD89 /* Main.storyboard */,
 				7402480D1D87ABC9003FAD89 /* street.JPG */,
@@ -152,6 +151,16 @@
 				740248041D86FB32003FAD89 /* ViewController.swift */,
 			);
 			path = SNDraw2;
+			sourceTree = "<group>";
+		};
+		740248171D89BA9A003FAD89 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */,
+				740248191D89BA9A003FAD89 /* SNTrimController.swift */,
+			);
+			name = src;
+			path = ../../src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,12 +238,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				740247ED1D86FAFF003FAD89 /* SNPathBuilder.swift in Sources */,
-				740247D81D86FAC3003FAD89 /* SNTrimController.swift in Sources */,
 				740247EC1D86FAFF003FAD89 /* SNPath.swift in Sources */,
 				740247EB1D86FAFF003FAD89 /* SNDrawView.swift in Sources */,
+				7402481A1D89BA9A003FAD89 /* SNTrimColorPicker.swift in Sources */,
 				740248141D89A75F003FAD89 /* ViewController.swift in Sources */,
+				7402481B1D89BA9A003FAD89 /* SNTrimController.swift in Sources */,
 				740247D61D86FAC3003FAD89 /* AppDelegate.swift in Sources */,
-				740248101D889F8C003FAD89 /* SNTrimColorPicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
