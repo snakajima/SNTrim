@@ -14,6 +14,13 @@ private struct Layer {
     let fPlus:Bool
 }
 
+private enum BackgroundMode: Int {
+    case checker = 0
+    case black = 1
+    case white = 2
+    case limit = 3
+}
+
 protocol SNTrimControllerDelegate : class {
     func wasImageTrimmed(controller:SNTrimController, image:UIImage?)
 }
@@ -54,6 +61,29 @@ class SNTrimController: UIViewController {
             builder.minSegment = 8.0 / xform.a
         }
     }
+    
+    // Background
+    private var backgroundMode = BackgroundMode.limit {
+        didSet {
+            checkerView.image = nil
+            thumbImage.image = nil
+            switch(backgroundMode) {
+            case .checker:
+                checkerView.image = checkerImage
+                thumbImage.image = checkerImage
+            case .black:
+                checkerView.backgroundColor = UIColor.blackColor()
+                thumbImage.backgroundColor = UIColor.blackColor()
+            case .white:
+                checkerView.backgroundColor = UIColor.whiteColor()
+                thumbImage.backgroundColor = UIColor.whiteColor()
+            default:
+                break
+            }
+        }
+    }
+    private var checkerImage:UIImage?
+
     // Image Cache
     private let cacheCycle = 8
     private let cacheMax = 8
@@ -82,7 +112,6 @@ class SNTrimController: UIViewController {
             return CGAffineTransformTranslate(xf, -(size.width - self.image.size.width / sy) / 2.0, 0)
         }
     }()
-    private var checkerImage:UIImage?
     
     private func updateUI() {
         print("updateUI", index, layers.count)
@@ -110,6 +139,7 @@ class SNTrimController: UIViewController {
         trimmedImage = image
         segment.selectedSegmentIndex = 0
         viewMain.addSubview(borderView)
+        backgroundMode = .checker
         updateUI()
     }
     
@@ -128,8 +158,10 @@ class SNTrimController: UIViewController {
         }
         checkerImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        checkerView.image = checkerImage
-        thumbImage.image = checkerImage
+        
+        let temp = backgroundMode
+        backgroundMode = .limit
+        backgroundMode = temp
     }
 
     override func didReceiveMemoryWarning() {
@@ -174,6 +206,8 @@ class SNTrimController: UIViewController {
     
     @IBAction func switchBackground() {
         print("switchBackground")
+        let rawValue = (backgroundMode.rawValue + 1) % BackgroundMode.limit.rawValue
+        backgroundMode = BackgroundMode(rawValue: rawValue)!
     }
     
     @IBAction func undo() {
