@@ -25,6 +25,7 @@ class SNTrimController: UIViewController {
     @IBOutlet var checkerView:UIImageView!
     @IBOutlet var imageView:UIImageView!
     @IBOutlet var segment:UISegmentedControl!
+    @IBOutlet var thumbImage:UIImageView!
     
     var image:UIImage!
     var delegate:SNTrimControllerDelegate!
@@ -108,6 +109,7 @@ class SNTrimController: UIViewController {
         trimmedImage = image
         segment.selectedSegmentIndex = 0
         viewMain.addSubview(borderView)
+        thumbImage.backgroundColor = UIColor.redColor()
         updateUI()
     }
     
@@ -166,6 +168,10 @@ class SNTrimController: UIViewController {
         trimmedImage = image
         setTransformAnimated(CGAffineTransformIdentity)
         updateUI()
+    }
+    
+    @IBAction func switchBackground() {
+        print("switchBackground")
     }
     
     @IBAction func undo() {

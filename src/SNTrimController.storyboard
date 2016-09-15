@@ -21,40 +21,18 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="19n-K2-kCo">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="392"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X3c-gp-IZ2">
-                                        <rect key="frame" x="0.0" y="44" width="320" height="392"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="392"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </imageView>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VFI-RG-gqQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="Y2k-20-P0u"/>
-                                        </constraints>
-                                        <items>
-                                            <barButtonItem systemItem="cancel" id="XAd-5v-ZFd">
-                                                <connections>
-                                                    <action selector="cancel" destination="BYZ-38-t0r" id="Y1I-Vi-pnH"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem style="plain" systemItem="flexibleSpace" id="izU-BJ-uUF"/>
-                                            <barButtonItem title="Done" id="jA9-m5-RLi">
-                                                <connections>
-                                                    <action selector="done" destination="BYZ-38-t0r" id="QcU-BZ-Yta"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </items>
-                                    </toolbar>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="VFI-RG-gqQ" firstAttribute="top" secondItem="19n-K2-kCo" secondAttribute="top" id="1jt-Dg-7Ox"/>
                                     <constraint firstAttribute="trailing" secondItem="X3c-gp-IZ2" secondAttribute="trailing" id="3P4-sT-BxV"/>
                                     <constraint firstItem="X3c-gp-IZ2" firstAttribute="top" secondItem="19n-K2-kCo" secondAttribute="top" constant="80" id="BI6-L8-zMw"/>
-                                    <constraint firstItem="X3c-gp-IZ2" firstAttribute="top" secondItem="VFI-RG-gqQ" secondAttribute="bottom" id="Bfh-zt-0JD"/>
                                     <constraint firstAttribute="bottom" secondItem="X3c-gp-IZ2" secondAttribute="bottom" id="KG1-zy-biC"/>
-                                    <constraint firstAttribute="trailing" secondItem="VFI-RG-gqQ" secondAttribute="trailing" id="PAb-W7-Xux"/>
-                                    <constraint firstItem="VFI-RG-gqQ" firstAttribute="leading" secondItem="19n-K2-kCo" secondAttribute="leading" id="dCV-4p-62N"/>
+                                    <constraint firstItem="X3c-gp-IZ2" firstAttribute="top" secondItem="19n-K2-kCo" secondAttribute="top" id="KcV-l8-u4x"/>
                                     <constraint firstItem="X3c-gp-IZ2" firstAttribute="leading" secondItem="19n-K2-kCo" secondAttribute="leading" id="osa-u9-ykx"/>
                                 </constraints>
                                 <variation key="default">
@@ -69,6 +47,17 @@
                                     <constraint firstAttribute="height" constant="44" id="ipj-gZ-7m2"/>
                                 </constraints>
                                 <items>
+                                    <barButtonItem style="plain" id="R3C-px-qcw">
+                                        <view key="customView" contentMode="scaleToFill" id="C86-9x-NGt" customClass="UIImageView">
+                                            <rect key="frame" x="16" y="5.5" width="44" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <gestureRecognizers/>
+                                            <connections>
+                                                <outletCollection property="gestureRecognizers" destination="cY6-1x-mUV" appends="YES" id="eKZ-gb-F21"/>
+                                            </connections>
+                                        </view>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="MO0-r6-LXk"/>
                                     <barButtonItem style="plain" id="8ap-aB-Lai">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="3qf-gd-QpI">
@@ -97,22 +86,50 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VFI-RG-gqQ">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Y2k-20-P0u"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem systemItem="cancel" id="XAd-5v-ZFd">
+                                        <connections>
+                                            <action selector="cancel" destination="BYZ-38-t0r" id="Y1I-Vi-pnH"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="izU-BJ-uUF"/>
+                                    <barButtonItem title="Done" id="jA9-m5-RLi">
+                                        <connections>
+                                            <action selector="done" destination="BYZ-38-t0r" id="QcU-BZ-Yta"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="bjL-G7-yTB" secondAttribute="bottom" id="277-t1-1yq"/>
                             <constraint firstItem="DSU-rI-PNS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Cjk-MN-aCJ"/>
+                            <constraint firstAttribute="trailing" secondItem="VFI-RG-gqQ" secondAttribute="trailing" id="GUD-Wt-laC"/>
                             <constraint firstItem="19n-K2-kCo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="KZS-Ds-AYx"/>
                             <constraint firstAttribute="trailing" secondItem="bjL-G7-yTB" secondAttribute="trailing" id="Nvd-0l-yRE"/>
                             <constraint firstAttribute="trailing" secondItem="DSU-rI-PNS" secondAttribute="trailing" id="POt-Mw-wLD"/>
                             <constraint firstAttribute="trailing" secondItem="19n-K2-kCo" secondAttribute="trailing" id="T9L-bS-ROH"/>
                             <constraint firstItem="bjL-G7-yTB" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="XHZ-F6-GM9"/>
+                            <constraint firstItem="VFI-RG-gqQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="a19-Rr-0PK"/>
                             <constraint firstItem="DSU-rI-PNS" firstAttribute="top" secondItem="19n-K2-kCo" secondAttribute="bottom" id="aDk-pL-qbx"/>
+                            <constraint firstItem="19n-K2-kCo" firstAttribute="top" secondItem="VFI-RG-gqQ" secondAttribute="bottom" id="clU-VJ-8wN"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="DSU-rI-PNS" secondAttribute="bottom" id="v3Y-lW-Ptu"/>
+                            <constraint firstItem="VFI-RG-gqQ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="xYG-j1-b0O"/>
                             <constraint firstItem="bjL-G7-yTB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="xmt-oG-e0m"/>
-                            <constraint firstItem="19n-K2-kCo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="yyQ-W4-wUO"/>
+                            <constraint firstItem="19n-K2-kCo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="80" id="yyQ-W4-wUO"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="yyQ-W4-wUO"/>
+                            </mask>
+                        </variation>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="W1m-iu-pYH" appends="YES" id="8Jy-Ey-Vd6"/>
                             <outletCollection property="gestureRecognizers" destination="Xeu-Nm-SUD" appends="YES" id="Z6r-Kw-4Si"/>
@@ -126,6 +143,7 @@
                         <outlet property="checkerView" destination="bjL-G7-yTB" id="KVg-j7-ZQM"/>
                         <outlet property="imageView" destination="X3c-gp-IZ2" id="38v-wv-DwN"/>
                         <outlet property="segment" destination="3qf-gd-QpI" id="CwG-It-t5X"/>
+                        <outlet property="thumbImage" destination="C86-9x-NGt" id="E5y-Zf-bHp"/>
                         <outlet property="viewMain" destination="19n-K2-kCo" id="9b3-VZ-iUm"/>
                         <segue destination="Yac-ZW-jxE" kind="show" identifier="color" id="XTz-Gh-Awv"/>
                     </connections>
@@ -141,6 +159,11 @@
                         <action selector="handlePan:" destination="BYZ-38-t0r" id="KPs-7n-4N6"/>
                     </connections>
                 </panGestureRecognizer>
+                <tapGestureRecognizer id="cY6-1x-mUV">
+                    <connections>
+                        <action selector="switchBackground" destination="BYZ-38-t0r" id="NoS-QF-Lag"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="305" y="281"/>
         </scene>
