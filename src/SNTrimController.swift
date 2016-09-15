@@ -15,7 +15,7 @@ private struct Layer {
 }
 
 protocol SNTrimControllerDelegate : class {
-    func wasImageTrimmed(controller:SNTrimController, image:UIImage)
+    func wasImageTrimmed(controller:SNTrimController, image:UIImage?)
 }
 
 class SNTrimController: UIViewController {
@@ -148,6 +148,10 @@ class SNTrimController: UIViewController {
         let croppedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         delegate.wasImageTrimmed(self, image: croppedImage)
+    }
+    
+    @IBAction func cancel() {
+        delegate.wasImageTrimmed(self, image: nil)
     }
     
     @IBAction func clear() {
