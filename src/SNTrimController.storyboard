@@ -180,7 +180,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YLB-X6-TXW">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="436"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="392"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <connections>
@@ -195,11 +195,6 @@
                                     <constraint firstAttribute="height" constant="44" id="9rv-ac-hqC"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem systemItem="done" id="Emq-FS-MMf">
-                                        <connections>
-                                            <action selector="done" destination="Yac-ZW-jxE" id="FOg-fw-NIc"/>
-                                        </connections>
-                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Ifq-CU-gOe"/>
                                     <barButtonItem style="plain" id="SBq-D9-2M5">
                                         <view key="customView" contentMode="scaleToFill" id="fgO-LR-b1l">
@@ -210,17 +205,40 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KnU-Cq-GKD">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Rqz-iW-z7n"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="I9a-hX-1d8"/>
+                                    <barButtonItem systemItem="done" id="Emq-FS-MMf">
+                                        <connections>
+                                            <action selector="done" destination="Yac-ZW-jxE" id="FOg-fw-NIc"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="YLB-X6-TXW" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" id="2nU-zU-UZA"/>
+                            <constraint firstItem="YLB-X6-TXW" firstAttribute="top" secondItem="KnU-Cq-GKD" secondAttribute="bottom" id="2h7-ge-e0Z"/>
+                            <constraint firstItem="YLB-X6-TXW" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" constant="80" id="2nU-zU-UZA"/>
                             <constraint firstItem="klv-sm-kgO" firstAttribute="top" secondItem="YLB-X6-TXW" secondAttribute="bottom" id="8Tz-Ag-FQd"/>
                             <constraint firstAttribute="trailing" secondItem="YLB-X6-TXW" secondAttribute="trailing" id="NCM-Fa-rfa"/>
+                            <constraint firstItem="KnU-Cq-GKD" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="WgB-hS-6VS"/>
                             <constraint firstAttribute="trailing" secondItem="klv-sm-kgO" secondAttribute="trailing" id="ZY8-iB-qZ8"/>
                             <constraint firstItem="klv-sm-kgO" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="h4s-zW-kQc"/>
+                            <constraint firstItem="KnU-Cq-GKD" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" id="haC-Mk-cTh"/>
                             <constraint firstItem="dUL-sh-Ipu" firstAttribute="top" secondItem="klv-sm-kgO" secondAttribute="bottom" id="iHe-ag-If9"/>
                             <constraint firstItem="YLB-X6-TXW" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="kIc-47-yNx"/>
+                            <constraint firstAttribute="trailing" secondItem="KnU-Cq-GKD" secondAttribute="trailing" id="xaA-mV-ZHX"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="2nU-zU-UZA"/>
+                            </mask>
+                        </variation>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
