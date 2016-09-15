@@ -186,6 +186,7 @@
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="sdn-SK-1Ul" appends="YES" id="fMn-E7-d6O"/>
                                     <outletCollection property="gestureRecognizers" destination="Azl-Dm-y90" appends="YES" id="sGy-To-5Pj"/>
+                                    <outletCollection property="gestureRecognizers" destination="3gK-9E-MRx" appends="YES" id="slL-ju-yg9"/>
                                 </connections>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="klv-sm-kgO">
@@ -239,6 +240,11 @@
                         <action selector="handlePinch:" destination="Yac-ZW-jxE" id="ChU-0u-2aj"/>
                     </connections>
                 </pinchGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" maximumNumberOfTouches="1" id="3gK-9E-MRx">
+                    <connections>
+                        <action selector="handlePan:" destination="Yac-ZW-jxE" id="GRD-Wi-ZvB"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="743" y="281"/>
         </scene>

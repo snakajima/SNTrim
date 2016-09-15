@@ -67,9 +67,8 @@ class SNTrimColorPicker: UIViewController {
             self.delegate.didColorSelected(self, color: self.color)
         }
     }
-    
-    @IBAction func handleTap(recognizer:UITapGestureRecognizer) {
-        //let size = image.size
+
+    private func pickColorWith(recognizer:UIGestureRecognizer, offset:CGSize) {
         let pt = recognizer.locationInView(mainView)
         let data = NSMutableData(length: 4)!
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
@@ -79,11 +78,28 @@ class SNTrimColorPicker: UIViewController {
         let bytes = UnsafePointer<UInt8>(data.bytes)
         color = UIColor(red: CGFloat(bytes[0]) / 255, green: CGFloat(bytes[1]) / 255, blue: CGFloat(bytes[2]) / 255, alpha: 1.0)
         colorView.backgroundColor = color
-        
         preView.backgroundColor = color
-        preView.center = recognizer.locationInView(view)
+        preView.center = recognizer.locationInView(view).translate(offset.width, y: offset.height)
+    }
+    
+    @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
+        switch(recognizer.state) {
+        case .Began:
+            preView.alpha = 1.0
+            pickColorWith(recognizer, offset:CGSize(width: 0.0, height: -88.0))
+        case .Changed:
+            pickColorWith(recognizer, offset:CGSize(width: 0.0, height: -88.0))
+        default:
+            UIView.animateWithDuration(0.2) {
+                self.preView.alpha = 0.0
+            }
+        }
+    }
+    
+    @IBAction func handleTap(recognizer:UITapGestureRecognizer) {
+        pickColorWith(recognizer, offset:.zero)
         preView.alpha = 1.0
-        UIView.animateWithDuration(1.0) {
+        UIView.animateWithDuration(0.2) {
             self.preView.alpha = 0.0
         }
     }
