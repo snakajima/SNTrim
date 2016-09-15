@@ -74,7 +74,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="f0Z-k0-DjY"/>
                                     <barButtonItem style="plain" id="R3C-px-qcw">
-                                        <view key="customView" contentMode="scaleToFill" id="C86-9x-NGt" customClass="UIImageView">
+                                        <view key="customView" clipsSubviews="YES" contentMode="TopLeft" id="C86-9x-NGt" customClass="UIImageView">
                                             <rect key="frame" x="260" y="5.5" width="44" height="33"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

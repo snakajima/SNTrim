@@ -82,6 +82,7 @@ class SNTrimController: UIViewController {
             return CGAffineTransformTranslate(xf, -(size.width - self.image.size.width / sy) / 2.0, 0)
         }
     }()
+    private var checkerImage:UIImage?
     
     private func updateUI() {
         print("updateUI", index, layers.count)
@@ -109,7 +110,6 @@ class SNTrimController: UIViewController {
         trimmedImage = image
         segment.selectedSegmentIndex = 0
         viewMain.addSubview(borderView)
-        thumbImage.backgroundColor = UIColor.redColor()
         updateUI()
     }
     
@@ -126,8 +126,10 @@ class SNTrimController: UIViewController {
                 CGContextFillRect(context, CGRect(x: x * 32 + 16, y: y * 32 + 16, width: 16, height: 16))
             }
         }
-        checkerView.image = UIGraphicsGetImageFromCurrentImageContext()
+        checkerImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+        checkerView.image = checkerImage
+        thumbImage.image = checkerImage
     }
 
     override func didReceiveMemoryWarning() {
