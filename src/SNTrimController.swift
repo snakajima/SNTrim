@@ -340,12 +340,11 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             let (dx, dy, dz) = (x - x0, y - y0, z - z0)
             let distance = sqrt(dx * dx + dy * dy + dz * dz)
             let d:CGFloat
+            d = (distance - 0.1) * 4.0
+            var a = max(0, min(255, Int(d * 255)))
             if fPlus {
-                d = 1.0 - (distance - 0.3) * 4.0
-            } else {
-                d = (distance - 0.0025) * 4.0
+                a = 255 - a
             }
-            let a = max(0, min(255, Int(d * 255)))
             bytes[i*4 + 0] = UInt8(r * CGFloat(a))
             bytes[i*4 + 1] = UInt8(g * CGFloat(a))
             bytes[i*4 + 2] = UInt8(b * CGFloat(a))
@@ -360,8 +359,8 @@ extension SNTrimController: SNTrimColorPickerDelegate {
     
     func colorCone(h:CGFloat, s:CGFloat, v:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
         let radian = h * CGFloat(M_PI * 2)
-        let x = cos(radian) * v * s
-        let y = sin(radian) * v * s
+        let x = cos(radian) * sqrt(v) * s
+        let y = sin(radian) * sqrt(v) * s
         return (x, y, v)
     }
 
