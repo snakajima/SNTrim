@@ -9,7 +9,14 @@
 #include <metal_stdlib>
 using namespace metal;
 
-kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
+struct Pixel {
+    uchar r;
+    uchar g;
+    uchar b;
+    uchar a;
+};
+
+kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
                       const device uint& width [[ buffer(1) ]],
                       const device uint& height [[ buffer(2) ]],
                       const device float& x0 [[ buffer(3) ]],
@@ -22,25 +29,23 @@ kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
                       const uint tPos [[ thread_position_in_threadgroup ]]) {
     
     uint offset = tgPos * tPerTg + tPos;
-    uint index = offset * width * 4;
-    uint end = index + width * 4;
-    for(; index < end; index += 4) {
-        const uchar r = rgba[index];
-        const uchar g = rgba[index+1];
-        const uchar b = rgba[index+2];
-        const uchar v = max(r, max(g, b));
+    uint index = offset * width;
+    uint end = index + width;
+    for(; index < end; index++) {
+        const Pixel pixel = pixels[index];
+        const uchar v = max(pixel.r, max(pixel.g, pixel.b));
         uchar s = 0;
         int h = 0;
         if (v > 0) {
-            uint delta = (uint)(v - min(r, min(g, b)));
+            uint delta = (uint)(v - min(pixel.r, min(pixel.g, pixel.b)));
             if (delta > 0) {
                 s = (uchar)(delta * 255 / (uint)v);
-                int delR = (((uint)(v - r) * 60) + delta * 180) / delta;
-                int delG = (((uint)(v - g) * 60) + delta * 180) / delta;
-                int delB = (((uint)(v - b) * 60) + delta * 180) / delta;
-                if (r == v) {
+                int delR = (((uint)(v - pixel.r) * 60) + delta * 180) / delta;
+                int delG = (((uint)(v - pixel.g) * 60) + delta * 180) / delta;
+                int delB = (((uint)(v - pixel.b) * 60) + delta * 180) / delta;
+                if (pixel.r == v) {
                     h = delB - delG;
-                } else if (g == v) {
+                } else if (pixel.g == v) {
                     h = 120 + delR - delB;
                 } else {
                     h = 240 + delG - delR;
@@ -60,7 +65,7 @@ kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
         if (inv) {
             a = 1.0 - a;
         }
-        rgba[index+3] = (uchar)(a * 255.0);
+        pixels[index].a = (uchar)(a * 255.0);
     }
 }
 
