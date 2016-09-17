@@ -34,12 +34,12 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
     for(; index < end; index++) {
         const Pixel pixel = pixels[index];
         const uchar v = max(pixel.r, max(pixel.g, pixel.b));
-        uchar s = 0;
+        float s = 0.0;
         int h = 0;
         if (v > 0) {
             uint delta = (uint)(v - min(pixel.r, min(pixel.g, pixel.b)));
             if (delta > 0) {
-                s = (uchar)(delta * 255 / (uint)v);
+                s = (float)delta / (float)v;
                 int delR = (((uint)(v - pixel.r) * 60) + delta * 180) / delta;
                 int delG = (((uint)(v - pixel.g) * 60) + delta * 180) / delta;
                 int delB = (((uint)(v - pixel.b) * 60) + delta * 180) / delta;
@@ -55,8 +55,8 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
         }
         float radian = (float)h * 3.14159265 / 180.0;
         float z = (float)v / 255.0;
-        float x = sin(radian) * sqrt(z) * (float)s / 255.0;
-        float y = cos(radian) * sqrt(z) * (float)s / 255.0;
+        float x = sin(radian) * sqrt(z) * s;
+        float y = cos(radian) * sqrt(z) * s;
         float dx = x0 - x;
         float dy = y0 - y;
         float dz = z0 - z;
