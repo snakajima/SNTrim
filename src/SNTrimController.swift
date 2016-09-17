@@ -313,10 +313,10 @@ extension SNTrimController {
 //
 extension SNTrimController: SNTrimColorPickerDelegate {
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
-        updateMaskColorCPU(color, fPlus: fPlus)
-    }
-    
-    func updateMaskColorGPU(color:UIColor?, fPlus:Bool) {
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            print("SNTrim No Metal. User CPU")
+            return updateMaskColorCPU(color, fPlus: fPlus)
+        }
         if maskColor == color {
             return
         }
@@ -338,7 +338,6 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         
-        let device = MTLCreateSystemDefaultDevice()!
         let queue = device.newCommandQueue()
         let dataBuffer = device.newBufferWithBytes(bytes, length: data.length, options: [])
         let cmdBuffer:MTLCommandBuffer = {
@@ -374,7 +373,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         cmdBuffer.commit()
         cmdBuffer.waitUntilCompleted()
         let end = NSDate()
-        print("SNTrim updateMaskColorMetal \(size), \(end.timeIntervalSinceDate(start))")
+        print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
         memcpy(bytes, dataBuffer.contents(), data.length)
         maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
     }
@@ -420,7 +419,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             bytes[i*4 + 3] = UInt8(a)
         }
         let end = NSDate()
-        print("SNTrim updateMaskColor \(size), \(end.timeIntervalSinceDate(start))")
+        print("SNTrim CPU \(size), \(end.timeIntervalSinceDate(start))")
         maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
     }
 
