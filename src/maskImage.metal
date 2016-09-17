@@ -15,6 +15,7 @@ kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
                       const device float& x0 [[ buffer(3) ]],
                       const device float& y0 [[ buffer(4) ]],
                       const device float& z0 [[ buffer(5) ]],
+                      const device bool& inv [[ buffer(6) ]],
 
                       const uint tgPos [[ threadgroup_position_in_grid ]],
                       const uint tPerTg [[ threads_per_threadgroup ]],
@@ -56,6 +57,9 @@ kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
         float dz = z0 - z;
         float d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.1) * 4.0;
         float a = max(0.0, min(1.0, d));
+        if (inv) {
+            a = 1.0 - a;
+        }
         rgba[index+3] = (uchar)(a * 255.0);
     }
 }
