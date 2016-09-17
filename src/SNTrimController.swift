@@ -119,7 +119,7 @@ class SNTrimController: UIViewController {
     }()
     
     private func updateUI() {
-        print("updateUI", index, layers.count)
+        //print("updateUI", index, layers.count)
         btnUndo.enabled = index > 0
         btnRedo.enabled = index < layers.count
     }
@@ -336,7 +336,6 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
         let size = image.size
         let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
-        //let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
