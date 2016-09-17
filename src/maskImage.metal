@@ -33,9 +33,9 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
     uint end = index + width;
     for(; index < end; index++) {
         const Pixel pixel = pixels[index];
-        const uchar v = max(pixel.r, max(pixel.g, pixel.b));
-        float s = 0.0;
-        int h = 0;
+        const uchar v = max(pixel.r, max(pixel.g, pixel.b)); // Value 0-255
+        float s = 0.0; // Saturation 0.0-1.0
+        int h = 0; // Hue 0-360
         if (v > 0) {
             uint delta = (uint)(v - min(pixel.r, min(pixel.g, pixel.b)));
             if (delta > 0) {
@@ -55,10 +55,9 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
         }
         float radian = (float)h * 3.14159265 / 180.0;
         float z = (float)v / 255.0;
-        float x = sin(radian) * sqrt(z) * s;
-        float y = cos(radian) * sqrt(z) * s;
-        float dx = x0 - x;
-        float dy = y0 - y;
+        float factor = sqrt(z) * s;
+        float dx = x0 - sin(radian) * factor;
+        float dy = y0 - cos(radian) * factor;
         float dz = z0 - z;
         float d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.1) * 4.0;
         float a = max(0.0, min(1.0, d));
