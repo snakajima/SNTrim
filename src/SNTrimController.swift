@@ -336,11 +336,12 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
+        let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         
         let start = NSDate()
-        let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
+        // NOTE: We need to copy it because the "bytes" might not be page-aligned.
+        let dataBuffer = device.newBufferWithBytes(bytes, length: data.length, options: [])
         let cmdBuffer:MTLCommandBuffer = {
-            let dataBuffer = device.newBufferWithBytesNoCopy(bytes, length: data.length, options: [], deallocator: nil)
             let queue = device.newCommandQueue()
             let cmdBuffer = queue.commandBuffer()
             let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
@@ -374,6 +375,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         cmdBuffer.waitUntilCompleted()
         let end = NSDate()
         print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
+        memcpy(bytes, dataBuffer.contents(), data.length)
         maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
     }
 
@@ -399,7 +401,6 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
-        
         let start = NSDate()
         for i in 0..<(data.length/4) {
             let (r, g, b) = (CGFloat(bytes[i*4])/255, CGFloat(bytes[i*4+1])/255, CGFloat(bytes[i*4+2])/255)
