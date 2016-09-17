@@ -37,6 +37,10 @@ class SNTrimController: UIViewController {
     
     var image:UIImage!
     var delegate:SNTrimControllerDelegate!
+    
+    // Metal
+    static let device = MTLCreateSystemDefaultDevice()
+    let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("maskImage")
 
     private let borderView:UIView = {
         let borderView = UIView()
@@ -313,7 +317,8 @@ extension SNTrimController {
 //
 extension SNTrimController: SNTrimColorPickerDelegate {
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
-        guard let device = MTLCreateSystemDefaultDevice() else {
+        guard let device = SNTrimController.device,
+              let function = self.function else {
             print("SNTrim No Metal. User CPU")
             return updateMaskColorCPU(color, fPlus: fPlus)
         }
@@ -346,9 +351,6 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             let cmdBuffer = queue.commandBuffer()
             let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
             
-            //let loader = MTKTextureLoader(device: device)
-            //let texture = try! loader.newTextureWithCGImage(image.CGImage!, options: nil)
-            //encoder.setTexture(texture, atIndex: 0)
             var intWidth = CUnsignedInt(size.width)
             var intHeight = CUnsignedInt(size.height)
             var (ux0, uy0, uz0) = (CFloat(x0), CFloat(y0), CFloat(z0))
@@ -361,7 +363,6 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             encoder.setBytes(&uz0, length: sizeofValue(uz0), atIndex: 5)
             encoder.setBytes(&inv, length: sizeofValue(inv), atIndex: 6)
 
-            let function = device.newDefaultLibrary()!.newFunctionWithName("maskImage")!
             let pipeline = try! device.newComputePipelineStateWithFunction(function)
             encoder.setComputePipelineState(pipeline)
             let threadExeWidth = pipeline.threadExecutionWidth
