@@ -302,7 +302,6 @@ extension SNTrimController {
             shapeLayer.path = nil
             let layer = createShapeLayer()
             layer.path = builder.end()
-            print("Ended")
             layers.removeRange(index..<layers.count)
             layers.append(Layer(layer: layer, maskColor: maskColor, fPlus: segment.selectedSegmentIndex==2))
             redo()
