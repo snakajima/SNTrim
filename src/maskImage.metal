@@ -45,7 +45,10 @@ kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
                 h = (h + 360) % 360;
             }
         }
-        rgba[index+3] = (uchar)h;
+        float radian = (float)h * 3.14159265 / 180;
+        float x = sin(radian) * sqrt((float)v) * (float)s;
+        float y = sin(radian) * sqrt((float)v) * (float)s;
+        rgba[index+3] = (uchar)x;
     }
 }
 
