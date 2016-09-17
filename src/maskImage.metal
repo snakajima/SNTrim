@@ -22,6 +22,30 @@ kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
     uint index = offset * width * 4;
     uint end = index + width * 4;
     for(; index < end; index += 4) {
-        rgba[index+3] = rgba[index];
+        const uchar r = rgba[index];
+        const uchar g = rgba[index+1];
+        const uchar b = rgba[index+2];
+        const uchar v = max(r, max(g, b));
+        uchar s = 0;
+        int h = 0;
+        if (v > 0) {
+            uint delta = (uint)(v - min(r, min(g, b)));
+            if (delta > 0) {
+                s = (uchar)(delta * 255 / (uint)v);
+                int delR = (((uint)(v - r) * 60) + delta * 180) / delta;
+                int delG = (((uint)(v - g) * 60) + delta * 180) / delta;
+                int delB = (((uint)(v - b) * 60) + delta * 180) / delta;
+                if (r == v) {
+                    h = delB - delG;
+                } else if (g == v) {
+                    h = 120 + delR - delB;
+                } else {
+                    h = 240 + delG - delR;
+                }
+                h = (h + 360) % 360;
+            }
+        }
+        rgba[index+3] = (uchar)h;
     }
 }
+

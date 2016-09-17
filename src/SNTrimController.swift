@@ -349,7 +349,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             encoder.setBuffer(dataBuffer, offset: 0, atIndex: 0)
             encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
             encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
-            encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 3)
+            //encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 3)
 
             let function = device.newDefaultLibrary()!.newFunctionWithName("maskImage")!
             let pipeline = try! device.newComputePipelineStateWithFunction(function)
