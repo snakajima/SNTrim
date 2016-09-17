@@ -338,9 +338,9 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         
-        let queue = device.newCommandQueue()
         let dataBuffer = device.newBufferWithBytes(bytes, length: data.length, options: [])
         let cmdBuffer:MTLCommandBuffer = {
+            let queue = device.newCommandQueue()
             let cmdBuffer = queue.commandBuffer()
             let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
             
