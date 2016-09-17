@@ -20,6 +20,7 @@
 		7402481A1D89BA9A003FAD89 /* SNTrimColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */; };
 		7402481B1D89BA9A003FAD89 /* SNTrimController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740248191D89BA9A003FAD89 /* SNTrimController.swift */; };
 		7402481D1D89BB96003FAD89 /* SNTrimController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7402481C1D89BB96003FAD89 /* SNTrimController.storyboard */; };
+		746EDF911D8CAE1C008AA635 /* maskImage.metal in Sources */ = {isa = PBXBuildFile; fileRef = 746EDF901D8CAE1C008AA635 /* maskImage.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNTrimColorPicker.swift; sourceTree = "<group>"; };
 		740248191D89BA9A003FAD89 /* SNTrimController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNTrimController.swift; sourceTree = "<group>"; };
 		7402481C1D89BB96003FAD89 /* SNTrimController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SNTrimController.storyboard; sourceTree = "<group>"; };
+		746EDF901D8CAE1C008AA635 /* maskImage.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = maskImage.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 			children = (
 				740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */,
 				740248191D89BA9A003FAD89 /* SNTrimController.swift */,
+				746EDF901D8CAE1C008AA635 /* maskImage.metal */,
 				7402481C1D89BB96003FAD89 /* SNTrimController.storyboard */,
 			);
 			name = src;
@@ -244,6 +247,7 @@
 				740248141D89A75F003FAD89 /* ViewController.swift in Sources */,
 				7402481B1D89BA9A003FAD89 /* SNTrimController.swift in Sources */,
 				740247D61D86FAC3003FAD89 /* AppDelegate.swift in Sources */,
+				746EDF911D8CAE1C008AA635 /* maskImage.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,6 +385,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SNTrim/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cloudreaders.SNTrim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -392,6 +397,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SNTrim/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cloudreaders.SNTrim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -417,6 +423,7 @@
 				740247E61D86FAC3003FAD89 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

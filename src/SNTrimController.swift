@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MetalKit
 
 private struct Layer {
     let layer:CALayer
@@ -324,6 +325,64 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         let (h0, s0, v0) = colorHSV(red, g: green, b: blue)
         let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
+        let size = image.size
+        let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
+        //let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
+        var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
+        bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
+        let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
+        let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
+        
+        let device = MTLCreateSystemDefaultDevice()!
+        let queue = device.newCommandQueue()
+        let dataBuffer = device.newBufferWithBytes(bytes, length: data.length, options: [])
+        let cmdBuffer:MTLCommandBuffer = {
+            let cmdBuffer = queue.commandBuffer()
+            let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
+            
+            //let loader = MTKTextureLoader(device: device)
+            //let texture = try! loader.newTextureWithCGImage(image.CGImage!, options: nil)
+            //encoder.setTexture(texture, atIndex: 0)
+            var intWidth = CUnsignedInt(size.width)
+            var intHeight = CUnsignedInt(size.height)
+            encoder.setBuffer(dataBuffer, offset: 0, atIndex: 0)
+            encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
+            encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
+            encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 3)
+
+            let function = device.newDefaultLibrary()!.newFunctionWithName("maskImage")!
+            let pipeline = try! device.newComputePipelineStateWithFunction(function)
+            encoder.setComputePipelineState(pipeline)
+            let threadExeWidth = pipeline.threadExecutionWidth
+            let threadgroupsPerGrid = MTLSize(width: (Int(size.height) + threadExeWidth - 1) / threadExeWidth, height: 1, depth: 1)
+            let threadsPerThreadgroup = MTLSize(width: pipeline.threadExecutionWidth, height: 1, depth: 1)
+            encoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+            return cmdBuffer
+        }()
+        
+        let start = NSDate()
+        cmdBuffer.commit()
+        cmdBuffer.waitUntilCompleted()
+        let end = NSDate()
+        print("SNTrim updateMaskColorMetal \(size), \(end.timeIntervalSinceDate(start))")
+        memcpy(bytes, dataBuffer.contents(), data.length)
+        maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
+    }
+
+    func updateMaskColorCPU(color:UIColor?, fPlus:Bool) {
+        if maskColor == color {
+            return
+        }
+        maskColor = color
+        guard let color = color else {
+            maskImage = nil
+            return
+        }
+        var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        let (h0, s0, v0) = colorHSV(red, g: green, b: blue)
+        let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
         
         let size = image.size
         let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
@@ -333,6 +392,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
+        let start = NSDate()
         for i in 0..<(data.length/4) {
             let (r, g, b) = (CGFloat(bytes[i*4])/255, CGFloat(bytes[i*4+1])/255, CGFloat(bytes[i*4+2])/255)
             let (h, s, v) = colorHSV(r, g: g, b: b)
@@ -350,6 +410,8 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             bytes[i*4 + 2] = UInt8(b * CGFloat(a))
             bytes[i*4 + 3] = UInt8(a)
         }
+        let end = NSDate()
+        print("SNTrim updateMaskColor \(size), \(end.timeIntervalSinceDate(start))")
         maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
     }
 
