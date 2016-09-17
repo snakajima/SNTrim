@@ -313,6 +313,10 @@ extension SNTrimController {
 //
 extension SNTrimController: SNTrimColorPickerDelegate {
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
+        updateMaskColorCPU(color, fPlus: fPlus)
+    }
+    
+    func updateMaskColorGPU(color:UIColor?, fPlus:Bool) {
         if maskColor == color {
             return
         }
