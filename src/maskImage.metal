@@ -12,7 +12,9 @@ using namespace metal;
 kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
                       const device uint& width [[ buffer(1) ]],
                       const device uint& height [[ buffer(2) ]],
-                      const device uint& extra [[ buffer(3) ]],
+                      const device float& x0 [[ buffer(3) ]],
+                      const device float& y0 [[ buffer(4) ]],
+                      const device float& z0 [[ buffer(5) ]],
 
                       const uint tgPos [[ threadgroup_position_in_grid ]],
                       const uint tPerTg [[ threads_per_threadgroup ]],
@@ -45,10 +47,16 @@ kernel void maskImage(device uchar* rgba [[ buffer(0) ]],
                 h = (h + 360) % 360;
             }
         }
-        float radian = (float)h * 3.14159265 / 180;
-        float x = sin(radian) * sqrt((float)v) * (float)s;
-        float y = sin(radian) * sqrt((float)v) * (float)s;
-        rgba[index+3] = (uchar)x;
+        float radian = (float)h * 3.14159265 / 180.0;
+        float z = (float)v / 255.0;
+        float x = sin(radian) * sqrt(z) * (float)s / 255.0;
+        float y = cos(radian) * sqrt(z) * (float)s / 255.0;
+        float dx = x0 - x;
+        float dy = y0 - y;
+        float dz = z0 - z;
+        float d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.1) * 4.0;
+        float a = max(0.0, min(1.0, d));
+        rgba[index+3] = (uchar)(a * 255.0);
     }
 }
 
