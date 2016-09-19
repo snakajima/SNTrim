@@ -63,8 +63,8 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
         float radian = (float)h * M_PI_F / 180.0;
         float z = (float)v / 255.0;
         float factor = sqrt(z) * s;
-        float dx = pos.x - sin(radian) * factor;
-        float dy = pos.y - cos(radian) * factor;
+        float dx = pos.x - cos(radian) * factor;
+        float dy = pos.y - sin(radian) * factor;
         float dz = pos.z - z;
         float a = saturate((sqrt(dx * dx + dy * dy + dz * dz) - 0.1) * 4.0);
         if (inv) {
