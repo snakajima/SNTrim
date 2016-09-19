@@ -16,13 +16,17 @@ struct Pixel {
     uchar a;
 };
 
+struct Position {
+    float x;
+    float y;
+    float z;
+};
+
 kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
                       const device ushort& width [[ buffer(1) ]],
                       const device ushort& height [[ buffer(2) ]],
-                      const device float& x0 [[ buffer(3) ]],
-                      const device float& y0 [[ buffer(4) ]],
-                      const device float& z0 [[ buffer(5) ]],
-                      const device bool& inv [[ buffer(6) ]],
+                      const device Position& pos [[ buffer(3) ]],
+                      const device bool& inv [[ buffer(4) ]],
 
                       const uint tgPos [[ threadgroup_position_in_grid ]],
                       const uint tPerTg [[ threads_per_threadgroup ]],
@@ -59,9 +63,9 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
         float radian = (float)h * 3.14159265 / 180.0;
         float z = (float)v / 255.0;
         float factor = sqrt(z) * s;
-        float dx = x0 - sin(radian) * factor;
-        float dy = y0 - cos(radian) * factor;
-        float dz = z0 - z;
+        float dx = pos.x - sin(radian) * factor;
+        float dy = pos.y - cos(radian) * factor;
+        float dz = pos.z - z;
         float d = (sqrt(dx * dx + dy * dy + dz * dz) - 0.1) * 4.0;
         float a = max(0.0, min(1.0, d));
         if (inv) {
