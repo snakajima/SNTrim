@@ -42,7 +42,13 @@ class SNTrimController: UIViewController {
     static let device = MTLCreateSystemDefaultDevice()
     static let queue = SNTrimController.device?.newCommandQueue()
     static let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("maskImage")
-
+    static let pipeline:MTLComputePipelineState? = {
+        if let function = SNTrimController.function {
+            return try! SNTrimController.device?.newComputePipelineStateWithFunction(function)
+        }
+        return nil
+    }()
+    
     private let borderView:UIView = {
         let borderView = UIView()
         borderView.backgroundColor = UIColor.clearColor()
@@ -320,7 +326,8 @@ extension SNTrimController: SNTrimColorPickerDelegate {
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
         guard let device = SNTrimController.device,
               let queue = SNTrimController.queue,
-              let function = SNTrimController.function else {
+              let function = SNTrimController.function,
+              let pipeline = SNTrimController.pipeline else {
             print("SNTrim No Metal. User CPU")
             return updateMaskColorCPU(color, fPlus: fPlus)
         }
@@ -365,11 +372,10 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             encoder.setBytes(&pos, length: sizeofValue(pos), atIndex: 3)
             encoder.setBytes(&inv, length: sizeofValue(inv), atIndex: 4)
 
-            let pipeline = try! device.newComputePipelineStateWithFunction(function)
             encoder.setComputePipelineState(pipeline)
             let threadExeWidth = pipeline.threadExecutionWidth
             let threadgroupsPerGrid = MTLSize(width: (Int(size.height) + threadExeWidth - 1) / threadExeWidth, height: 1, depth: 1)
-            let threadsPerThreadgroup = MTLSize(width: pipeline.threadExecutionWidth, height: 1, depth: 1)
+            let threadsPerThreadgroup = MTLSize(width: threadExeWidth, height: 1, depth: 1)
             encoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             return cmdBuffer
         }()
