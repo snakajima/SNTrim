@@ -40,6 +40,7 @@ class SNTrimController: UIViewController {
     
     // Metal
     static let device = MTLCreateSystemDefaultDevice()
+    static let queue = SNTrimController.device?.newCommandQueue()
     let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("maskImage")
 
     private let borderView:UIView = {
@@ -318,6 +319,7 @@ extension SNTrimController {
 extension SNTrimController: SNTrimColorPickerDelegate {
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
         guard let device = SNTrimController.device,
+              let queue = SNTrimController.queue,
               let function = self.function else {
             print("SNTrim No Metal. User CPU")
             return updateMaskColorCPU(color, fPlus: fPlus)
@@ -345,7 +347,6 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
         
         let cmdBuffer:MTLCommandBuffer = {
-            let queue = device.newCommandQueue()
             let cmdBuffer = queue.commandBuffer()
             let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
             
