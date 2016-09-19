@@ -17,8 +17,8 @@ struct Pixel {
 };
 
 kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
-                      const device uint& width [[ buffer(1) ]],
-                      const device uint& height [[ buffer(2) ]],
+                      const device ushort& width [[ buffer(1) ]],
+                      const device ushort& height [[ buffer(2) ]],
                       const device float& x0 [[ buffer(3) ]],
                       const device float& y0 [[ buffer(4) ]],
                       const device float& z0 [[ buffer(5) ]],
@@ -38,14 +38,14 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
         const Pixel pixel = pixels[index];
         const uchar v = max(pixel.r, max(pixel.g, pixel.b)); // Value 0-255
         float s = 0.0; // Saturation 0.0-1.0
-        int h = 0; // Hue 0-360
+        short h = 0; // Hue 0-360
         if (v > 0) {
             uint delta = (uint)(v - min(pixel.r, min(pixel.g, pixel.b)));
             if (delta > 0) {
                 s = (float)delta / (float)v;
-                int delR = (((uint)(v - pixel.r) * 60) + delta * 180) / delta;
-                int delG = (((uint)(v - pixel.g) * 60) + delta * 180) / delta;
-                int delB = (((uint)(v - pixel.b) * 60) + delta * 180) / delta;
+                short delR = (((short)(v - pixel.r) * 60) + delta * 180) / delta;
+                short delG = (((short)(v - pixel.g) * 60) + delta * 180) / delta;
+                short delB = (((short)(v - pixel.b) * 60) + delta * 180) / delta;
                 if (pixel.r == v) {
                     h = delB - delG;
                 } else if (pixel.g == v) {

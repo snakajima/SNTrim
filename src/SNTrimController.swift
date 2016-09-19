@@ -349,8 +349,8 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             let cmdBuffer = queue.commandBuffer()
             let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
             
-            var intWidth = CUnsignedInt(size.width)
-            var intHeight = CUnsignedInt(size.height)
+            var intWidth = CUnsignedShort(size.width)
+            var intHeight = CUnsignedShort(size.height)
             var (ux0, uy0, uz0) = (CFloat(x0), CFloat(y0), CFloat(z0))
             var inv = CBool(fPlus)
             encoder.setBuffer(dataBuffer, offset: 0, atIndex: 0)
