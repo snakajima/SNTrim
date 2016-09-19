@@ -48,6 +48,7 @@ class SNTrimController: UIViewController {
         borderView.layer.borderColor = UIColor.greenColor().CGColor
         borderView.layer.borderWidth = 4.0
         borderView.alpha = 0.0
+        borderView.userInteractionEnabled = false
         return borderView
     }()
     private var trimmedImage:UIImage! {
@@ -524,6 +525,8 @@ extension SNTrimController {
         let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage)
         let words = UnsafeMutablePointer<UInt32>(data.mutableBytes)
+
+        let start = NSDate()
         var frame = CGRect(origin: .zero, size: size)
         for y in 0..<height {
             let row = y * width
@@ -551,6 +554,9 @@ extension SNTrimController {
                 break
             }
         }
+        let end = NSDate()
+        print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
+
         return frame
     }
 }
