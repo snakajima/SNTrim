@@ -49,9 +49,9 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
             uint delta = (uint)(v - min(pixel.r, min(pixel.g, pixel.b)));
             if (delta > 0) {
                 s = (float)delta / (float)v;
-                short delR = (((short)(v - pixel.r) * 60) + delta * 180) / delta;
-                short delG = (((short)(v - pixel.g) * 60) + delta * 180) / delta;
-                short delB = (((short)(v - pixel.b) * 60) + delta * 180) / delta;
+                short delR = (short)(v - pixel.r) * 60 / delta;
+                short delG = (short)(v - pixel.g) * 60 / delta;
+                short delB = (short)(v - pixel.b) * 60 / delta;
                 if (pixel.r == v) {
                     h = delB - delG;
                 } else if (pixel.g == v) {
@@ -59,7 +59,6 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
                 } else {
                     h = 240 + delG - delR;
                 }
-                h = (h + 360) % 360;
             }
         }
         float radian = (float)h * M_PI_F / 180.0;
