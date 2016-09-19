@@ -39,7 +39,7 @@ class SNTrimController: UIViewController {
         didSet {
             let size = image.size
             let length = 4 * Int(size.width) * Int(size.height)
-            self.dataBuffer = SNTrimController.device?.newBufferWithLength(length, options: [.StorageModeShared])
+            self.pixelBuffer = SNTrimController.device?.newBufferWithLength(length, options: [.StorageModeShared])
         }
     }
     var delegate:SNTrimControllerDelegate!
@@ -54,7 +54,7 @@ class SNTrimController: UIViewController {
         }
         return nil
     }()
-    var dataBuffer:MTLBuffer?
+    var pixelBuffer:MTLBuffer?
     
     private let borderView:UIView = {
         let borderView = UIView()
@@ -335,7 +335,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
               let queue = SNTrimController.queue,
               let function = SNTrimController.function,
               let pipeline = SNTrimController.pipeline,
-              let dataBuffer = self.dataBuffer else {
+              let pixelBuffer = self.pixelBuffer else {
             print("SNTrim No Metal. User CPU")
             return updateMaskColorCPU(color, fPlus: fPlus)
         }
@@ -356,7 +356,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
-        let context = CGBitmapContextCreate(dataBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
+        let context = CGBitmapContextCreate(pixelBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
         
         let cmdBuffer:MTLCommandBuffer = {
@@ -372,7 +372,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             }
             var pos = Position(x: CFloat(x0), y: CFloat(y0), z: CFloat(z0))
             var inv = CBool(fPlus)
-            encoder.setBuffer(dataBuffer, offset: 0, atIndex: 0)
+            encoder.setBuffer(pixelBuffer, offset: 0, atIndex: 0)
             encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
             encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
             encoder.setBytes(&pos, length: sizeofValue(pos), atIndex: 3)
