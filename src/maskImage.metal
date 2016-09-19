@@ -26,7 +26,9 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
                       const device ushort& width [[ buffer(1) ]],
                       const device ushort& height [[ buffer(2) ]],
                       const device Position& pos [[ buffer(3) ]],
-                      const device bool& inv [[ buffer(4) ]],
+                      const device float& slack [[ buffer(4) ]],
+                      const device float& slope [[ buffer(5) ]],
+                      const device bool& inv [[ buffer(6) ]],
 
                       const uint tgPos [[ threadgroup_position_in_grid ]],
                       const uint tPerTg [[ threads_per_threadgroup ]],
@@ -66,7 +68,7 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
         float dx = pos.x - cos(radian) * factor;
         float dy = pos.y - sin(radian) * factor;
         float dz = pos.z - z;
-        float a = saturate((sqrt(dx * dx + dy * dy + dz * dz) - 0.1) * 4.0);
+        float a = saturate((sqrt(dx * dx + dy * dy + dz * dz) - slack) * slope);
         if (inv) {
             a = 1.0 - a;
         }

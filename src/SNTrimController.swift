@@ -371,12 +371,16 @@ extension SNTrimController: SNTrimColorPickerDelegate {
                 let z:CFloat
             }
             var pos = Position(x: CFloat(x0), y: CFloat(y0), z: CFloat(z0))
+            var slack = CFloat(0.1)
+            var slope = CFloat(4.0)
             var inv = CBool(fPlus)
             encoder.setBuffer(pixelBuffer, offset: 0, atIndex: 0)
             encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
             encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
             encoder.setBytes(&pos, length: sizeofValue(pos), atIndex: 3)
-            encoder.setBytes(&inv, length: sizeofValue(inv), atIndex: 4)
+            encoder.setBytes(&slack, length: sizeofValue(slack), atIndex: 4)
+            encoder.setBytes(&slope, length: sizeofValue(slope), atIndex: 5)
+            encoder.setBytes(&inv, length: sizeofValue(inv), atIndex: 6)
 
             encoder.setComputePipelineState(pipeline)
             let threadExeWidth = pipeline.threadExecutionWidth
