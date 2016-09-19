@@ -35,7 +35,13 @@ class SNTrimController: UIViewController {
     @IBOutlet var segment:UISegmentedControl!
     @IBOutlet var thumbImage:UIImageView!
     
-    var image:UIImage!
+    var image:UIImage! {
+        didSet {
+            let size = image.size
+            let length = 4 * Int(size.width) * Int(size.height)
+            self.dataBuffer = SNTrimController.device?.newBufferWithLength(length, options: [.StorageModeShared])
+        }
+    }
     var delegate:SNTrimControllerDelegate!
     
     // Metal
@@ -48,6 +54,7 @@ class SNTrimController: UIViewController {
         }
         return nil
     }()
+    var dataBuffer:MTLBuffer?
     
     private let borderView:UIView = {
         let borderView = UIView()
@@ -327,7 +334,8 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         guard let device = SNTrimController.device,
               let queue = SNTrimController.queue,
               let function = SNTrimController.function,
-              let pipeline = SNTrimController.pipeline else {
+              let pipeline = SNTrimController.pipeline,
+              let dataBuffer = self.dataBuffer else {
             print("SNTrim No Metal. User CPU")
             return updateMaskColorCPU(color, fPlus: fPlus)
         }
@@ -341,13 +349,11 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         }
         
         let start = NSDate()
+        let size = image.size
         var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         let (h0, s0, v0) = colorHSV(red, g: green, b: blue)
         let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
-        let size = image.size
-        let length = 4 * Int(size.width) * Int(size.height)
-        let dataBuffer = device.newBufferWithLength(length, options: [])
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(dataBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
