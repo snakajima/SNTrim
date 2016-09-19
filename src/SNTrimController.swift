@@ -330,8 +330,7 @@ extension SNTrimController {
 //
 extension SNTrimController: SNTrimColorPickerDelegate {
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
-        guard let device = SNTrimController.device,
-              let queue = SNTrimController.queue,
+        guard let queue = SNTrimController.queue,
               let pipeline = SNTrimController.pipeline,
               let pixelBuffer = self.pixelBuffer else {
             print("SNTrim No Metal. User CPU")
@@ -379,12 +378,13 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             encoder.setBytes(&slack, length: sizeofValue(slack), atIndex: 4)
             encoder.setBytes(&slope, length: sizeofValue(slope), atIndex: 5)
             encoder.setBytes(&inv, length: sizeofValue(inv), atIndex: 6)
-
             encoder.setComputePipelineState(pipeline)
+
             let threadExeWidth = pipeline.threadExecutionWidth
             let threadgroupsPerGrid = MTLSize(width: (Int(size.height) + threadExeWidth - 1) / threadExeWidth, height: 1, depth: 1)
             let threadsPerThreadgroup = MTLSize(width: threadExeWidth, height: 1, depth: 1)
             encoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+
             return cmdBuffer
         }()
         
