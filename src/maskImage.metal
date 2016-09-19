@@ -29,6 +29,9 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
                       const uint tPos [[ thread_position_in_threadgroup ]]) {
     
     uint offset = tgPos * tPerTg + tPos;
+    if (offset >= height) {
+        return;
+    }
     uint index = offset * width;
     uint end = index + width;
     for(; index < end; index++) {
