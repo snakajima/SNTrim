@@ -330,21 +330,20 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             maskImage = nil
             return
         }
+        
+        let start = NSDate()
         var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         let (h0, s0, v0) = colorHSV(red, g: green, b: blue)
         let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
         let size = image.size
-        let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
+        let length = 4 * Int(size.width) * Int(size.height)
+        let dataBuffer = device.newBufferWithLength(length, options: [])
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
-        let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
+        let context = CGBitmapContextCreate(dataBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
-        let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         
-        let start = NSDate()
-        // NOTE: We need to copy it because the "bytes" might not be page-aligned.
-        let dataBuffer = device.newBufferWithBytes(bytes, length: data.length, options: [])
         let cmdBuffer:MTLCommandBuffer = {
             let queue = device.newCommandQueue()
             let cmdBuffer = queue.commandBuffer()
@@ -375,7 +374,6 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         cmdBuffer.waitUntilCompleted()
         let end = NSDate()
         print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
-        memcpy(bytes, dataBuffer.contents(), data.length)
         maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
     }
 
