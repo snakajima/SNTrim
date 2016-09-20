@@ -43,9 +43,14 @@ class SNTrimController: UIViewController {
     
     var image:UIImage! {
         didSet {
+            guard let device = SNTrimController.device else {
+                return
+            }
             let size = image.size
             let length = 4 * Int(size.width) * Int(size.height)
-            self.pixelBuffer = SNTrimController.device?.newBufferWithLength(length, options: [.StorageModeShared])
+            self.pixelBuffer = device.newBufferWithLength(length, options: [.StorageModeShared])
+            self.horizontalBuffer = device.newBufferWithLength(4 * Int(size.height), options: [.StorageModeShared])
+            self.verticalBuffer = device.newBufferWithLength(4 * Int(size.width), options: [.StorageModeShared])
         }
     }
     var delegate:SNTrimControllerDelegate!
@@ -53,13 +58,15 @@ class SNTrimController: UIViewController {
     // Metal
     static let device = MTLCreateSystemDefaultDevice()
     static let queue = SNTrimController.device?.newCommandQueue()
-    static let pipeline:MTLComputePipelineState? = {
+    static let psMask:MTLComputePipelineState? = {
         if let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("maskImage") {
             return try! SNTrimController.device?.newComputePipelineStateWithFunction(function)
         }
         return nil
     }()
     var pixelBuffer:MTLBuffer?
+    var horizontalBuffer:MTLBuffer?
+    var verticalBuffer:MTLBuffer?
     
     private let borderView:UIView = {
         let borderView = UIView()
@@ -337,7 +344,7 @@ extension SNTrimController {
 extension SNTrimController: SNTrimColorPickerDelegate {
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
         guard let queue = SNTrimController.queue,
-              let pipeline = SNTrimController.pipeline,
+              let psMask = SNTrimController.psMask,
               let pixelBuffer = self.pixelBuffer else {
             print("SNTrim No Metal. User CPU")
             return updateMaskColorCPU(color, fPlus: fPlus)
@@ -384,9 +391,9 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             encoder.setBytes(&slack, length: sizeofValue(slack), atIndex: 4)
             encoder.setBytes(&slope, length: sizeofValue(slope), atIndex: 5)
             encoder.setBytes(&inv, length: sizeofValue(inv), atIndex: 6)
-            encoder.setComputePipelineState(pipeline)
+            encoder.setComputePipelineState(psMask)
 
-            let threadExeWidth = pipeline.threadExecutionWidth
+            let threadExeWidth = psMask.threadExecutionWidth
             let threadgroupsPerGrid = MTLSize(width: (Int(size.height) + threadExeWidth - 1) / threadExeWidth, height: 1, depth: 1)
             let threadsPerThreadgroup = MTLSize(width: threadExeWidth, height: 1, depth: 1)
             encoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
