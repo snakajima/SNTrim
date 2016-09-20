@@ -544,14 +544,12 @@ extension SNTrimController {
             }
         case .Ended:
             xform = self.viewMain.transform
-            if xform.a < 1.0 {
-                let frame = cropRect()
-                self.borderView.frame = CGRectApplyAffineTransform(frame, CGAffineTransformInvert(self.imageTransform))
-                self.borderView.alpha = 1.0
-                UIView.animateWithDuration(0.5, animations: {
-                    self.borderView.alpha = 0.0
-                })
-            }
+            let frame = cropRect()
+            self.borderView.frame = CGRectApplyAffineTransform(frame, CGAffineTransformInvert(self.imageTransform))
+            self.borderView.alpha = 1.0
+            UIView.animateWithDuration(0.5, animations: {
+                self.borderView.alpha = 0.0
+            })
         default:
             self.viewMain.transform = xform
         }
@@ -572,6 +570,7 @@ extension SNTrimController {
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(pixelBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
+        CGContextClearRect(context, CGRect(origin: .zero, size:size))
         CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage)
         
         let cmdHorizontal:MTLCommandBuffer = {
@@ -601,7 +600,7 @@ extension SNTrimController {
             encoder.setBuffer(pixelBuffer, offset: 0, atIndex: 0)
             encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
             encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
-            encoder.setBuffer(horizontalBuffer, offset: 0, atIndex: 3)
+            encoder.setBuffer(verticalBuffer, offset: 0, atIndex: 3)
             encoder.setComputePipelineState(psVertical)
 
             let threadExeWidth = psVertical.threadExecutionWidth
