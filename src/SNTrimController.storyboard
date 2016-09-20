@@ -195,6 +195,11 @@
                                     <constraint firstAttribute="height" constant="44" id="Rqz-iW-z7n"/>
                                 </constraints>
                                 <items>
+                                    <barButtonItem systemItem="cancel" id="Yje-jR-K1t">
+                                        <connections>
+                                            <action selector="cancel" destination="Yac-ZW-jxE" id="rtR-wQ-P8w"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="I9a-hX-1d8"/>
                                     <barButtonItem systemItem="done" id="Emq-FS-MMf">
                                         <connections>

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SNTrimColorPickerDelegate: class {
-    func didColorSelected(vc:SNTrimColorPicker, color:UIColor)
+    func wasColorSelected(vc:SNTrimColorPicker, color:UIColor?)
 }
 
 class SNTrimColorPicker: UIViewController {
@@ -67,7 +67,13 @@ class SNTrimColorPicker: UIViewController {
 
     @IBAction func done() {
         self.presentingViewController?.dismissViewControllerAnimated(true) {
-            self.delegate.didColorSelected(self, color: self.color)
+            self.delegate.wasColorSelected(self, color: self.color)
+        }
+    }
+
+    @IBAction func cancel() {
+        self.presentingViewController?.dismissViewControllerAnimated(true) {
+            self.delegate.wasColorSelected(self, color: nil)
         }
     }
 

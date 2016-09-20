@@ -354,6 +354,15 @@ extension SNTrimController {
 // MARK: Magic Eraser
 //
 extension SNTrimController: SNTrimColorPickerDelegate {
+    func wasColorSelected(vc:SNTrimColorPicker, color:UIColor?) {
+        if let color = color {
+            updateMaskColor(color, fPlus: segment.selectedSegmentIndex==2)
+        } else {
+            segment.selectedSegmentIndex = 0
+            updateMaskColor(nil, fPlus: false)
+        }
+    }
+    
     func updateMaskColor(color:UIColor?, fPlus:Bool) {
         guard let queue = SNTrimController.queue,
               let psMask = SNTrimController.psMask,
@@ -465,10 +474,6 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
     }
 
-    func didColorSelected(vc:SNTrimColorPicker, color:UIColor) {
-        updateMaskColor(color, fPlus: segment.selectedSegmentIndex==2)
-    }
-    
     func colorCone(h:CGFloat, s:CGFloat, v:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
         let radian = h * CGFloat(M_PI * 2)
         let x = cos(radian) * sqrt(v) * s
