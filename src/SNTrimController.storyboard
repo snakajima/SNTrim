@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G24b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -189,22 +189,6 @@
                                     <outletCollection property="gestureRecognizers" destination="3gK-9E-MRx" appends="YES" id="slL-ju-yg9"/>
                                 </connections>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="klv-sm-kgO">
-                                <rect key="frame" x="0.0" y="436" width="320" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="9rv-ac-hqC"/>
-                                </constraints>
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Ifq-CU-gOe"/>
-                                    <barButtonItem style="plain" id="SBq-D9-2M5">
-                                        <view key="customView" contentMode="scaleToFill" id="fgO-LR-b1l">
-                                            <rect key="frame" x="104" y="5.5" width="200" height="33"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KnU-Cq-GKD">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <constraints>
@@ -219,19 +203,38 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="quX-Jr-Ie6">
+                                <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick a color" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yUl-FT-7ia">
+                                        <rect key="frame" x="8" y="8" width="304" height="28"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="yUl-FT-7ia" secondAttribute="bottom" constant="8" id="6tm-Zx-LWl"/>
+                                    <constraint firstAttribute="trailing" secondItem="yUl-FT-7ia" secondAttribute="trailing" constant="8" id="TTi-c5-q36"/>
+                                    <constraint firstAttribute="height" constant="44" id="Xsb-EK-bL8"/>
+                                    <constraint firstItem="yUl-FT-7ia" firstAttribute="top" secondItem="quX-Jr-Ie6" secondAttribute="top" constant="8" id="vLc-ZE-87o"/>
+                                    <constraint firstItem="yUl-FT-7ia" firstAttribute="leading" secondItem="quX-Jr-Ie6" secondAttribute="leading" constant="8" id="w29-ED-kjx"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="YLB-X6-TXW" firstAttribute="top" secondItem="KnU-Cq-GKD" secondAttribute="bottom" id="2h7-ge-e0Z"/>
                             <constraint firstItem="YLB-X6-TXW" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" constant="80" id="2nU-zU-UZA"/>
-                            <constraint firstItem="klv-sm-kgO" firstAttribute="top" secondItem="YLB-X6-TXW" secondAttribute="bottom" id="8Tz-Ag-FQd"/>
+                            <constraint firstItem="quX-Jr-Ie6" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="4gG-ZD-8dr"/>
+                            <constraint firstItem="quX-Jr-Ie6" firstAttribute="top" secondItem="YLB-X6-TXW" secondAttribute="bottom" id="MtR-Td-oqL"/>
                             <constraint firstAttribute="trailing" secondItem="YLB-X6-TXW" secondAttribute="trailing" id="NCM-Fa-rfa"/>
                             <constraint firstItem="KnU-Cq-GKD" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="WgB-hS-6VS"/>
-                            <constraint firstAttribute="trailing" secondItem="klv-sm-kgO" secondAttribute="trailing" id="ZY8-iB-qZ8"/>
-                            <constraint firstItem="klv-sm-kgO" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="h4s-zW-kQc"/>
+                            <constraint firstAttribute="trailing" secondItem="quX-Jr-Ie6" secondAttribute="trailing" id="XS4-vc-Qyk"/>
                             <constraint firstItem="KnU-Cq-GKD" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" id="haC-Mk-cTh"/>
-                            <constraint firstItem="dUL-sh-Ipu" firstAttribute="top" secondItem="klv-sm-kgO" secondAttribute="bottom" id="iHe-ag-If9"/>
                             <constraint firstItem="YLB-X6-TXW" firstAttribute="leading" secondItem="eAe-RR-awc" secondAttribute="leading" id="kIc-47-yNx"/>
+                            <constraint firstAttribute="bottom" secondItem="quX-Jr-Ie6" secondAttribute="bottom" id="wqg-d8-HFe"/>
                             <constraint firstAttribute="trailing" secondItem="KnU-Cq-GKD" secondAttribute="trailing" id="xaA-mV-ZHX"/>
                         </constraints>
                         <variation key="default">
@@ -243,7 +246,8 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="colorView" destination="fgO-LR-b1l" id="7Dq-0e-lXd"/>
+                        <outlet property="colorView" destination="quX-Jr-Ie6" id="jwk-Fq-HJs"/>
+                        <outlet property="labelHint" destination="yUl-FT-7ia" id="pj8-In-Zgr"/>
                         <outlet property="mainView" destination="YLB-X6-TXW" id="8Oo-uA-jaE"/>
                     </connections>
                 </viewController>

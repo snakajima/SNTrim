@@ -15,10 +15,12 @@ protocol SNTrimColorPickerDelegate: class {
 class SNTrimColorPicker: UIViewController {
     @IBOutlet var mainView:UIView!
     @IBOutlet var colorView:UIView!
+    @IBOutlet var labelHint:UILabel!
     let preView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 80, height: 80)))
     weak var delegate:SNTrimColorPickerDelegate!
     var image:UIImage!
     var color:UIColor!
+    var helpText = "Pick A Color"
     var xform = CGAffineTransformIdentity
     let imageLayer = CALayer()
 
@@ -34,6 +36,7 @@ class SNTrimColorPicker: UIViewController {
         imageLayer.contents = image.CGImage
         imageLayer.contentsGravity = kCAGravityResizeAspect
         colorView.backgroundColor = color
+        labelHint.text = helpText
         
         self.view.addSubview(preView)
         preView.alpha = 0
@@ -80,6 +83,9 @@ class SNTrimColorPicker: UIViewController {
         colorView.backgroundColor = color
         preView.backgroundColor = color
         preView.center = recognizer.locationInView(view).translate(offset.width, y: offset.height)
+        UIView.animateWithDuration(0.2) { 
+            self.labelHint.alpha = 0.0
+        }
     }
     
     @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
