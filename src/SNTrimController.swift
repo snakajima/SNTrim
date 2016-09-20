@@ -22,8 +22,14 @@ private enum BackgroundMode: Int {
     case limit = 3
 }
 
+enum TrimHelpContext {
+    case colorMinus
+    case colorPlus
+}
+
 protocol SNTrimControllerDelegate : class {
     func wasImageTrimmed(controller:SNTrimController, image:UIImage?)
+    func helpText(controller:SNTrimController, context:TrimHelpContext) -> String
 }
 
 class SNTrimController: UIViewController {
@@ -489,6 +495,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             vc.image = image
             vc.color = UIColor.whiteColor()
             vc.xform = xform
+            vc.helpText = delegate.helpText(self, context: segment.selectedSegmentIndex == 1 ? .colorMinus : .colorPlus)
             vc.delegate = self
         }
     }

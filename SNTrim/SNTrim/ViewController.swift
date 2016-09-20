@@ -39,6 +39,15 @@ extension ViewController: SNTrimControllerDelegate {
         self.dismissViewControllerAnimated(true, completion: nil)
         imageView.image = image
     }
+
+    func helpText(controller:SNTrimController, context:TrimHelpContext) -> String {
+        switch(context) {
+        case .colorMinus:
+            return "Pick a color to remove"
+        case .colorPlus:
+            return "Pick a color to keep"
+        }
+    }
 }
 
 extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
