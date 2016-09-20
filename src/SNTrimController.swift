@@ -568,11 +568,11 @@ extension SNTrimController {
             return cropRectCPU()
         }
         let start = NSDate()
-        let size = image.size
+        let size = trimmedImage.size
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(pixelBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage)
         
         let cmdHorizontal:MTLCommandBuffer = {
             let cmdBuffer = queue.commandBuffer()
@@ -614,9 +614,39 @@ extension SNTrimController {
         cmdHorizontal.commit()
         cmdVertical.commit()
         cmdVertical.waitUntilCompleted()
+
+
+        let (width, height) = (Int(size.width), Int(size.height))
+        var frame = CGRect(origin: .zero, size: size)
+        let hbuf = UnsafeMutablePointer<UInt32>(horizontalBuffer.contents())
+        let vbuf = UnsafeMutablePointer<UInt32>(verticalBuffer.contents())
+        for y in 0..<height {
+            if hbuf[y] != 0 {
+                frame.origin.y = CGFloat(y)
+                break
+            }
+        }
+        for y in (Int(frame.origin.y+1)..<height).reverse() {
+            if hbuf[y] != 0 {
+                frame.size.height = CGFloat(y) - frame.origin.y + 1
+                break
+            }
+        }
+        for x in 0..<width {
+            if vbuf[x] != 0 {
+                frame.origin.x = CGFloat(x)
+                break
+            }
+        }
+        for x in (Int(frame.origin.x)..<width).reverse() {
+            if vbuf[x] != 0 {
+                frame.size.width = CGFloat(x) - frame.origin.x + 1
+                break
+            }
+        }
         let end = NSDate()
         print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
-        return cropRectCPU()
+        return frame // cropRectCPU()
     }
     
     func cropRectCPU() -> CGRect {
