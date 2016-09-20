@@ -20,7 +20,9 @@
 		7402481A1D89BA9A003FAD89 /* SNTrimColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */; };
 		7402481B1D89BA9A003FAD89 /* SNTrimController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740248191D89BA9A003FAD89 /* SNTrimController.swift */; };
 		7402481D1D89BB96003FAD89 /* SNTrimController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7402481C1D89BB96003FAD89 /* SNTrimController.storyboard */; };
-		746EDF911D8CAE1C008AA635 /* maskImage.metal in Sources */ = {isa = PBXBuildFile; fileRef = 746EDF901D8CAE1C008AA635 /* maskImage.metal */; };
+		7418B3A41D915DDE001E61E7 /* SNTrimHorizontal.metal in Sources */ = {isa = PBXBuildFile; fileRef = 7418B3A31D915DDE001E61E7 /* SNTrimHorizontal.metal */; };
+		7418B3A61D915DFC001E61E7 /* SNTrimVertical.metal in Sources */ = {isa = PBXBuildFile; fileRef = 7418B3A51D915DFC001E61E7 /* SNTrimVertical.metal */; };
+		746EDF911D8CAE1C008AA635 /* SNTrimMask.metal in Sources */ = {isa = PBXBuildFile; fileRef = 746EDF901D8CAE1C008AA635 /* SNTrimMask.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +53,9 @@
 		740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNTrimColorPicker.swift; sourceTree = "<group>"; };
 		740248191D89BA9A003FAD89 /* SNTrimController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNTrimController.swift; sourceTree = "<group>"; };
 		7402481C1D89BB96003FAD89 /* SNTrimController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SNTrimController.storyboard; sourceTree = "<group>"; };
-		746EDF901D8CAE1C008AA635 /* maskImage.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = maskImage.metal; sourceTree = "<group>"; };
+		7418B3A31D915DDE001E61E7 /* SNTrimHorizontal.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = SNTrimHorizontal.metal; sourceTree = "<group>"; };
+		7418B3A51D915DFC001E61E7 /* SNTrimVertical.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = SNTrimVertical.metal; sourceTree = "<group>"; };
+		746EDF901D8CAE1C008AA635 /* SNTrimMask.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = SNTrimMask.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,7 +163,9 @@
 			children = (
 				740248181D89BA9A003FAD89 /* SNTrimColorPicker.swift */,
 				740248191D89BA9A003FAD89 /* SNTrimController.swift */,
-				746EDF901D8CAE1C008AA635 /* maskImage.metal */,
+				746EDF901D8CAE1C008AA635 /* SNTrimMask.metal */,
+				7418B3A31D915DDE001E61E7 /* SNTrimHorizontal.metal */,
+				7418B3A51D915DFC001E61E7 /* SNTrimVertical.metal */,
 				7402481C1D89BB96003FAD89 /* SNTrimController.storyboard */,
 			);
 			name = src;
@@ -242,12 +248,14 @@
 			files = (
 				740247ED1D86FAFF003FAD89 /* SNPathBuilder.swift in Sources */,
 				740247EC1D86FAFF003FAD89 /* SNPath.swift in Sources */,
+				7418B3A61D915DFC001E61E7 /* SNTrimVertical.metal in Sources */,
 				740247EB1D86FAFF003FAD89 /* SNDrawView.swift in Sources */,
 				7402481A1D89BA9A003FAD89 /* SNTrimColorPicker.swift in Sources */,
 				740248141D89A75F003FAD89 /* ViewController.swift in Sources */,
 				7402481B1D89BA9A003FAD89 /* SNTrimController.swift in Sources */,
+				7418B3A41D915DDE001E61E7 /* SNTrimHorizontal.metal in Sources */,
 				740247D61D86FAC3003FAD89 /* AppDelegate.swift in Sources */,
-				746EDF911D8CAE1C008AA635 /* maskImage.metal in Sources */,
+				746EDF911D8CAE1C008AA635 /* SNTrimMask.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

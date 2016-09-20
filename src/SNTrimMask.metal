@@ -1,5 +1,5 @@
 //
-//  maskImage.metal
+//  SNTrimMask.metal
 //  SNTrim
 //
 //  Created by satoshi on 9/16/16.
@@ -22,7 +22,7 @@ struct Position {
     float z;
 };
 
-kernel void maskImage(device Pixel* pixelBuffer [[ buffer(0) ]],
+kernel void SNTrimMask(device Pixel* pixelBuffer [[ buffer(0) ]],
                       const device ushort& width [[ buffer(1) ]],
                       const device ushort& height [[ buffer(2) ]],
                       const device Position& pos [[ buffer(3) ]],

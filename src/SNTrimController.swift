@@ -59,7 +59,19 @@ class SNTrimController: UIViewController {
     static let device = MTLCreateSystemDefaultDevice()
     static let queue = SNTrimController.device?.newCommandQueue()
     static let psMask:MTLComputePipelineState? = {
-        if let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("maskImage") {
+        if let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("SNTrimMask") {
+            return try! SNTrimController.device?.newComputePipelineStateWithFunction(function)
+        }
+        return nil
+    }()
+    static let psHorizontal:MTLComputePipelineState? = {
+        if let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("SNTrimHorizontal") {
+            return try! SNTrimController.device?.newComputePipelineStateWithFunction(function)
+        }
+        return nil
+    }()
+    static let psVertical:MTLComputePipelineState? = {
+        if let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("SNTrimVertical") {
             return try! SNTrimController.device?.newComputePipelineStateWithFunction(function)
         }
         return nil
