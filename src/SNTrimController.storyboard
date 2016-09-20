@@ -47,12 +47,12 @@
                                     <constraint firstAttribute="height" constant="44" id="ipj-gZ-7m2"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="⬅︎" id="tR1-I5-A7q">
+                                    <barButtonItem image="ic_white_undo" id="tR1-I5-A7q">
                                         <connections>
                                             <action selector="undo" destination="BYZ-38-t0r" id="RqY-zz-Iyq"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="➡︎" id="bKV-qC-psD">
+                                    <barButtonItem image="ic_white_redo" id="bKV-qC-psD">
                                         <connections>
                                             <action selector="redo" destination="BYZ-38-t0r" id="X2I-7H-KBl"/>
                                         </connections>
@@ -271,4 +271,8 @@
             <point key="canvasLocation" x="743" y="281"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_white_redo" width="25" height="25"/>
+        <image name="ic_white_undo" width="25" height="25"/>
+    </resources>
 </document>
