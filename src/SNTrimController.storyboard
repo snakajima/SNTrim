@@ -181,7 +181,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YLB-X6-TXW">
                                 <rect key="frame" x="0.0" y="44" width="320" height="392"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="sdn-SK-1Ul" appends="YES" id="fMn-E7-d6O"/>
@@ -223,7 +223,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="YLB-X6-TXW" firstAttribute="top" secondItem="KnU-Cq-GKD" secondAttribute="bottom" id="2h7-ge-e0Z"/>
                             <constraint firstItem="YLB-X6-TXW" firstAttribute="top" secondItem="lUQ-VF-uLZ" secondAttribute="bottom" constant="80" id="2nU-zU-UZA"/>
