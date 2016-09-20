@@ -224,7 +224,7 @@ class SNTrimController: UIViewController {
     }
     
     @IBAction func switchBackground() {
-        print("switchBackground")
+        //print("switchBackground")
         let rawValue = (backgroundMode.rawValue + 1) % BackgroundMode.limit.rawValue
         backgroundMode = BackgroundMode(rawValue: rawValue)!
     }

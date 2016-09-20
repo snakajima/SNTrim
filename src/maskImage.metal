@@ -22,7 +22,7 @@ struct Position {
     float z;
 };
 
-kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
+kernel void maskImage(device Pixel* pixelBuffer [[ buffer(0) ]],
                       const device ushort& width [[ buffer(1) ]],
                       const device ushort& height [[ buffer(2) ]],
                       const device Position& pos [[ buffer(3) ]],
@@ -38,20 +38,20 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
     if (offset >= height) {
         return;
     }
-    uint index = offset * width;
-    uint end = index + width;
-    for(; index < end; index++) {
-        const Pixel pixel = pixels[index];
-        const uchar v = max(pixel.r, max(pixel.g, pixel.b)); // Value 0-255
+    
+    device Pixel* lineBuffer = pixelBuffer + offset * width;
+    for(ushort index=0; index < width; index++) {
+        const Pixel pixel = lineBuffer[index];
+        const short v = max(pixel.r, max(pixel.g, pixel.b)); // Value 0-255
         float s = 0.0; // Saturation 0.0-1.0
         short h = 0; // Hue 0-360
         if (v > 0) {
-            uint delta = (uint)(v - min(pixel.r, min(pixel.g, pixel.b)));
+            short delta = (short)(v - min(pixel.r, min(pixel.g, pixel.b)));
             if (delta > 0) {
                 s = (float)delta / (float)v;
-                short delR = (short)(v - pixel.r) * 60 / delta;
-                short delG = (short)(v - pixel.g) * 60 / delta;
-                short delB = (short)(v - pixel.b) * 60 / delta;
+                short delR = (v - pixel.r) * 60 / delta;
+                short delG = (v - pixel.g) * 60 / delta;
+                short delB = (v - pixel.b) * 60 / delta;
                 if (pixel.r == v) {
                     h = delB - delG;
                 } else if (pixel.g == v) {
@@ -71,7 +71,7 @@ kernel void maskImage(device Pixel* pixels [[ buffer(0) ]],
         if (inv) {
             a = 1.0 - a;
         }
-        pixels[index].a = (uchar)(a * 255.0);
+        lineBuffer[index].a = (uchar)(a * 255.0);
     }
 }
 
