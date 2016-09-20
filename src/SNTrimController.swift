@@ -358,7 +358,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         guard let queue = SNTrimController.queue,
               let psMask = SNTrimController.psMask,
               let pixelBuffer = self.pixelBuffer else {
-            print("SNTrim No Metal. User CPU")
+            print("SNTrim No Metal. Use CPU")
             return updateMaskColorCPU(color, fPlus: fPlus)
         }
         if maskColor == color {
@@ -556,8 +556,70 @@ extension SNTrimController {
             self.viewMain.transform = xform
         }
     }
-    
+
     func cropRect() -> CGRect {
+        guard let queue = SNTrimController.queue,
+              let psHorizontal = SNTrimController.psHorizontal,
+              let psVertical = SNTrimController.psVertical,
+              let pixelBuffer = self.pixelBuffer,
+              let horizontalBuffer = self.horizontalBuffer,
+              let verticalBuffer = self.verticalBuffer else {
+            print("SNTrim No Metal. Use CPU")
+            return cropRectCPU()
+        }
+        let start = NSDate()
+        let size = image.size
+        var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
+        bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
+        let context = CGBitmapContextCreate(pixelBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
+        
+        let cmdHorizontal:MTLCommandBuffer = {
+            let cmdBuffer = queue.commandBuffer()
+            let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
+            
+            var intWidth = CUnsignedShort(size.width)
+            var intHeight = CUnsignedShort(size.height)
+            encoder.setBuffer(pixelBuffer, offset: 0, atIndex: 0)
+            encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
+            encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
+            encoder.setBuffer(horizontalBuffer, offset: 0, atIndex: 3)
+            encoder.setComputePipelineState(psHorizontal)
+
+            let threadExeWidth = psHorizontal.threadExecutionWidth
+            let threadgroupsPerGrid = MTLSize(width: (Int(size.height) + threadExeWidth - 1) / threadExeWidth, height: 1, depth: 1)
+            let threadsPerThreadgroup = MTLSize(width: threadExeWidth, height: 1, depth: 1)
+            encoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+            return cmdBuffer
+        }()
+        let cmdVertical:MTLCommandBuffer = {
+            let cmdBuffer = queue.commandBuffer()
+            let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
+            
+            var intWidth = CUnsignedShort(size.width)
+            var intHeight = CUnsignedShort(size.height)
+            encoder.setBuffer(pixelBuffer, offset: 0, atIndex: 0)
+            encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
+            encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
+            encoder.setBuffer(horizontalBuffer, offset: 0, atIndex: 3)
+            encoder.setComputePipelineState(psVertical)
+
+            let threadExeWidth = psVertical.threadExecutionWidth
+            let threadgroupsPerGrid = MTLSize(width: (Int(size.width) + threadExeWidth - 1) / threadExeWidth, height: 1, depth: 1)
+            let threadsPerThreadgroup = MTLSize(width: threadExeWidth, height: 1, depth: 1)
+            encoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+            return cmdBuffer
+        }()
+        
+        cmdHorizontal.commit()
+        cmdVertical.commit()
+        cmdVertical.waitUntilCompleted()
+        let end = NSDate()
+        print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
+        return cropRectCPU()
+    }
+    
+    func cropRectCPU() -> CGRect {
         let size = trimmedImage.size
         let (width, height) = (Int(size.width), Int(size.height))
         let data = NSMutableData(length: 4 * width * height)!
@@ -597,7 +659,7 @@ extension SNTrimController {
             }
         }
         let end = NSDate()
-        print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
+        print("SNTrim CPU \(size), \(end.timeIntervalSinceDate(start))")
 
         return frame
     }
