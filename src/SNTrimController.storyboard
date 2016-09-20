@@ -98,7 +98,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="izU-BJ-uUF"/>
-                                    <barButtonItem title="Done" id="jA9-m5-RLi">
+                                    <barButtonItem systemItem="done" id="jA9-m5-RLi">
                                         <connections>
                                             <action selector="done" destination="BYZ-38-t0r" id="QcU-BZ-Yta"/>
                                         </connections>
