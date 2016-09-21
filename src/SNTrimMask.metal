@@ -37,16 +37,16 @@ kernel void SNTrimMask(device Pixel* pixelBuffer [[ buffer(0) ]],
     const short v = max(pixel.r, max(pixel.g, pixel.b)); // Value 0-255
     float s = 0.0; // Saturation 0.0-1.0
     short h = 0; // Hue 0-360
-    if (v > 0) {
-        short delta = (short)(v - min(pixel.r, min(pixel.g, pixel.b)));
-        if (delta > 0) {
-            s = (float)delta / (float)v;
+    short delta = (short)(v - min(pixel.r, min(pixel.g, pixel.b)));
+    if (v * delta > 0) {
+        s = (float)delta / (float)v;
+        short delG = (v - pixel.g) * 60 / delta;
+        short delB = (v - pixel.b) * 60 / delta;
+        if (pixel.r == v) {
+            h = delB - delG;
+        } else {
             short delR = (v - pixel.r) * 60 / delta;
-            short delG = (v - pixel.g) * 60 / delta;
-            short delB = (v - pixel.b) * 60 / delta;
-            if (pixel.r == v) {
-                h = delB - delG;
-            } else if (pixel.g == v) {
+            if (pixel.g == v) {
                 h = 120 + delR - delB;
             } else {
                 h = 240 + delG - delR;
