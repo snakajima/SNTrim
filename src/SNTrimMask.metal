@@ -42,15 +42,13 @@ kernel void SNTrimMask(device Pixel* pixelBuffer [[ buffer(0) ]],
         s = (float)delta / (float)v;
         short delG = (v - pixel.g) * 60 / delta;
         short delB = (v - pixel.b) * 60 / delta;
+        short delR = (v - pixel.r) * 60 / delta;
         if (pixel.r == v) {
             h = delB - delG;
+        } else if (pixel.g == v) {
+            h = 120 + delR - delB;
         } else {
-            short delR = (v - pixel.r) * 60 / delta;
-            if (pixel.g == v) {
-                h = 120 + delR - delB;
-            } else {
-                h = 240 + delG - delR;
-            }
+            h = 240 + delG - delR;
         }
     }
     float radian = (float)h * M_PI_F / 180.0;
