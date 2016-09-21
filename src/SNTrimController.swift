@@ -414,14 +414,9 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             encoder.setBytes(&inv, length: sizeofValue(inv), atIndex: 6)
             encoder.setComputePipelineState(psMask)
 
-            /*
-            let threadExeWidth = psMask.threadExecutionWidth
-            let threadgroupsPerGrid = MTLSize(width: (Int(size.height) + threadExeWidth - 1) / threadExeWidth, height: 1, depth: 1)
-            let threadsPerThreadgroup = MTLSize(width: threadExeWidth, height: 1, depth: 1)
-            */
-            let threadsPerThreadgroup = MTLSize(width: 8, height: 8, depth: 1)
-            let threadgroupsPerGrid = MTLSize(width: Int(size.width) / 8, height: Int(size.height) / 8, depth: 1)
-            encoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+            let threadsCount = MTLSize(width: 8, height: min(8, psMask.maxTotalThreadsPerThreadgroup/8), depth: 1)
+            let groupsCount = MTLSize(width: Int(size.width) / threadsCount.width, height: Int(size.height)/threadsCount.height, depth: 1)
+            encoder.dispatchThreadgroups(groupsCount, threadsPerThreadgroup: threadsCount)
 
             return cmdBuffer
         }()
