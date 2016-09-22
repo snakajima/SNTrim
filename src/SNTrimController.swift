@@ -43,6 +43,7 @@ class SNTrimController: UIViewController {
     
     var image:UIImage! {
         didSet {
+            precondition(image.CGImage != nil, "SNTrimController does not support an image created from CIImage.")
             guard let device = SNTrimController.device else {
                 return
             }
@@ -305,13 +306,13 @@ class SNTrimController: UIViewController {
                 CGContextRestoreGState(imageContext)
 
                 CGContextSetBlendMode(imageContext, CGBlendMode.DestinationOut)
-                CGContextDrawImage(imageContext, rc, maskImage.CGImage)
+                CGContextDrawImage(imageContext, rc, maskImage.CGImage!)
 
-                let imageBrush = UIGraphicsGetImageFromCurrentImageContext()
+                let imageBrush = UIGraphicsGetImageFromCurrentImageContext()!
                 UIGraphicsEndImageContext()
 
                 CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
-                CGContextDrawImage(context, rc, imageBrush.CGImage)
+                CGContextDrawImage(context, rc, imageBrush.CGImage!)
             } else {
                 CGContextConcatCTM(context, imageTransform)
                 CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
@@ -388,7 +389,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(pixelBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage!)
         
         let cmdBuffer:MTLCommandBuffer = {
             let cmdBuffer = queue.commandBuffer()
@@ -448,7 +449,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage)
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage!)
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         let start = NSDate()
         for i in 0..<(data.length/4) {
@@ -575,7 +576,7 @@ extension SNTrimController {
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(pixelBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
         CGContextClearRect(context, CGRect(origin: .zero, size:size))
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage)
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage!)
         
         let cmdHorizontal:MTLCommandBuffer = {
             let cmdBuffer = queue.commandBuffer()
@@ -660,7 +661,7 @@ extension SNTrimController {
         var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
         bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
         let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage)
+        CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage!)
         let words = UnsafeMutablePointer<UInt32>(data.mutableBytes)
 
         let start = NSDate()
