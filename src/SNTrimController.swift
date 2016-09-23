@@ -54,7 +54,7 @@ class SNTrimController: UIViewController {
             self.verticalBuffer = device.newBufferWithLength(4 * Int(size.width), options: [.StorageModeShared])
         }
     }
-    var delegate:SNTrimControllerDelegate!
+    weak var delegate:SNTrimControllerDelegate!
     
     // Metal
     static let device = MTLCreateSystemDefaultDevice()
