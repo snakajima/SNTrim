@@ -53,6 +53,10 @@ extension ViewController: SNTrimControllerDelegate {
     
     @IBAction func action() {
         print("action")
+        let data = UIImagePNGRepresentation(imageView.image!)
+        let activity = UIActivityViewController(activityItems: [data!], applicationActivities: nil)
+        activity.popoverPresentationController?.barButtonItem = btnAction
+        self.presentViewController(activity, animated: true, completion: nil)
     }
 }
 
