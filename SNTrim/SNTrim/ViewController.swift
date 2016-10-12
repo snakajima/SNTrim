@@ -39,7 +39,7 @@ extension ViewController: SNTrimControllerDelegate {
         print("wasImageTrimmed")
         self.dismissViewControllerAnimated(true, completion: nil)
         imageView.image = image
-        btnAction.enabled = true
+        btnAction.enabled = image != nil
     }
 
     func helpText(controller:SNTrimController, context:TrimHelpContext) -> String {
@@ -53,8 +53,11 @@ extension ViewController: SNTrimControllerDelegate {
     
     @IBAction func action() {
         print("action")
-        let data = UIImagePNGRepresentation(imageView.image!)
-        let activity = UIActivityViewController(activityItems: [data!], applicationActivities: nil)
+        guard let image = imageView.image,
+              let data = UIImagePNGRepresentation(image) else {
+            return
+        }
+        let activity = UIActivityViewController(activityItems: [data], applicationActivities: nil)
         activity.popoverPresentationController?.barButtonItem = btnAction
         self.presentViewController(activity, animated: true, completion: nil)
     }
