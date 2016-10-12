@@ -29,6 +29,12 @@
                                             <action selector="pickImage:" destination="hAI-So-cfh" id="OLB-NU-NpL"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="GcH-CB-gpK"/>
+                                    <barButtonItem systemItem="action" id="Bv9-CB-JRN">
+                                        <connections>
+                                            <action selector="action" destination="hAI-So-cfh" id="2ev-89-XH2"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
@@ -45,6 +51,7 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="btnAction" destination="Bv9-CB-JRN" id="KZG-Tn-NNa"/>
                         <outlet property="imageView" destination="YFY-cf-unZ" id="3Rw-vf-9Na"/>
                         <segue destination="sWR-3w-LSi" kind="show" identifier="trim" id="ySC-4s-GcQ"/>
                     </connections>

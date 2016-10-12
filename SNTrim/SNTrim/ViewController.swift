@@ -10,11 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var imageView:UIImageView!
+    @IBOutlet var btnAction:UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        btnAction.enabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,6 +39,7 @@ extension ViewController: SNTrimControllerDelegate {
         print("wasImageTrimmed")
         self.dismissViewControllerAnimated(true, completion: nil)
         imageView.image = image
+        btnAction.enabled = true
     }
 
     func helpText(controller:SNTrimController, context:TrimHelpContext) -> String {
@@ -47,6 +49,10 @@ extension ViewController: SNTrimControllerDelegate {
         case .colorPlus:
             return "Pick a color to keep"
         }
+    }
+    
+    @IBAction func action() {
+        print("action")
     }
 }
 
