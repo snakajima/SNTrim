@@ -67,12 +67,12 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         }
     }
     
-     @IBAction func pickImage(sender:UIButton) {
+     @IBAction func pickImage(_ sender:UIBarButtonItem) {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         picker.modalPresentationStyle = .Popover
-        picker.popoverPresentationController?.sourceView = sender
+        picker.popoverPresentationController?.barButtonItem = sender
         self.presentViewController(picker, animated: true, completion: nil)
     }
 }

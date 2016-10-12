@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G24b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hAI-So-cfh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="hAI-So-cfh">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,36 +15,35 @@
                         <viewControllerLayoutGuide type="bottom" id="Z3j-8j-H9W"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="hUe-zF-cqM">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0SO-Jw-7cN">
-                                <rect key="frame" x="137" y="420" width="46" height="30"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YFY-cf-unZ"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gvX-ky-ar7">
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="HQj-dL-W39"/>
-                                    <constraint firstAttribute="width" constant="46" id="uEP-Dn-omB"/>
+                                    <constraint firstAttribute="height" constant="44" id="XaD-AF-stX"/>
                                 </constraints>
-                                <state key="normal" title="Pick"/>
-                                <connections>
-                                    <action selector="pickImage:" destination="hAI-So-cfh" eventType="touchUpInside" id="5Of-9s-9TV"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YFY-cf-unZ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="390"/>
-                            </imageView>
+                                <items>
+                                    <barButtonItem title="Pick" id="3fw-1t-esp">
+                                        <connections>
+                                            <action selector="pickImage:" destination="hAI-So-cfh" id="OLB-NU-NpL"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="0SO-Jw-7cN" firstAttribute="top" secondItem="YFY-cf-unZ" secondAttribute="bottom" constant="30" id="098-9r-3ek"/>
-                            <constraint firstAttribute="trailing" secondItem="YFY-cf-unZ" secondAttribute="trailing" id="58f-OL-5Vw"/>
-                            <constraint firstItem="YFY-cf-unZ" firstAttribute="top" secondItem="8or-c6-a3S" secondAttribute="bottom" id="5ex-WC-1Vq"/>
-                            <constraint firstItem="Z3j-8j-H9W" firstAttribute="top" secondItem="0SO-Jw-7cN" secondAttribute="bottom" constant="30" id="jgf-Ud-f3Z"/>
-                            <constraint firstItem="0SO-Jw-7cN" firstAttribute="centerX" secondItem="hUe-zF-cqM" secondAttribute="centerX" id="vEN-R0-HLB"/>
-                            <constraint firstItem="YFY-cf-unZ" firstAttribute="leading" secondItem="hUe-zF-cqM" secondAttribute="leading" id="weB-7C-5lw"/>
+                            <constraint firstAttribute="trailing" secondItem="gvX-ky-ar7" secondAttribute="trailing" id="5Up-ab-kHP"/>
+                            <constraint firstItem="YFY-cf-unZ" firstAttribute="top" secondItem="8or-c6-a3S" secondAttribute="bottom" id="JPd-O8-Cz2"/>
+                            <constraint firstItem="gvX-ky-ar7" firstAttribute="leading" secondItem="hUe-zF-cqM" secondAttribute="leading" id="ZKr-7a-47V"/>
+                            <constraint firstItem="YFY-cf-unZ" firstAttribute="leading" secondItem="hUe-zF-cqM" secondAttribute="leading" id="bQZ-d6-lh4"/>
+                            <constraint firstAttribute="trailing" secondItem="YFY-cf-unZ" secondAttribute="trailing" id="blQ-GN-HB2"/>
+                            <constraint firstItem="Z3j-8j-H9W" firstAttribute="top" secondItem="gvX-ky-ar7" secondAttribute="bottom" id="kg4-6g-ayz"/>
+                            <constraint firstItem="gvX-ky-ar7" firstAttribute="top" secondItem="YFY-cf-unZ" secondAttribute="bottom" id="zUH-rE-xHP"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="imageView" destination="YFY-cf-unZ" id="3Rw-vf-9Na"/>
                         <segue destination="sWR-3w-LSi" kind="show" identifier="trim" id="ySC-4s-GcQ"/>
@@ -51,7 +51,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fBv-ih-ebm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="271" y="324"/>
+            <point key="canvasLocation" x="269.60000000000002" y="323.38830584707648"/>
         </scene>
         <!--SNTrimController-->
         <scene sceneID="7oG-JZ-269">
@@ -59,7 +59,7 @@
                 <viewControllerPlaceholder storyboardName="SNTrimController" id="sWR-3w-LSi" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OzJ-Px-omK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="552" y="324"/>
+            <point key="canvasLocation" x="824" y="708"/>
         </scene>
     </scenes>
 </document>
