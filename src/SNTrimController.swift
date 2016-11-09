@@ -28,8 +28,8 @@ enum TrimHelpContext {
 }
 
 protocol SNTrimControllerDelegate : class {
-    func wasImageTrimmed(controller:SNTrimController, image:UIImage?)
-    func helpText(controller:SNTrimController, context:TrimHelpContext) -> String
+    func wasImageTrimmed(_ controller:SNTrimController, image:UIImage?)
+    func helpText(_ controller:SNTrimController, context:TrimHelpContext) -> String
 }
 
 class SNTrimController: UIViewController {
@@ -43,37 +43,37 @@ class SNTrimController: UIViewController {
     
     var image:UIImage! {
         didSet {
-            precondition(image.CGImage != nil, "SNTrimController does not support an image created from CIImage.")
+            precondition(image.cgImage != nil, "SNTrimController does not support an image created from CIImage.")
             guard let device = SNTrimController.device else {
                 return
             }
             let size = image.size
             let length = 4 * Int(size.width) * Int(size.height)
-            self.pixelBuffer = device.newBufferWithLength(length, options: [.StorageModeShared])
-            self.horizontalBuffer = device.newBufferWithLength(4 * Int(size.height), options: [.StorageModeShared])
-            self.verticalBuffer = device.newBufferWithLength(4 * Int(size.width), options: [.StorageModeShared])
+            self.pixelBuffer = device.makeBuffer(length: length, options: [.storageModeShared])
+            self.horizontalBuffer = device.makeBuffer(length: 4 * Int(size.height), options: [.storageModeShared])
+            self.verticalBuffer = device.makeBuffer(length: 4 * Int(size.width), options: [.storageModeShared])
         }
     }
     weak var delegate:SNTrimControllerDelegate!
     
     // Metal
     static let device = MTLCreateSystemDefaultDevice()
-    static let queue = SNTrimController.device?.newCommandQueue()
+    static let queue = SNTrimController.device?.makeCommandQueue()
     static let psMask:MTLComputePipelineState? = {
-        if let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("SNTrimMask") {
-            return try! SNTrimController.device?.newComputePipelineStateWithFunction(function)
+        if let function = SNTrimController.device?.newDefaultLibrary()?.makeFunction(name: "SNTrimMask") {
+            return try! SNTrimController.device?.makeComputePipelineState(function: function)
         }
         return nil
     }()
     static let psHorizontal:MTLComputePipelineState? = {
-        if let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("SNTrimHorizontal") {
-            return try! SNTrimController.device?.newComputePipelineStateWithFunction(function)
+        if let function = SNTrimController.device?.newDefaultLibrary()?.makeFunction(name: "SNTrimHorizontal") {
+            return try! SNTrimController.device?.makeComputePipelineState(function: function)
         }
         return nil
     }()
     static let psVertical:MTLComputePipelineState? = {
-        if let function = SNTrimController.device?.newDefaultLibrary()?.newFunctionWithName("SNTrimVertical") {
-            return try! SNTrimController.device?.newComputePipelineStateWithFunction(function)
+        if let function = SNTrimController.device?.newDefaultLibrary()?.makeFunction(name: "SNTrimVertical") {
+            return try! SNTrimController.device?.makeComputePipelineState(function: function)
         }
         return nil
     }()
@@ -81,26 +81,26 @@ class SNTrimController: UIViewController {
     var horizontalBuffer:MTLBuffer?
     var verticalBuffer:MTLBuffer?
     
-    private let borderView:UIView = {
+    fileprivate let borderView:UIView = {
         let borderView = UIView()
-        borderView.backgroundColor = UIColor.clearColor()
-        borderView.layer.borderColor = UIColor.greenColor().CGColor
+        borderView.backgroundColor = UIColor.clear
+        borderView.layer.borderColor = UIColor.green.cgColor
         borderView.layer.borderWidth = 4.0
         borderView.alpha = 0.0
-        borderView.userInteractionEnabled = false
+        borderView.isUserInteractionEnabled = false
         return borderView
     }()
-    private var trimmedImage:UIImage! {
+    fileprivate var trimmedImage:UIImage! {
         didSet {
             imageView.image = trimmedImage
         }
     }
     
-    private var maskColor:UIColor?
-    private var maskImage:UIImage?
-    private var layers = [Layer]()
-    private var index = 0
-    private var xform = CGAffineTransformIdentity {
+    fileprivate var maskColor:UIColor?
+    fileprivate var maskImage:UIImage?
+    fileprivate var layers = [Layer]()
+    fileprivate var index = 0
+    fileprivate var xform = CGAffineTransform.identity {
         didSet {
             shapeLayer.lineWidth = 30 / xform.a
             builder.minSegment = 8.0 / xform.a
@@ -117,11 +117,11 @@ class SNTrimController: UIViewController {
                 checkerView.image = checkerImage
                 thumbImage.image = checkerImage
             case .black:
-                checkerView.backgroundColor = UIColor.blackColor()
-                thumbImage.backgroundColor = UIColor.blackColor()
+                checkerView.backgroundColor = .black
+                thumbImage.backgroundColor = .black
             case .white:
-                checkerView.backgroundColor = UIColor.whiteColor()
-                thumbImage.backgroundColor = UIColor.whiteColor()
+                checkerView.backgroundColor = .white
+                thumbImage.backgroundColor = .white
             default:
                 break
             }
@@ -135,41 +135,41 @@ class SNTrimController: UIViewController {
     private var imageCache = [(Int,UIImage?)]()
     
     // Transient properties for handlePinch
-    private var anchor = CGPoint.zero
-    private var delta = CGPoint.zero
+    fileprivate var anchor = CGPoint.zero
+    fileprivate var delta = CGPoint.zero
 
-    private var builder = SNPathBuilder(minSegment: 8.0)
-    private lazy var shapeLayer:CAShapeLayer = {
+    fileprivate var builder = SNPathBuilder(minSegment: 8.0)
+    fileprivate lazy var shapeLayer:CAShapeLayer = {
         let layer = self.createShapeLayer()
         layer.opacity = 0.5
         self.viewMain.layer.addSublayer(layer)
         return layer
     }()
-    private lazy var imageTransform:CGAffineTransform = {
+    fileprivate lazy var imageTransform:CGAffineTransform = {
         let size = self.viewMain.bounds.size
         let sx = self.image.size.width / size.width
         let sy = self.image.size.height / size.height
         if sx > sy {
-            let xf = CGAffineTransformMakeScale(sx, sx)
-            return CGAffineTransformTranslate(xf, 0, -(size.height - self.image.size.height / sx) / 2.0)
+            let xf = CGAffineTransform(scaleX: sx, y: sx)
+            return xf.translatedBy(x: 0, y: -(size.height - self.image.size.height / sx) / 2.0)
         } else {
-            let xf = CGAffineTransformMakeScale(sy, sy)
-            return CGAffineTransformTranslate(xf, -(size.width - self.image.size.width / sy) / 2.0, 0)
+            let xf = CGAffineTransform(scaleX: sy, y: sy)
+            return xf.translatedBy(x: -(size.width - self.image.size.width / sy) / 2.0, y: 0)
         }
     }()
     
     private func updateUI() {
         //print("updateUI", index, layers.count)
-        btnUndo.enabled = index > 0
-        btnRedo.enabled = index < layers.count
+        btnUndo.isEnabled = index > 0
+        btnRedo.isEnabled = index < layers.count
     }
     
-    private func createShapeLayer() -> CAShapeLayer {
+    fileprivate func createShapeLayer() -> CAShapeLayer {
         let layer = CAShapeLayer()
-        layer.contentsScale = UIScreen.mainScreen().scale
+        layer.contentsScale = UIScreen.main.scale
         layer.lineWidth = 30 / xform.a
-        layer.fillColor = UIColor.clearColor().CGColor
-        layer.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).CGColor
+        layer.fillColor = UIColor.clear.cgColor
+        layer.strokeColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1).cgColor
         layer.shadowRadius = 3.0
         layer.shadowColor = layer.strokeColor
         layer.shadowOpacity = 1.0
@@ -194,11 +194,11 @@ class SNTrimController: UIViewController {
         let size = checkerView.bounds.size
         UIGraphicsBeginImageContext(size)
         let context = UIGraphicsGetCurrentContext()!
-        CGContextSetFillColorWithColor(context, UIColor.lightGrayColor().CGColor)
+        context.setFillColor(UIColor.lightGray.cgColor)
         for x in 0...Int(size.width / 32) {
             for y in 0...Int(size.height / 32) {
-                CGContextFillRect(context, CGRect(x: x * 32, y: y * 32, width: 16, height: 16))
-                CGContextFillRect(context, CGRect(x: x * 32 + 16, y: y * 32 + 16, width: 16, height: 16))
+                context.fill(CGRect(x: x * 32, y: y * 32, width: 16, height: 16))
+                context.fill(CGRect(x: x * 32 + 16, y: y * 32 + 16, width: 16, height: 16))
             }
         }
         checkerImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -216,7 +216,7 @@ class SNTrimController: UIViewController {
     
     private func setTransformAnimated(xform:CGAffineTransform, completion:((Bool) -> Void)? = nil) {
         self.xform = xform
-        UIView.animateWithDuration(0.2, animations:{
+        UIView.animate(withDuration: 0.2, animations:{
             self.viewMain.transform = xform
         }, completion: completion)
     }
@@ -225,7 +225,7 @@ class SNTrimController: UIViewController {
         let frame = cropRect()
         let size = trimmedImage.size
         UIGraphicsBeginImageContext(frame.size)
-        trimmedImage.drawInRect(CGRect(x: -frame.origin.x, y: -frame.origin.y, width: size.width, height: size.height))
+        trimmedImage.draw(in: CGRect(x: -frame.origin.x, y: -frame.origin.y, width: size.width, height: size.height))
         let croppedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         delegate.wasImageTrimmed(self, image: croppedImage)
@@ -245,7 +245,7 @@ class SNTrimController: UIViewController {
         imageCache.removeAll()
         index = 0
         trimmedImage = image
-        setTransformAnimated(CGAffineTransformIdentity)
+        setTransformAnimated(xform: CGAffineTransform.identity)
         updateUI()
     }
     
@@ -256,7 +256,7 @@ class SNTrimController: UIViewController {
     }
     
     @IBAction func undo() {
-        if let (i,_) = imageCache.last where i == index {
+        if let (i,_) = imageCache.last, i == index {
             print("uncaching", index)
             imageCache.removeLast()
         }
@@ -274,7 +274,7 @@ class SNTrimController: UIViewController {
     }
 
     @IBAction func redo() {
-        renderLayers(index...index)
+        renderLayers(index..<index+1)
         index += 1
         if index % cacheCycle == 0 {
             if imageCache.count > cacheMax {
@@ -287,38 +287,38 @@ class SNTrimController: UIViewController {
         updateUI()
     }
     
-    private func renderLayers(range:Range<Int>) {
+    private func renderLayers(_ range:CountableRange<Int>) {
         UIGraphicsBeginImageContext(image.size)
         let context = UIGraphicsGetCurrentContext()!
-        trimmedImage.drawInRect(CGRect(origin: .zero, size: image.size))
+        trimmedImage.draw(in: CGRect(origin: .zero, size: image.size))
         for i in range {
             updateMaskColor(layers[i].maskColor, fPlus: layers[i].fPlus)
-            CGContextSaveGState(context)
+            context.saveGState()
             if let maskImage = maskImage {
                 let rc = CGRect(origin: .zero, size: image.size)
                 UIGraphicsBeginImageContext(image.size)
                 let imageContext = UIGraphicsGetCurrentContext()!
-                CGContextSaveGState(imageContext)
-                CGContextConcatCTM(imageContext, CGAffineTransformMakeTranslation(0, image.size.height))
-                CGContextConcatCTM(imageContext, CGAffineTransformMakeScale(1, -1))
-                CGContextConcatCTM(imageContext, imageTransform)
-                layers[i].layer.renderInContext(imageContext)
-                CGContextRestoreGState(imageContext)
+                imageContext.saveGState()
+                imageContext.concatenate(CGAffineTransform(translationX: 0, y: image.size.height))
+                imageContext.concatenate(CGAffineTransform(scaleX: 1, y: -1))
+                imageContext.concatenate(imageTransform)
+                layers[i].layer.render(in: imageContext)
+                imageContext.restoreGState()
 
-                CGContextSetBlendMode(imageContext, CGBlendMode.DestinationOut)
-                CGContextDrawImage(imageContext, rc, maskImage.CGImage!)
+                imageContext.setBlendMode(CGBlendMode.destinationOut)
+                imageContext.draw(maskImage.cgImage!, in: rc)
 
                 let imageBrush = UIGraphicsGetImageFromCurrentImageContext()!
                 UIGraphicsEndImageContext()
 
-                CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
-                CGContextDrawImage(context, rc, imageBrush.CGImage!)
+                context.setBlendMode(CGBlendMode.destinationOut)
+                context.draw(imageBrush.cgImage!, in: rc)
             } else {
-                CGContextConcatCTM(context, imageTransform)
-                CGContextSetBlendMode(context, CGBlendMode.DestinationOut)
-                layers[i].layer.renderInContext(context)
+                context.concatenate(imageTransform)
+                context.setBlendMode(CGBlendMode.destinationOut)
+                layers[i].layer.render(in: context)
             }
-            CGContextRestoreGState(context)
+            context.restoreGState()
         }
         trimmedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -329,20 +329,20 @@ class SNTrimController: UIViewController {
 // MARK: HandlePan
 //
 extension SNTrimController {
-    @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
-        let pt = recognizer.locationInView(viewMain)
+    @IBAction func handlePan(_ recognizer:UIPanGestureRecognizer) {
+        let pt = recognizer.location(in: viewMain)
         switch(recognizer.state) {
-        case .Began:
+        case .began:
             shapeLayer.path = builder.start(pt)
-        case .Changed:
+        case .changed:
             if let path = builder.move(pt) {
                 shapeLayer.path = path
             }
-        case .Ended:
+        case .ended:
             shapeLayer.path = nil
             let layer = createShapeLayer()
             layer.path = builder.end()
-            layers.removeRange(index..<layers.count)
+            layers.removeSubrange(index..<layers.count)
             layers.append(Layer(layer: layer, maskColor: maskColor, fPlus: segment.selectedSegmentIndex==2))
             redo()
         default:
@@ -355,7 +355,7 @@ extension SNTrimController {
 // MARK: Magic Eraser
 //
 extension SNTrimController: SNTrimColorPickerDelegate {
-    func wasColorSelected(vc:SNTrimColorPicker, color:UIColor?) {
+    func wasColorSelected(_ vc:SNTrimColorPicker, color:UIColor?) {
         if let color = color {
             updateMaskColor(color, fPlus: segment.selectedSegmentIndex==2)
         } else {
@@ -364,7 +364,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         }
     }
     
-    func updateMaskColor(color:UIColor?, fPlus:Bool) {
+    func updateMaskColor(_ color:UIColor?, fPlus:Bool) {
         guard let queue = SNTrimController.queue,
               let psMask = SNTrimController.psMask,
               let pixelBuffer = self.pixelBuffer else {
@@ -380,20 +380,20 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             return
         }
         
-        let start = NSDate()
+        let start = Date()
         let size = image.size
         var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        let (h0, s0, v0) = colorHSV(red, g: green, b: blue)
-        let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
-        var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
-        bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
-        let context = CGBitmapContextCreate(pixelBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage!)
+        let (h0, s0, v0) = colorHSV(r: red, g: green, b: blue)
+        let (x0, y0, z0) = colorCone(h: h0, s: s0, v: v0)
+        var bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Big.rawValue
+        bitmapInfo |= CGImageAlphaInfo.premultipliedLast.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
+        let context = CGContext(data: pixelBuffer.contents(), width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
+        context.draw(image.cgImage!, in: CGRect(origin: .zero, size:size))
         
         let cmdBuffer:MTLCommandBuffer = {
-            let cmdBuffer = queue.commandBuffer()
-            let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
+            let cmdBuffer = queue.makeCommandBuffer()
+            let encoder = cmdBuffer.makeComputeCommandEncoder(); defer { encoder.endEncoding() }
             
             var intWidth = CUnsignedShort(size.width)
             var intHeight = CUnsignedShort(size.height)
@@ -406,13 +406,13 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             var slack = CFloat(0.1)
             var slope = CFloat(4.0)
             var inv = CBool(fPlus)
-            encoder.setBuffer(pixelBuffer, offset: 0, atIndex: 0)
-            encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
-            encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
-            encoder.setBytes(&pos, length: sizeofValue(pos), atIndex: 3)
-            encoder.setBytes(&slack, length: sizeofValue(slack), atIndex: 4)
-            encoder.setBytes(&slope, length: sizeofValue(slope), atIndex: 5)
-            encoder.setBytes(&inv, length: sizeofValue(inv), atIndex: 6)
+            encoder.setBuffer(pixelBuffer, offset: 0, at: 0)
+            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), at: 1)
+            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), at: 2)
+            encoder.setBytes(&pos, length: MemoryLayout.size(ofValue: pos), at: 3)
+            encoder.setBytes(&slack, length: MemoryLayout.size(ofValue: slack), at: 4)
+            encoder.setBytes(&slope, length: MemoryLayout.size(ofValue: slope), at: 5)
+            encoder.setBytes(&inv, length: MemoryLayout.size(ofValue: inv), at: 6)
             encoder.setComputePipelineState(psMask)
 
             let threadsCount = MTLSize(width: 8, height: min(8, psMask.maxTotalThreadsPerThreadgroup/8), depth: 1)
@@ -424,12 +424,12 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         
         cmdBuffer.commit()
         cmdBuffer.waitUntilCompleted()
-        let end = NSDate()
-        print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
-        maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
+        let end = Date()
+        print("SNTrim GPU \(size), \(end.timeIntervalSince(start))")
+        maskImage = UIImage(cgImage: context.makeImage()!)
     }
 
-    func updateMaskColorCPU(color:UIColor?, fPlus:Bool) {
+    func updateMaskColorCPU(_ color:UIColor?, fPlus:Bool) {
         if maskColor == color {
             return
         }
@@ -440,22 +440,22 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         }
         var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0, alpha: CGFloat = 0.0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        let (h0, s0, v0) = colorHSV(red, g: green, b: blue)
-        let (x0, y0, z0) = colorCone(h0, s: s0, v: v0)
+        let (h0, s0, v0) = colorHSV(r: red, g: green, b: blue)
+        let (x0, y0, z0) = colorCone(h: h0, s: s0, v: v0)
         
         let size = image.size
         let data = NSMutableData(length: 4 * Int(size.width) * Int(size.height))!
         //let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
-        var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
-        bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
-        let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), image.CGImage!)
-        let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
-        let start = NSDate()
+        var bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Big.rawValue
+        bitmapInfo |= CGImageAlphaInfo.premultipliedLast.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
+        let context = CGContext(data: data.mutableBytes, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
+        context.draw(image.cgImage!, in: CGRect(origin: .zero, size:size))
+        let bytes = UnsafeMutablePointer(mutating: data.bytes.assumingMemoryBound(to: UInt8.self))
+        let start = Date()
         for i in 0..<(data.length/4) {
             let (r, g, b) = (CGFloat(bytes[i*4])/255, CGFloat(bytes[i*4+1])/255, CGFloat(bytes[i*4+2])/255)
-            let (h, s, v) = colorHSV(r, g: g, b: b)
-            let (x, y, z) = colorCone(h, s: s, v: v)
+            let (h, s, v) = colorHSV(r: r, g: g, b: b)
+            let (x, y, z) = colorCone(h: h, s: s, v: v)
             let (dx, dy, dz) = (x - x0, y - y0, z - z0)
             let distance = sqrt(dx * dx + dy * dy + dz * dz)
             let d:CGFloat
@@ -469,9 +469,9 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             bytes[i*4 + 2] = UInt8(b * CGFloat(a))
             bytes[i*4 + 3] = UInt8(a)
         }
-        let end = NSDate()
-        print("SNTrim CPU \(size), \(end.timeIntervalSinceDate(start))")
-        maskImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
+        let end = Date()
+        print("SNTrim CPU \(size), \(end.timeIntervalSince(start))")
+        maskImage = UIImage(cgImage: context.makeImage()!)
     }
 
     func colorCone(h:CGFloat, s:CGFloat, v:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
@@ -510,14 +510,14 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         if segment.selectedSegmentIndex == 0 {
             updateMaskColor(nil, fPlus: false)
         } else {
-            self.performSegueWithIdentifier("color", sender: nil)
+            self.performSegue(withIdentifier: "color", sender: nil)
         }
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let vc = segue.destinationViewController as? SNTrimColorPicker {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? SNTrimColorPicker {
             vc.image = image
-            vc.color = UIColor.whiteColor()
+            vc.color = .white
             vc.xform = xform
             vc.helpText = delegate.helpText(self, context: segment.selectedSegmentIndex == 1 ? .colorMinus : .colorPlus)
             vc.delegate = self
@@ -529,30 +529,30 @@ extension SNTrimController: SNTrimColorPickerDelegate {
 // MARK: HandlePinch
 //
 extension SNTrimController {
-    @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
-        let ptMain = recognizer.locationInView(viewMain)
-        let ptView = recognizer.locationInView(view)
+    @IBAction func handlePinch(_ recognizer:UIPinchGestureRecognizer) {
+        let ptMain = recognizer.location(in: viewMain)
+        let ptView = recognizer.location(in: view)
 
         switch(recognizer.state) {
-        case .Began:
+        case .began:
             anchor = ptView
             delta = ptMain.delta(viewMain.center)
-        case .Changed:
-            if recognizer.numberOfTouches() == 2 {
+        case .changed:
+            if recognizer.numberOfTouches == 2 {
                 var offset = ptView.delta(anchor)
                 offset.x /= xform.a
                 offset.y /= xform.a
-                var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
-                xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
-                xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
+                var xf = xform.translatedBy(x: offset.x + delta.x, y: offset.y + delta.y)
+                xf = xf.scaledBy(x: recognizer.scale, y: recognizer.scale)
+                xf = xf.translatedBy(x: -delta.x, y: -delta.y)
                 self.viewMain.transform = xf
             }
-        case .Ended:
+        case .ended:
             xform = self.viewMain.transform
             let frame = cropRect()
-            self.borderView.frame = CGRectApplyAffineTransform(frame, CGAffineTransformInvert(self.imageTransform))
+            self.borderView.frame = frame.applying(self.imageTransform.inverted())
             self.borderView.alpha = 1.0
-            UIView.animateWithDuration(0.5, animations: {
+            UIView.animate(withDuration: 0.5, animations: {
                 self.borderView.alpha = 0.0
             })
         default:
@@ -570,24 +570,24 @@ extension SNTrimController {
             print("SNTrim No Metal. Use CPU")
             return cropRectCPU()
         }
-        let start = NSDate()
+        let start = Date()
         let size = trimmedImage.size
-        var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
-        bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
-        let context = CGBitmapContextCreate(pixelBuffer.contents(), Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
-        CGContextClearRect(context, CGRect(origin: .zero, size:size))
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage!)
+        var bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Big.rawValue
+        bitmapInfo |= CGImageAlphaInfo.premultipliedLast.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
+        let context = CGContext(data: pixelBuffer.contents(), width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
+        context.clear(CGRect(origin: .zero, size:size))
+        context.draw(trimmedImage.cgImage!, in: CGRect(origin: .zero, size:size))
         
         let cmdHorizontal:MTLCommandBuffer = {
-            let cmdBuffer = queue.commandBuffer()
-            let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
+            let cmdBuffer = queue.makeCommandBuffer()
+            let encoder = cmdBuffer.makeComputeCommandEncoder(); defer { encoder.endEncoding() }
             
             var intWidth = CUnsignedShort(size.width)
             var intHeight = CUnsignedShort(size.height)
-            encoder.setBuffer(pixelBuffer, offset: 0, atIndex: 0)
-            encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
-            encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
-            encoder.setBuffer(horizontalBuffer, offset: 0, atIndex: 3)
+            encoder.setBuffer(pixelBuffer, offset: 0, at: 0)
+            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), at: 1)
+            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), at: 2)
+            encoder.setBuffer(horizontalBuffer, offset: 0, at: 3)
             encoder.setComputePipelineState(psHorizontal)
 
             let threadExeWidth = psHorizontal.threadExecutionWidth
@@ -597,15 +597,15 @@ extension SNTrimController {
             return cmdBuffer
         }()
         let cmdVertical:MTLCommandBuffer = {
-            let cmdBuffer = queue.commandBuffer()
-            let encoder = cmdBuffer.computeCommandEncoder(); defer { encoder.endEncoding() }
+            let cmdBuffer = queue.makeCommandBuffer()
+            let encoder = cmdBuffer.makeComputeCommandEncoder(); defer { encoder.endEncoding() }
             
             var intWidth = CUnsignedShort(size.width)
             var intHeight = CUnsignedShort(size.height)
-            encoder.setBuffer(pixelBuffer, offset: 0, atIndex: 0)
-            encoder.setBytes(&intWidth, length: sizeofValue(intWidth), atIndex: 1)
-            encoder.setBytes(&intHeight, length: sizeofValue(intHeight), atIndex: 2)
-            encoder.setBuffer(verticalBuffer, offset: 0, atIndex: 3)
+            encoder.setBuffer(pixelBuffer, offset: 0, at: 0)
+            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), at: 1)
+            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), at: 2)
+            encoder.setBuffer(verticalBuffer, offset: 0, at: 3)
             encoder.setComputePipelineState(psVertical)
 
             let threadExeWidth = psVertical.threadExecutionWidth
@@ -622,15 +622,15 @@ extension SNTrimController {
 
         let (width, height) = (Int(size.width), Int(size.height))
         var frame = CGRect(origin: .zero, size: size)
-        let hbuf = UnsafeMutablePointer<UInt32>(horizontalBuffer.contents())
-        let vbuf = UnsafeMutablePointer<UInt32>(verticalBuffer.contents())
+        let hbuf = UnsafeMutablePointer(mutating: horizontalBuffer.contents().assumingMemoryBound(to: UInt32.self))
+        let vbuf = UnsafeMutablePointer(mutating: verticalBuffer.contents().assumingMemoryBound(to: UInt32.self))
         for y in 0..<height {
             if hbuf[y] != 0 {
                 frame.origin.y = CGFloat(y)
                 break
             }
         }
-        for y in (Int(frame.origin.y+1)..<height).reverse() {
+        for y in (Int(frame.origin.y+1)..<height).reversed() {
             if hbuf[y] != 0 {
                 frame.size.height = CGFloat(y) - frame.origin.y + 1
                 break
@@ -642,14 +642,14 @@ extension SNTrimController {
                 break
             }
         }
-        for x in (Int(frame.origin.x)..<width).reverse() {
+        for x in (Int(frame.origin.x)..<width).reversed() {
             if vbuf[x] != 0 {
                 frame.size.width = CGFloat(x) - frame.origin.x + 1
                 break
             }
         }
-        let end = NSDate()
-        print("SNTrim GPU \(size), \(end.timeIntervalSinceDate(start))")
+        let end = Date()
+        print("SNTrim GPU \(size), \(end.timeIntervalSince(start))")
         return frame // cropRectCPU()
     }
     
@@ -658,42 +658,42 @@ extension SNTrimController {
         let (width, height) = (Int(size.width), Int(size.height))
         let data = NSMutableData(length: 4 * width * height)!
         //let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
-        var bitmapInfo: UInt32 = CGBitmapInfo.ByteOrder32Big.rawValue
-        bitmapInfo |= CGImageAlphaInfo.PremultipliedLast.rawValue & CGBitmapInfo.AlphaInfoMask.rawValue
-        let context = CGBitmapContextCreate(data.mutableBytes, Int(size.width), Int(size.height), 8, 4 * Int(size.width), CGColorSpaceCreateDeviceRGB(), bitmapInfo)!
-        CGContextDrawImage(context, CGRect(origin: .zero, size:size), trimmedImage.CGImage!)
-        let words = UnsafeMutablePointer<UInt32>(data.mutableBytes)
+        var bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Big.rawValue
+        bitmapInfo |= CGImageAlphaInfo.premultipliedLast.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
+        let context = CGContext(data: data.mutableBytes, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
+        context.draw(trimmedImage.cgImage!, in: CGRect(origin: .zero, size:size))
+        let words = data.mutableBytes.assumingMemoryBound(to: UInt32.self)
 
-        let start = NSDate()
+        let start = Date()
         var frame = CGRect(origin: .zero, size: size)
         for y in 0..<height {
             let row = y * width
-            if (0..<Int(size.width)).reduce(0, combine: { $0 | words[row + $1]}) != 0 {
+            if (0..<Int(size.width)).reduce(0, { $0 | words[row + $1]}) != 0 {
                 frame.origin.y = CGFloat(y)
                 break
             }
         }
-        for y in (Int(frame.origin.y+1)..<height).reverse() {
+        for y in (Int(frame.origin.y+1)..<height).reversed() {
             let row = y * width
-            if (0..<Int(size.width)).reduce(0, combine: { $0 | words[row + $1]}) != 0 {
+            if (0..<Int(size.width)).reduce(0, { $0 | words[row + $1]}) != 0 {
                 frame.size.height = CGFloat(y) - frame.origin.y + 1
                 break
             }
         }
         for x in 0..<width {
-            if (0..<height).reduce(0, combine: { $0 | words[$1 * width + x]}) != 0 {
+            if (0..<height).reduce(0, { $0 | words[$1 * width + x]}) != 0 {
                 frame.origin.x = CGFloat(x)
                 break
             }
         }
-        for x in (Int(frame.origin.x)..<width).reverse() {
-            if (0..<height).reduce(0, combine: { $0 | words[$1 * width + x]}) != 0 {
+        for x in (Int(frame.origin.x)..<width).reversed() {
+            if (0..<height).reduce(0, { $0 | words[$1 * width + x]}) != 0 {
                 frame.size.width = CGFloat(x) - frame.origin.x + 1
                 break
             }
         }
-        let end = NSDate()
-        print("SNTrim CPU \(size), \(end.timeIntervalSinceDate(start))")
+        let end = Date()
+        print("SNTrim CPU \(size), \(end.timeIntervalSince(start))")
 
         return frame
     }
