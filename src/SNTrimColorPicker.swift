@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SNTrimColorPickerDelegate: class {
-    func wasColorSelected(vc:SNTrimColorPicker, color:UIColor?)
+    func wasColorSelected(_ vc:SNTrimColorPicker, color:UIColor?)
 }
 
 class SNTrimColorPicker: UIViewController {
@@ -21,19 +21,19 @@ class SNTrimColorPicker: UIViewController {
     var image:UIImage!
     var color:UIColor!
     var helpText = "Pick A Color"
-    var xform = CGAffineTransformIdentity
+    var xform = CGAffineTransform.identity
     let imageLayer = CALayer()
 
     // Transient properties for handlePinch
-    private var anchor = CGPoint.zero
-    private var delta = CGPoint.zero
+    fileprivate var anchor = CGPoint.zero
+    fileprivate var delta = CGPoint.zero
 
     override func viewDidLoad() {
         super.viewDidLoad()
         //mainView.image = image
         mainView.layer.addSublayer(imageLayer)
         mainView.transform = xform
-        imageLayer.contents = image.CGImage
+        imageLayer.contents = image.cgImage
         imageLayer.contentsGravity = kCAGravityResizeAspect
         colorView.backgroundColor = color
         labelHint.text = helpText
@@ -66,52 +66,52 @@ class SNTrimColorPicker: UIViewController {
     */
 
     @IBAction func done() {
-        self.presentingViewController?.dismissViewControllerAnimated(true) {
+        self.presentingViewController?.dismiss(animated: true) {
             self.delegate.wasColorSelected(self, color: self.color)
         }
     }
 
     @IBAction func cancel() {
-        self.presentingViewController?.dismissViewControllerAnimated(true) {
+        self.presentingViewController?.dismiss(animated: true) {
             self.delegate.wasColorSelected(self, color: nil)
         }
     }
 
-    private func pickColorWith(recognizer:UIGestureRecognizer, offset:CGSize) {
-        let pt = recognizer.locationInView(mainView)
+    private func pickColor(with recognizer:UIGestureRecognizer, offset:CGSize) {
+        let pt = recognizer.location(in: mainView)
         let data = NSMutableData(length: 4)!
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
-        let context = CGBitmapContextCreate(data.mutableBytes, 1, 1, 8, 4, CGColorSpaceCreateDeviceRGB(), bitmapInfo.rawValue)!
-        CGContextConcatCTM(context, CGAffineTransformMakeTranslation(-pt.x, -pt.y))
-        imageLayer.renderInContext(context)
-        let bytes = UnsafePointer<UInt8>(data.bytes)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        let context = CGContext(data: data.mutableBytes, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo.rawValue)!
+        context.concatenate(CGAffineTransform(translationX: -pt.x, y: -pt.y))
+        imageLayer.render(in: context)
+        let bytes = data.bytes.assumingMemoryBound(to: UInt8.self)
         color = UIColor(red: CGFloat(bytes[0]) / 255, green: CGFloat(bytes[1]) / 255, blue: CGFloat(bytes[2]) / 255, alpha: 1.0)
         colorView.backgroundColor = color
         preView.backgroundColor = color
-        preView.center = recognizer.locationInView(view).translate(offset.width, y: offset.height)
-        UIView.animateWithDuration(0.2) { 
+        preView.center = recognizer.location(in: view).translate(x: offset.width, y: offset.height)
+        UIView.animate(withDuration: 0.2) { 
             self.labelHint.alpha = 0.0
         }
     }
     
-    @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
+    @IBAction func handlePan(_ recognizer:UIPanGestureRecognizer) {
         switch(recognizer.state) {
-        case .Began:
+        case .began:
             preView.alpha = 1.0
-            pickColorWith(recognizer, offset:CGSize(width: 0.0, height: -88.0))
-        case .Changed:
-            pickColorWith(recognizer, offset:CGSize(width: 0.0, height: -88.0))
+            pickColor(with:recognizer, offset:CGSize(width: 0.0, height: -88.0))
+        case .changed:
+            pickColor(with:recognizer, offset:CGSize(width: 0.0, height: -88.0))
         default:
-            UIView.animateWithDuration(0.2) {
+            UIView.animate(withDuration: 0.2) {
                 self.preView.alpha = 0.0
             }
         }
     }
     
-    @IBAction func handleTap(recognizer:UITapGestureRecognizer) {
-        pickColorWith(recognizer, offset:.zero)
+    @IBAction func handleTap(_ recognizer:UITapGestureRecognizer) {
+        pickColor(with:recognizer, offset:.zero)
         preView.alpha = 1.0
-        UIView.animateWithDuration(0.2) {
+        UIView.animate(withDuration: 0.2) {
             self.preView.alpha = 0.0
         }
     }
@@ -123,33 +123,33 @@ class SNTrimColorPicker: UIViewController {
 extension SNTrimColorPicker {
     private func setTransformAnimated(xform:CGAffineTransform) {
         self.xform = xform
-        UIView.animateWithDuration(0.2) { 
+        UIView.animate(withDuration: 0.2) { 
             self.mainView.transform = xform
         }
     }
 
-    @IBAction func handlePinch(recognizer:UIPinchGestureRecognizer) {
-        let ptMain = recognizer.locationInView(mainView)
-        let ptView = recognizer.locationInView(view)
+    @IBAction func handlePinch(_ recognizer:UIPinchGestureRecognizer) {
+        let ptMain = recognizer.location(in: mainView)
+        let ptView = recognizer.location(in: view)
 
         switch(recognizer.state) {
-        case .Began:
+        case .began:
             anchor = ptView
             delta = ptMain.delta(mainView.center)
-        case .Changed:
-            if recognizer.numberOfTouches() == 2 {
+        case .changed:
+            if recognizer.numberOfTouches == 2 {
                 var offset = ptView.delta(anchor)
                 offset.x /= xform.a
                 offset.y /= xform.a
-                var xf = CGAffineTransformTranslate(xform, offset.x + delta.x, offset.y + delta.y)
-                xf = CGAffineTransformScale(xf, recognizer.scale, recognizer.scale)
-                xf = CGAffineTransformTranslate(xf, -delta.x, -delta.y)
+                var xf = xform.translatedBy(x: offset.x + delta.x, y: offset.y + delta.y)
+                xf = xf.scaledBy(x: recognizer.scale, y: recognizer.scale)
+                xf = xf.translatedBy(x: -delta.x, y: -delta.y)
                 self.mainView.transform = xf
             }
-        case .Ended:
+        case .ended:
             xform = self.mainView.transform
             if xform.a < 0.5 {
-                setTransformAnimated(CGAffineTransformIdentity)
+                setTransformAnimated(xform: CGAffineTransform.identity)
             }
         default:
             self.mainView.transform = xform
