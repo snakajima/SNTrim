@@ -34,25 +34,26 @@ kernel void SNTrimMask(device Pixel* pixelBuffer [[ buffer(0) ]],
     
     const uint index = (uint)width * (uint)gid.y + (uint)gid.x;
     const Pixel pixel = pixelBuffer[index];
-    float v = max(pixel.r, max(pixel.g, pixel.b)); // Value 0-255
+    const float3 color = float3((float)pixel.r, (float)pixel.g, (float)pixel.b);
+    float v = max(color.r, max(color.g, color.b)); // Value 0-255
     float s = 0.0; // Saturation 0.0-1.0
     float h = 0; // Hue 0-360
-    float delta = v - (float)min(pixel.r, min(pixel.g, pixel.b));
+    float delta = v - min(color.r, min(color.g, color.b));
     if (v * delta > 0) {
-        s = (float)delta / (float)v;
-        float delG = (v - (float)pixel.g) * 60.0 / delta;
-        float delB = (v - (float)pixel.b) * 60.0 / delta;
-        float delR = (v - (float)pixel.r) * 60.0 / delta;
-        if (pixel.r == v) {
+        s = delta / v;
+        float delG = (v - color.g) * 60.0 / delta;
+        float delB = (v - color.b) * 60.0 / delta;
+        float delR = (v - color.r) * 60.0 / delta;
+        if (color.r == v) {
             h = delB - delG;
-        } else if (pixel.g == v) {
-            h = 120 + delR - delB;
+        } else if (color.g == v) {
+            h = 120.0 + delR - delB;
         } else {
-            h = 240 + delG - delR;
+            h = 240.0 + delG - delR;
         }
     }
-    float radian = (float)h * M_PI_F / 180.0;
-    float z = (float)v / 255.0;
+    float radian = h * M_PI_F / 180.0;
+    float z = v / 255.0;
     float factor = sqrt(z) * s;
     float dx = pos.x - cos(radian) * factor;
     float dy = pos.y - sin(radian) * factor;
