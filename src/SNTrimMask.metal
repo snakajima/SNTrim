@@ -44,9 +44,9 @@ kernel void SNTrimMask(device Pixel* pixelBuffer [[ buffer(0) ]],
         float delG = (v - color.g) * 60.0 / delta;
         float delB = (v - color.b) * 60.0 / delta;
         float delR = (v - color.r) * 60.0 / delta;
-        if (color.r == v) {
+        if (delR == 0.0) {
             h = delB - delG;
-        } else if (color.g == v) {
+        } else if (delG == 0.0) {
             h = 120.0 + delR - delB;
         } else {
             h = 240.0 + delG - delR;
