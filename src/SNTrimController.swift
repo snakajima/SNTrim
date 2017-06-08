@@ -368,7 +368,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         guard let queue = SNTrimController.queue,
               let psMask = SNTrimController.psMask,
               let pixelBuffer = self.pixelBuffer else {
-            print("SNTrim No Metal. Use CPU")
+            //print("SNTrim No Metal. Use CPU")
             return updateMaskColorCPU(color, fPlus: fPlus)
         }
         if maskColor == color {
@@ -452,22 +452,23 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         context.draw(image.cgImage!, in: CGRect(origin: .zero, size:size))
         let bytes = UnsafeMutablePointer(mutating: data.bytes.assumingMemoryBound(to: UInt8.self))
         let start = Date()
-        for i in 0..<(data.length/4) {
-            let (r, g, b) = (CGFloat(bytes[i*4])/255, CGFloat(bytes[i*4+1])/255, CGFloat(bytes[i*4+2])/255)
-            let (h, s, v) = colorHSV(r: r, g: g, b: b)
-            let (x, y, z) = colorCone(h: h, s: s, v: v)
-            let (dx, dy, dz) = (x - x0, y - y0, z - z0)
-            let distance = sqrt(dx * dx + dy * dy + dz * dz)
-            let d:CGFloat
-            d = (distance - 0.1) * 4.0
-            var a = max(0, min(255, Int(d * 255)))
-            if fPlus {
-                a = 255 - a
-            }
-            bytes[i*4 + 0] = UInt8(r * CGFloat(a))
-            bytes[i*4 + 1] = UInt8(g * CGFloat(a))
-            bytes[i*4 + 2] = UInt8(b * CGFloat(a))
-            bytes[i*4 + 3] = UInt8(a)
+        //for i in 0..<(data.length/4) {
+        DispatchQueue.concurrentPerform(iterations: data.length/4) { (i) in
+          let (r, g, b) = (CGFloat(bytes[i*4])/255, CGFloat(bytes[i*4+1])/255, CGFloat(bytes[i*4+2])/255)
+          let (h, s, v) = colorHSV(r: r, g: g, b: b)
+          let (x, y, z) = colorCone(h: h, s: s, v: v)
+          let (dx, dy, dz) = (x - x0, y - y0, z - z0)
+          let distance = sqrt(dx * dx + dy * dy + dz * dz)
+          let d:CGFloat
+          d = (distance - 0.1) * 4.0
+          var a = max(0, min(255, Int(d * 255)))
+          if fPlus {
+            a = 255 - a
+          }
+          bytes[i*4 + 0] = UInt8(r * CGFloat(a))
+          bytes[i*4 + 1] = UInt8(g * CGFloat(a))
+          bytes[i*4 + 2] = UInt8(b * CGFloat(a))
+          bytes[i*4 + 3] = UInt8(a)
         }
         let end = Date()
         print("SNTrim CPU \(size), \(end.timeIntervalSince(start))")
