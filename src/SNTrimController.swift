@@ -476,7 +476,7 @@ extension SNTrimController: SNTrimColorPickerDelegate {
     }
 
     func colorCone(h:CGFloat, s:CGFloat, v:CGFloat) -> (CGFloat, CGFloat, CGFloat) {
-        let radian = h * CGFloat(M_PI * 2)
+        let radian = h * .pi * 2
         let x = cos(radian) * sqrt(v) * s
         let y = sin(radian) * sqrt(v) * s
         return (x, y, v)
