@@ -205,7 +205,7 @@
 					740247D11D86FAC3003FAD89 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = H34BY2CCCD;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -423,6 +423,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cloudreaders.SNTrim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -436,6 +438,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cloudreaders.SNTrim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

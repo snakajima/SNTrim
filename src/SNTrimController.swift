@@ -60,19 +60,19 @@ class SNTrimController: UIViewController {
     static let device = MTLCreateSystemDefaultDevice()
     static let queue = SNTrimController.device?.makeCommandQueue()
     static let psMask:MTLComputePipelineState? = {
-        if let function = SNTrimController.device?.newDefaultLibrary()?.makeFunction(name: "SNTrimMask") {
+        if let function = SNTrimController.device?.makeDefaultLibrary()?.makeFunction(name: "SNTrimMask") {
             return try! SNTrimController.device?.makeComputePipelineState(function: function)
         }
         return nil
     }()
     static let psHorizontal:MTLComputePipelineState? = {
-        if let function = SNTrimController.device?.newDefaultLibrary()?.makeFunction(name: "SNTrimHorizontal") {
+        if let function = SNTrimController.device?.makeDefaultLibrary()?.makeFunction(name: "SNTrimHorizontal") {
             return try! SNTrimController.device?.makeComputePipelineState(function: function)
         }
         return nil
     }()
     static let psVertical:MTLComputePipelineState? = {
-        if let function = SNTrimController.device?.newDefaultLibrary()?.makeFunction(name: "SNTrimVertical") {
+        if let function = SNTrimController.device?.makeDefaultLibrary()?.makeFunction(name: "SNTrimVertical") {
             return try! SNTrimController.device?.makeComputePipelineState(function: function)
         }
         return nil
@@ -174,8 +174,8 @@ class SNTrimController: UIViewController {
         layer.shadowColor = layer.strokeColor
         layer.shadowOpacity = 1.0
         layer.shadowOffset = CGSize.zero
-        layer.lineCap = "round"
-        layer.lineJoin = "round"
+        layer.lineCap = convertToCAShapeLayerLineCap("round")
+        layer.lineJoin = convertToCAShapeLayerLineJoin("round")
         return layer
     }
 
@@ -392,8 +392,8 @@ extension SNTrimController: SNTrimColorPickerDelegate {
         context.draw(image.cgImage!, in: CGRect(origin: .zero, size:size))
         
         let cmdBuffer:MTLCommandBuffer = {
-            let cmdBuffer = queue.makeCommandBuffer()
-            let encoder = cmdBuffer.makeComputeCommandEncoder(); defer { encoder.endEncoding() }
+            let cmdBuffer = queue.makeCommandBuffer()! // LAZY: !
+            let encoder = cmdBuffer.makeComputeCommandEncoder()!; defer { encoder.endEncoding() }
             
             var intWidth = CUnsignedShort(size.width)
             var intHeight = CUnsignedShort(size.height)
@@ -406,13 +406,13 @@ extension SNTrimController: SNTrimColorPickerDelegate {
             var slack = CFloat(0.1)
             var slope = CFloat(4.0)
             var inv = CBool(fPlus)
-            encoder.setBuffer(pixelBuffer, offset: 0, at: 0)
-            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), at: 1)
-            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), at: 2)
-            encoder.setBytes(&pos, length: MemoryLayout.size(ofValue: pos), at: 3)
-            encoder.setBytes(&slack, length: MemoryLayout.size(ofValue: slack), at: 4)
-            encoder.setBytes(&slope, length: MemoryLayout.size(ofValue: slope), at: 5)
-            encoder.setBytes(&inv, length: MemoryLayout.size(ofValue: inv), at: 6)
+            encoder.setBuffer(pixelBuffer, offset: 0, index: 0)
+            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), index: 1)
+            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), index: 2)
+            encoder.setBytes(&pos, length: MemoryLayout.size(ofValue: pos), index: 3)
+            encoder.setBytes(&slack, length: MemoryLayout.size(ofValue: slack), index: 4)
+            encoder.setBytes(&slope, length: MemoryLayout.size(ofValue: slope), index: 5)
+            encoder.setBytes(&inv, length: MemoryLayout.size(ofValue: inv), index: 6)
             encoder.setComputePipelineState(psMask)
 
             let threadsCount = MTLSize(width: 8, height: min(8, psMask.maxTotalThreadsPerThreadgroup/8), depth: 1)
@@ -580,15 +580,15 @@ extension SNTrimController {
         context.draw(trimmedImage.cgImage!, in: CGRect(origin: .zero, size:size))
         
         let cmdHorizontal:MTLCommandBuffer = {
-            let cmdBuffer = queue.makeCommandBuffer()
-            let encoder = cmdBuffer.makeComputeCommandEncoder(); defer { encoder.endEncoding() }
+            let cmdBuffer = queue.makeCommandBuffer()! // LAZY !
+            let encoder = cmdBuffer.makeComputeCommandEncoder()!; defer { encoder.endEncoding() }
             
             var intWidth = CUnsignedShort(size.width)
             var intHeight = CUnsignedShort(size.height)
-            encoder.setBuffer(pixelBuffer, offset: 0, at: 0)
-            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), at: 1)
-            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), at: 2)
-            encoder.setBuffer(horizontalBuffer, offset: 0, at: 3)
+            encoder.setBuffer(pixelBuffer, offset: 0, index: 0)
+            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), index: 1)
+            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), index: 2)
+            encoder.setBuffer(horizontalBuffer, offset: 0, index: 3)
             encoder.setComputePipelineState(psHorizontal)
 
             let threadExeWidth = psHorizontal.threadExecutionWidth
@@ -598,15 +598,15 @@ extension SNTrimController {
             return cmdBuffer
         }()
         let cmdVertical:MTLCommandBuffer = {
-            let cmdBuffer = queue.makeCommandBuffer()
-            let encoder = cmdBuffer.makeComputeCommandEncoder(); defer { encoder.endEncoding() }
+            let cmdBuffer = queue.makeCommandBuffer()! // Lazy !
+            let encoder = cmdBuffer.makeComputeCommandEncoder()!; defer { encoder.endEncoding() }
             
             var intWidth = CUnsignedShort(size.width)
             var intHeight = CUnsignedShort(size.height)
-            encoder.setBuffer(pixelBuffer, offset: 0, at: 0)
-            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), at: 1)
-            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), at: 2)
-            encoder.setBuffer(verticalBuffer, offset: 0, at: 3)
+            encoder.setBuffer(pixelBuffer, offset: 0, index: 0)
+            encoder.setBytes(&intWidth, length: MemoryLayout.size(ofValue: intWidth), index: 1)
+            encoder.setBytes(&intHeight, length: MemoryLayout.size(ofValue: intHeight), index: 2)
+            encoder.setBuffer(verticalBuffer, offset: 0, index: 3)
             encoder.setComputePipelineState(psVertical)
 
             let threadExeWidth = psVertical.threadExecutionWidth
@@ -700,3 +700,13 @@ extension SNTrimController {
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCAShapeLayerLineCap(_ input: String) -> CAShapeLayerLineCap {
+	return CAShapeLayerLineCap(rawValue: input)
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCAShapeLayerLineJoin(_ input: String) -> CAShapeLayerLineJoin {
+	return CAShapeLayerLineJoin(rawValue: input)
+}

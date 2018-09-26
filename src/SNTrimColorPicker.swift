@@ -34,7 +34,7 @@ class SNTrimColorPicker: UIViewController {
         mainView.layer.addSublayer(imageLayer)
         mainView.transform = xform
         imageLayer.contents = image.cgImage
-        imageLayer.contentsGravity = kCAGravityResizeAspect
+        imageLayer.contentsGravity = CALayerContentsGravity.resizeAspect
         colorView.backgroundColor = color
         labelHint.text = helpText
         
